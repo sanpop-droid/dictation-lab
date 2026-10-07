@@ -3,7 +3,7 @@
 </style></head><body>
 <script>
 (function(){
-  var errs = [];
+  var errs = []; window.__dlErrs = errs;
   function show(){
     if(!errs.length || document.getElementById('app-err')) return;
     var b = document.createElement('div'); b.id = 'app-err'; b.setAttribute('role', 'alert');
@@ -801,6 +801,75 @@
   .fr-stats span{display:flex;flex-direction:column;font-family:var(--th);font-size:11.5px;color:var(--ink2);line-height:1.3}
   .fr-stats b{font-family:var(--en);font-size:20px;color:var(--ink)}
   .fr-card .garden.mini{min-height:26px}
+
+  /* sentence dictation */
+  .dl .sn-listen{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0 10px}
+  .dl .sn-listen .btn{width:auto;flex:1 1 auto;min-width:96px}
+  .dl .sn-th{font-family:var(--th);text-align:center;color:var(--ink2);margin:4px 0 12px;min-height:1.6em}
+  .dl .sn-in{display:block;width:100%;box-sizing:border-box;font-family:var(--en);font-size:21px;line-height:1.45;padding:12px 14px;border:2px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);resize:vertical;min-height:96px}
+  .dl .sn-in:focus{outline:none;border-color:var(--accent)}
+  .dl .sn-out{font-family:var(--en);font-size:21px;line-height:2.1;margin:10px 0 4px;word-spacing:2px}
+  .dl .snw{display:inline-block;position:relative;padding:0 3px;border-radius:6px;line-height:1.3}
+  .dl .snw.typo{background:var(--bad-soft);color:var(--bad);font-weight:700}
+  .dl .snw.typo small{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);font-size:12.5px;font-weight:400;color:var(--ink3);text-decoration:line-through;white-space:nowrap;line-height:1.1}
+  .dl .snw.miss{color:var(--bad);border-bottom:3px dashed var(--bad);border-radius:0}
+  .dl .sn-extra{font-family:var(--th);font-size:14px;color:var(--ink2);margin:0 0 6px}
+  .dl .sn-extra s{font-family:var(--en);color:var(--ink3)}
+  .dl .sn-key{display:flex;gap:12px;justify-content:center;font-family:var(--th);font-size:12.5px;color:var(--ink3);margin:4px 0 0}
+  .dl .sn-key .k::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;background:var(--line)}
+  .dl .sn-key .k.typo::before{background:var(--bad-soft);border:1px solid var(--bad)}
+  .dl .sn-key .k.miss::before{background:transparent;border-bottom:2px dashed var(--bad);border-radius:0}
+  /* error coach */
+  .dl .co-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin:0 0 12px}
+  .dl .co-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .dl .co-top h3{margin:0;font-family:var(--th);font-size:17px}
+  .dl .co-n{font-family:var(--th);font-size:13px;color:var(--bad);white-space:nowrap}
+  .dl .co-bar{height:6px;border-radius:3px;background:var(--line);margin:8px 0 10px;overflow:hidden}
+  .dl .co-bar i{display:block;height:100%;background:var(--bad);border-radius:3px}
+  .dl .co-ex{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 0 10px;padding:0;list-style:none;font-family:var(--en);font-size:16px}
+  .dl .co-ex s{color:var(--ink3)}
+  .dl .co-ex b{color:var(--ok)}
+  .dl .co-tip{font-family:var(--th);font-size:14.5px;line-height:1.6;color:var(--ink2);margin:0 0 12px}
+  .dl .co-acts{display:flex;flex-wrap:wrap;gap:8px}
+  .dl .co-acts .btn{width:auto}
+  .dl .co-empty{font-family:var(--th);color:var(--ink2);text-align:center;padding:20px 8px;line-height:1.7}
+  .dl .co-tease{display:flex;align-items:center;gap:12px;justify-content:space-between}
+  .dl .co-tease.hidden{display:none}
+  .dl .co-tease p{margin:0;font-family:var(--th);font-size:14.5px;line-height:1.5}
+  .dl .co-tease .btn{width:auto;flex:none}
+  /* weekly report */
+  .dl .wk-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+  .dl .wk-cmp{font-family:var(--th);font-size:13px;color:var(--ink3)}
+  .dl .wk-cmp.up{color:var(--ok)}
+  .dl .wk-bars{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:end;height:118px;margin:6px 0 4px}
+  .dl .wk-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+  .dl .wk-v{font-family:var(--en);font-size:11.5px;color:var(--ink3);min-height:14px}
+  .dl .wk-b{width:100%;max-width:30px;border-radius:6px 6px 3px 3px;background:var(--ok-soft);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;min-height:3px}
+  .dl .wk-b i{display:block;background:var(--ok);width:100%}
+  .dl .wk-d{font-family:var(--th);font-size:12px;color:var(--ink3)}
+  .dl .wk-col.today .wk-d{color:var(--ink);font-weight:700}
+  .dl .wk-sum{font-family:var(--th);font-size:14px;color:var(--ink2);margin:8px 0 0;line-height:1.6}
+  /* welcome */
+  .dl .sheet.ob{max-width:520px}
+  .dl .ob-step{font-family:var(--th);font-size:13px;color:var(--ink3);margin:0 0 4px}
+  .dl .ob h2{font-family:var(--th);margin:0 0 8px}
+  .dl .ob p{font-family:var(--th);line-height:1.65}
+  .dl .ob-how{list-style:none;padding:0;margin:8px 0 16px;display:grid;gap:8px}
+  .dl .ob-how li{font-family:var(--th);display:flex;gap:10px;align-items:flex-start;background:var(--bg);border-radius:12px;padding:10px 12px;line-height:1.5}
+  .dl .ob-how b{font-family:var(--en);color:var(--accent);min-width:18px}
+  .dl .ob-lv{display:grid;gap:8px;margin:8px 0 14px}
+  .dl .ob-lv button{display:flex;gap:12px;align-items:center;text-align:left;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);padding:12px 14px;font-family:var(--th)}
+  .dl .ob-lv button[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+  .dl .ob-lv b{font-family:var(--en);font-size:18px;min-width:30px;color:var(--accent)}
+  .dl .ob-lv span{display:flex;flex-direction:column;font-size:14px;color:var(--ink2)}
+  .dl .ob-lv span strong{color:var(--ink);font-size:15px}
+  .dl .ob-hear{display:flex;flex-direction:column;align-items:center;gap:10px;margin:12px 0 16px}
+  .dl .ob-hear .play{width:84px;height:84px}
+  .dl .ob-tips{font-family:var(--th);font-size:14px;line-height:1.6;background:var(--bad-soft);border-radius:12px;padding:10px 14px 10px 30px;margin:0 0 12px}
+  .dl .ob-acts{display:flex;gap:10px;flex-wrap:wrap}
+  .dl .ob-acts .btn{flex:1 1 auto;width:auto}
+  .dl .ob-skip{display:block;margin:12px auto 0}
+  #rp-out{width:100%;box-sizing:border-box;min-height:120px;font:12px/1.5 ui-monospace,Menlo,monospace;margin-top:8px}
   .set-note.warn{color:var(--bad)}
   .fr-card.tap{cursor:pointer;transition:transform .12s, border-color .12s}
   .fr-card.tap:hover, .fr-card.tap:focus-visible{border-color:var(--accent);transform:translateY(-1px)}
@@ -1432,6 +1501,12 @@
         <li class="step" id="t-step2"><span class="num">2</span><div class="sbody"><b>อ่านเรื่องสั้น</b><span id="t-s2"></span></div><button class="btn small" id="t-go2">อ่าน</button></li>
         <li class="step" id="t-step3"><span class="num">3</span><div class="sbody"><b>ทบทวนความหมาย</b><span id="t-s3"></span></div><button class="btn small" id="t-go3">ทบทวน</button></li>
       </ol>
+    <div class="panel co-tease hidden" id="t-coach"></div>
+    <div class="panel wk" id="wk-panel">
+      <div class="wk-head"><p class="label">สัปดาห์นี้</p><span class="wk-cmp" id="wk-cmp"></span></div>
+      <div class="wk-bars" id="wk-bars" role="img" aria-label="กราฟจำนวนคำที่ฝึกในแต่ละวันของ 7 วันล่าสุด"></div>
+      <p class="wk-sum" id="wk-sum"></p>
+    </div>
     <div class="panel" id="d-mistPanel">
       <p class="label">คำที่สะกดผิดบ่อย</p>
       <ul class="mist" id="d-mist"></ul>
@@ -1536,6 +1611,72 @@
 
 
     </section>
+
+    <!-- ============ PRACTICE: SENTENCE DICTATION ============ -->
+    <section class="view dl" id="view-sentence"><div class="d-wrap">
+      <p class="eyebrow">ฝึก · เขียนประโยค</p>
+      <h1 class="page-title">ฟังประโยค แล้วเขียนทั้งประโยค</h1>
+      <p class="page-sub">ขั้นต่อจากสะกดคำ ฝึกเขียนคำที่รู้ให้ถูกเมื่ออยู่ในประโยคจริง ไม่นับตัวพิมพ์ใหญ่-เล็กและเครื่องหมายวรรคตอน</p>
+      <section id="sn-home">
+        <div class="voice-warn hidden"></div>
+        <div class="panel">
+          <p class="label">เลือกประโยค</p>
+          <div class="chips" id="sn-src"></div>
+          <p class="label" style="margin-top:16px">จำนวนประโยค</p>
+          <div class="chips" id="sn-len"></div>
+        </div>
+        <button class="btn" id="sn-start">เริ่มเขียน</button>
+        <p class="note center" id="sn-note"></p>
+      </section>
+      <section id="sn-play" class="hidden">
+        <div class="sbar">
+          <button class="quit" id="sn-quit">จบ</button>
+          <div class="prog"><i id="sn-bar"></i></div>
+          <span class="count" id="sn-count"></span>
+        </div>
+        <p class="muted-note hidden" data-muted>เสียงปิดอยู่ การเขียนตามคำบอกต้องฟังเสียง <button class="linkbtn" data-unmute>เปิดเสียง</button></p>
+        <div class="sn-listen">
+          <button class="btn" id="sn-say">ฟังประโยค</button>
+          <button class="btn ghost" id="sn-slow">ฟังช้า</button>
+          <button class="btn ghost" id="sn-parts">ฟังทีละท่อน</button>
+        </div>
+        <p class="sn-th"><button class="linkbtn" id="sn-thBtn">ดูความหมายภาษาไทย</button><span id="sn-th" class="hidden"></span></p>
+        <div id="sn-ask">
+          <textarea class="sn-in" id="sn-in" rows="3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" aria-label="พิมพ์ประโยคที่ได้ยิน" placeholder="type the sentence here"></textarea>
+          <div class="actions"><button class="btn" id="sn-check">ตรวจ</button></div>
+          <p class="note center">กด Enter เพื่อตรวจ · ฟังซ้ำได้ไม่จำกัด</p>
+        </div>
+        <div id="sn-res" class="hidden">
+          <div class="verdict" id="sn-verdict"></div>
+          <p class="sn-out" id="sn-out"></p>
+          <p class="sn-extra" id="sn-extra"></p>
+          <p class="sn-key"><span class="k ok">ถูก</span><span class="k typo">สะกดผิด</span><span class="k miss">ขาด</span></p>
+          <div class="actions" style="margin-top:14px">
+            <button class="btn ghost" id="sn-retry">พิมพ์ใหม่อีกครั้ง</button>
+            <button class="btn" id="sn-next">ประโยคต่อไป</button>
+          </div>
+        </div>
+      </section>
+      <section id="sn-sum" class="hidden">
+        <div class="panel center">
+          <div class="big" id="sn-sumScore"></div>
+          <p class="note" id="sn-sumNote"></p>
+        </div>
+        <div class="panel" id="sn-sumWrongPanel">
+          <p class="label">คำที่เขียนผิดในประโยค (จะกลับมาให้ทบทวนพรุ่งนี้)</p>
+          <ul class="mist" id="sn-sumWrong"></ul>
+        </div>
+        <button class="btn" id="sn-again">เขียนอีกชุด</button>
+      </section>
+    </div></section>
+
+    <!-- ============ PRACTICE: ERROR COACH ============ -->
+    <section class="view dl" id="view-coach"><div class="d-wrap">
+      <p class="eyebrow">ฝึก · จุดอ่อน</p>
+      <h1 class="page-title">จุดที่สะกดพลาดบ่อย</h1>
+      <p class="page-sub">แอปดูคำที่คุณสะกดผิดใน 30 วันล่าสุด จัดกลุ่มเป็นรูปแบบ แล้วพาฝึกเฉพาะจุดนั้น ผิดซ้ำแบบไหน ก็ฝึกแบบนั้น</p>
+      <div id="co-list"></div>
+    </div></section>
 
     <!-- ============ HOME ============ -->
     <section class="view" id="view-home">
@@ -1973,8 +2114,8 @@
   // ---------- nav: 4 tabs, each with its own sub-pages ----------
   var views = document.querySelectorAll('.view');
   var navBtns = document.querySelectorAll('.spine-btn');
-  var TAB_OF = { friends:'play', play:'play', rain:'play', match:'play', typo:'play', fill:'play', today:'today', dictation:'practice', home:'practice', flashcards:'practice', quiz:'practice', story:'practice', phonics:'learn', tense:'learn', browse:'words' };
-  var SUBS = { play:[['play','สวนคำศัพท์'],['rain','คำตก'],['match','จับคู่'],['typo','จับคำผิด'],['fill','เติมตัวอักษร'],['friends', window.DL_STANDALONE ? 'ผู้เล่นทุกคน' : 'เพื่อน']], practice:[['dictation','สะกด'],['home','บัตรคำ'],['quiz','แบบทดสอบ'],['story','อ่านเรื่อง']], learn:[['phonics','อ่านออกเสียง (Phonics)'],['tense','Tense']] };
+  var TAB_OF = { friends:'play', play:'play', rain:'play', match:'play', typo:'play', fill:'play', today:'today', dictation:'practice', sentence:'practice', coach:'practice', home:'practice', flashcards:'practice', quiz:'practice', story:'practice', phonics:'learn', tense:'learn', browse:'words' };
+  var SUBS = { play:[['play','สวนคำศัพท์'],['rain','คำตก'],['match','จับคู่'],['typo','จับคำผิด'],['fill','เติมตัวอักษร'],['friends', window.DL_STANDALONE ? 'ผู้เล่นทุกคน' : 'เพื่อน']], practice:[['dictation','สะกด'],['sentence','เขียนประโยค'],['coach','จุดอ่อน'],['home','บัตรคำ'],['quiz','แบบทดสอบ'],['story','อ่านเรื่อง']], learn:[['phonics','อ่านออกเสียง (Phonics)'],['tense','Tense']] };
   var lastInTab = { play:'play', today:'today', practice:'dictation', learn:'phonics', words:'browse' };
   var subnavEl = document.getElementById('subnav');
   function renderSubnav(tab, name){
@@ -4037,6 +4178,9 @@
 })();
 </script>
 
+<div class="sheet-wrap dl hidden" id="ob-sheet" role="dialog" aria-modal="true" aria-labelledby="ob-title">
+  <div class="sheet ob"><div id="ob-body"></div></div>
+</div>
 <div class="sheet-wrap dl hidden" id="pf-sheet" role="dialog" aria-modal="true" aria-labelledby="pf-title">
   <div class="sheet">
     <div class="sheet-head"><h2 id="pf-title">ผู้เล่น</h2><button class="icon-btn" id="pf-close" aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
@@ -4097,6 +4241,12 @@
         <textarea id="x-out" class="hidden" readonly aria-label="รหัสสำรอง"></textarea>
         <textarea id="x-in" placeholder="วางรหัสสำรองจากอีกเครื่องที่นี่" aria-label="วางรหัสสำรอง"></textarea>
         <div class="row2"><button class="btn ghost small" id="x-load">นำเข้าและรวมกับข้อมูลในเครื่องนี้</button></div>
+      </div>
+      <div class="xfer">
+        <p class="pf-lab">เจอปัญหา? คัดลอกข้อมูลเครื่องนี้ส่งให้ผู้ดูแลแอป</p>
+        <div class="row2"><button class="btn ghost small" id="rp-make">คัดลอกข้อมูลแจ้งปัญหา</button><button class="btn ghost small" id="ob-again">ดูหน้าต้อนรับอีกครั้ง</button></div>
+        <textarea id="rp-out" class="hidden" readonly aria-label="ข้อมูลแจ้งปัญหา"></textarea>
+        <p class="set-note" id="rp-ver"></p>
       </div>
       <div class="danger">
         <button class="btn ghost small" data-reset="ui">คืนค่าการตั้งค่าเริ่มต้น</button>
@@ -4229,6 +4379,13 @@ function mergeState(a, b){
   var mo = older.mission, mn = newer.mission;
   if(mo && mn && mo.d===mn.d){ m.mission = cp(mn); m.mission.ok = Math.max(mo.ok||0, mn.ok||0); m.mission.streak = Math.max(mo.streak||0, mn.streak||0); m.mission.claimed = !!(mo.claimed || mn.claimed); m.mission.games = Object.assign({}, mo.games||{}, mn.games||{}); }
   else if(mo && (!mn || mo.d > mn.d)) m.mission = cp(mo);
+  /* spelling mistakes: union by id, a spelling reset drops the older side */
+  var eo = (older.updatedAt||0) > (m.wipe.p||0) && Array.isArray(older.err) ? older.err : [], en = (newer.updatedAt||0) > (m.wipe.p||0) && Array.isArray(newer.err) ? newer.err : [], eseen = {};
+  m.err = eo.concat(en).filter(function(e){ if(!Array.isArray(e)) return false; var id = e[3] || e.join('|'); if(eseen[id]) return false; eseen[id] = 1; return true; }).sort(function(x, y){ return (x[2]||0) - (y[2]||0); }).slice(-300);
+  /* practice log per day: the larger count of each field */
+  var lo = older.log || {}, ln = newer.log || {}; m.log = {};
+  Object.keys(lo).concat(Object.keys(ln)).forEach(function(d){ var a = lo[d] || {}, b = ln[d] || {}, r = m.log[d] = {}; Object.keys(a).concat(Object.keys(b)).forEach(function(f){ r[f] = Math.max(a[f]||0, b[f]||0); }); });
+  if(older.onboarded || newer.onboarded) m.onboarded = 1;
   /* "knows the meaning" marks from the flashcards */
   var vo = (older.ext && older.ext.vn) || {}, vn = (newer.ext && newer.ext.vn) || {};
   m.ext = m.ext || {}; m.ext.vn = Object.assign({}, vo, vn);
@@ -4334,6 +4491,7 @@ function switchProfile(pid){
   if(DB && UID){ dbRef = DB.collection('data/users/' + UID).doc(pDoc(pid)); syncFromDb(); }
   updateSummary(); resetAll(true);
   toast('ตอนนี้กำลังเล่นเป็น ' + curP().icon + ' ' + curP().name);
+  setTimeout(maybeOnboard, 300);
 }
 
 /* ---------- profile picker ---------- */
@@ -4509,7 +4667,7 @@ function renderSettings(){
   $('u-rate').value = u.rate; $('u-slow').value = u.slowRate;
   $('u-rateTxt').textContent = u.rate.toFixed(2)+'× · '+rateLabel(u.rate); $('u-slowTxt').textContent = u.slowRate.toFixed(2)+'×';
   var n = Object.keys(S.p).length, g = S.garden || {f:0,s:0};
-  renderBackupNote(); renderInstall();
+  renderBackupNote(); renderInstall(); $('rp-ver').textContent = 'เวอร์ชัน ' + APP_VER;
   $('u-dataNote').textContent = 'ผู้เล่น ' + curP().name + ' · ฝึกสะกดไปแล้ว ' + n + ' คำ · สวนมีดอกไม้ ' + g.f + ' ต้นอ่อน ' + g.s;
   var why = { ok:'', none:'กำลังเชื่อมต่อบัญชี…', noclaude:'แอปไม่ได้เปิดผ่าน claude.ai จึงบันทึกได้แค่ในเบราว์เซอร์นี้', nodb:'เบราว์เซอร์นี้เชื่อมกับบัญชีไม่ได้ (ยังไม่ได้ล็อกอิน หรือเบราว์เซอร์บล็อกข้อมูลของเว็บที่ฝังอยู่) ลองล็อกอิน claude.ai ใหม่ หรือปิดโหมดป้องกันการติดตามแบบเข้มงวดสำหรับ claude.ai', noid:'ยังไม่รู้ว่าเป็นบัญชีไหน ลองล็อกอิน claude.ai ใหม่แล้วเปิดหน้านี้อีกครั้ง', read:'อ่านข้อมูลจากบัญชีไม่สำเร็จ ลองเปิดหน้านี้ใหม่', write:'บันทึกขึ้นบัญชีไม่สำเร็จ (สิทธิ์ไม่พอหรือเน็ตหลุด) ข้อมูลยังอยู่ในเครื่องนี้' }[SYNC] || '';
   var st = $('u-sync'); st.className = 'sync-state' + (SYNC==='ok' ? '' : ' local');
@@ -4680,6 +4838,7 @@ function counts(){
   return { due:due, newLeft:Math.min(newLeft,pool), seen:seen, buckets:buckets };
 }
 function renderHome(){
+  try{ renderWeek(); renderCoachTease(); }catch(e){}
   var c = counts(), t = today();
   $('d-sDue').textContent = c.due; $('d-sNew').textContent = c.newLeft;
   $('d-sStreak').textContent = (S.lastDay===t||S.lastDay===t-1) ? S.streak : 0;
@@ -4799,7 +4958,7 @@ function check(){
   var ok = typed===target || typed.replace(/[ \-]/g,'')===target.replace(/[ \-]/g,'');
   lastTyped = typed;
   phase = 'result';
-  if(!cur.retry && firstTry[k]===undefined){ firstTry[k] = ok; if(mode==='free') freeGrade(k, ok); else grade(k, ok, hintLv>0); results.push({k:k, ok:ok}); }
+  if(!cur.retry && firstTry[k]===undefined){ firstTry[k] = ok; logDay('n'); if(ok) logDay('ok'); else recordErr(w[0], typed); if(mode==='free') freeGrade(k, ok); else grade(k, ok, hintLv>0); results.push({k:k, ok:ok}); }
   if(!ok && !retried[k]){ retried[k] = 1; Q.push({i:cur.i, isNew:cur.isNew, retry:true}); }
   renderResult(typed, w, ok);
 }
@@ -4940,7 +5099,7 @@ $('d-sheet').addEventListener('click', function(ev){
     if(what==='ui') S.ui = {};
     if(!S.wipe) S.wipe = {};
     if(what==='garden'){ S.garden = {f:0,s:0,list:[]}; S.gardenAlbum = []; S.wipe.garden = Date.now(); renderGarden(false); }
-    if(what==='spell'){ S.p = {}; S.newCount = 0; S.day = {d:-1,story:0,cards:0}; S.wipe.p = Date.now(); }
+    if(what==='spell'){ S.p = {}; S.err = []; S.newCount = 0; S.day = {d:-1,story:0,cards:0}; S.wipe.p = Date.now(); }
     save(); applyUI(); applyShowR(); pickVoice(); renderSettings(); renderHome();
   }
 });
@@ -5053,8 +5212,386 @@ function importBackup(text){
   var msg = [];
   if(merged) msg.push('รวมข้อมูล ' + merged + ' คน'); if(added) msg.push('เพิ่มผู้เล่นใหม่ ' + added + ' คน'); if(skipped) msg.push('ข้าม ' + skipped + ' คน (ผู้เล่นเต็ม ' + PMAX + ' คนหรือข้อมูลเสีย)');
   toast(msg.length ? 'นำเข้าแล้ว · ' + msg.join(' · ') : 'ไม่มีข้อมูลให้นำเข้า');
+  if(OB && !isFresh(S)){ S.onboarded = 1; save(); closeOnboard(); }
   return merged + added;
 }
+
+
+/* ---------- practice log + mistakes (feed the weekly report and the coach) ---------- */
+var APP_VER = 'v15 · 2026-10-07';
+function logDay(field, n){
+  var t = today(); if(!S.log || typeof S.log!=='object') S.log = {};
+  var d = S.log[t] || (S.log[t] = {}); d[field] = (d[field] || 0) + (n==null ? 1 : n);
+  var ks = Object.keys(S.log); if(ks.length>70) ks.sort(function(a, b){ return a - b; }).slice(0, ks.length - 70).forEach(function(k){ delete S.log[k]; });
+}
+function recordErr(target, typed){
+  target = String(target || '').toLowerCase(); typed = norm(String(typed || ''));
+  if(!target || !typed || target===typed || typed.length>40) return;
+  if(!Array.isArray(S.err)) S.err = [];
+  S.err.push([target, typed, today(), Date.now().toString(36) + Math.random().toString(36).slice(2, 5)]);
+  if(S.err.length>300) S.err = S.err.slice(-300);
+}
+
+/* ---------- error patterns ---------- */
+var EPAT = {
+  rl:{ t:'สับสน r กับ l', tip:'คนไทยมักออกเสียง r เป็น l จึงเขียนสลับกัน r ม้วนลิ้นไม่แตะเพดาน l ปลายลิ้นแตะหลังฟันบน ลองฟังคู่ <b>right / light</b>, <b>road / load</b>', re:/[rl]/ },
+  vw:{ t:'สับสน v กับ w', tip:'v ฟันบนแตะริมฝีปากล่างแล้วสั่น w ห่อปากกลม ไม่แตะฟัน ลองฟังคู่ <b>vet / wet</b>, <b>very / worry</b>', re:/[vw]/ },
+  final:{ t:'ลืมพยัญชนะท้ายคำ', tip:'ภาษาไทยไม่ออกเสียงท้ายคำแบบอังกฤษ เลยมักลืมเขียนตัวท้าย เช่น <b>-s, -d, -t, -k</b> ฟังช้าแล้วพูดเสียงท้ายให้ชัด เช่น desk, hand, cats', re:/[bcdfgklmnprstvxz]$/ },
+  magic:{ t:'e ท้ายคำ (magic e)', tip:'e ท้ายคำไม่ออกเสียง แต่ทำให้สระข้างหน้าออกเสียงยาวตามชื่อตัว เช่น <b>hat → hate</b>, <b>bit → bite</b>, <b>hop → hope</b>', re:/[aeiou][^aeiou]e$/, lesson:'magic-e' },
+  double:{ t:'ตัวอักษรซ้ำ (ll, ss, tt, pp …)', tip:'หลังสระเสียงสั้น พยัญชนะมักเขียนซ้ำสองตัว เช่น <b>happy, dinner, swimming, ball</b> ถ้าสระเสียงยาวจะไม่ซ้ำ เช่น hoping กับ hopping', re:/([bcdfgklmnprstz])\1/ },
+  silent:{ t:'ตัวที่เขียนแต่ไม่อ่าน (kn, wr, gh, mb …)', tip:'บางตัวเขียนไว้แต่ไม่ออกเสียง ต้องจำรูปคำ เช่น <b>know, write, night, climb, hour, listen</b>', re:/^kn|^wr|mb$|gh|^ho[un]|^wh|lk|lm|st(?:en|le)$/, lesson:'silent-letters' },
+  team:{ t:'สระคู่ (ee, ea, ai, oa, ou …)', tip:'เสียงเดียวกันเขียนได้หลายแบบ เช่น เสียง "อี" เป็น <b>ee</b> (see) หรือ <b>ea</b> (sea) ต้องจำเป็นคำ ลองจัดกลุ่มคำที่ใช้สระคู่เดียวกันแล้วฝึกพร้อมกัน', re:/ee|ea|ai|ay|oa|oo|ou|ow|ie|ei|ue|ew|au|aw|oi|oy/, lesson:'vowels' },
+  ending:{ t:'ท้ายคำ (-tion, -er/-or, -le/-el …)', tip:'ท้ายคำหลายแบบออกเสียงคล้ายกัน เช่น <b>-er, -or, -ar</b> ออกเสียง "เออะ" เหมือนกัน และ <b>-tion / -sion</b> ออกเสียง "ชั่น" ต้องจำเป็นชุดคำ', re:/(tion|sion|ture|cial|tial|ous|le|el|al|er|or|ar|our|ly|ey|ful|ness|ment|able|ible|ant|ent|ance|ence)$/, lesson:'why-tricky' },
+  f:{ t:'เสียง f ที่เขียนเป็น ph / gh', tip:'<b>ph</b> และบางครั้ง <b>gh</b> ออกเสียง f เช่น phone, photo, laugh, enough', re:/ph|gh/, lesson:'digraphs' },
+  ck:{ t:'เสียง k / s (c, k, ck, s)', tip:'<b>c</b> ก่อน a, o, u ออกเสียง k (cat) ก่อน e, i, y ออกเสียง s (city) ส่วน <b>ck</b> ใช้ท้ายคำหลังสระเสียงสั้น (back, duck)', re:/c|k/, lesson:'digraphs' },
+  vowel:{ t:'สระเดี่ยวสลับกัน (a, e, i, o, u)', tip:'สระที่ไม่ลงเสียงหนักมักออกเสียง "เออะ" เหมือนกันทุกตัว ลองออกเสียงแบบสะกดทีละพยางค์ในใจ เช่น choc-o-late, sep-a-rate', re:/[aeiou]/, lesson:'vowels' },
+  swap:{ t:'สลับตำแหน่งตัวอักษร', tip:'ตัวอักษรครบแต่สลับที่ ลองพิมพ์ช้าลง อ่านเป็นพยางค์ และฟังซ้ำก่อนพิมพ์', re:null },
+  miss:{ t:'ตกหล่นหรือเกินตัวอักษร', tip:'ลองแบ่งคำเป็นพยางค์ แล้วพิมพ์ทีละพยางค์พร้อมพูดออกเสียง', re:null }
+};
+var EORDER = ['rl','vw','final','magic','double','silent','team','ending','f','ck','vowel','swap','miss'];
+function spans(re, t){ var out = [], m, g = new RegExp(re.source, 'g'); while((m = g.exec(t))){ out.push([m.index, m.index + m[0].length]); if(m[0].length===0) g.lastIndex++; } return out; }
+function classify(t, y){
+  t = String(t || '').toLowerCase(); y = String(y || '').toLowerCase().replace(/\s+/g, ' ');
+  var out = []; function add(c){ if(out.indexOf(c)<0) out.push(c); }
+  if(!y || t===y) return out;
+  if(t.length===y.length){ var d = []; for(var i=0;i<t.length;i++) if(t[i]!==y[i]) d.push(i);
+    if(d.length===2 && d[1]===d[0]+1 && t[d[0]]===y[d[1]] && t[d[1]]===y[d[0]]){ add('swap'); return out; } }
+  var und = function(x){ return x.replace(/([a-z])\1+/g, '$1'); };
+  if(und(t)===und(y)){ add('double'); return out; }
+  if((/[^aeiou]e$/.test(t) && y===t.slice(0, -1)) || y===t + 'e'){ add('magic'); return out; }
+  if(y.length<t.length && t.indexOf(y)===0 && /^[^aeiou]+$/.test(t.slice(y.length))){ add('final'); return out; }
+  var ops = align(y, t), hits = [], vsubs = [];
+  ops.forEach(function(o, k){
+    if(o.t==='sub'){ hits.push(o.bi);
+      var p = [o.a, o.b].sort().join(''); if(p==='lr') add('rl'); if(p==='vw') add('vw');
+      if('aeiou'.indexOf(o.a)>-1 && 'aeiou'.indexOf(o.b)>-1) vsubs.push(o.bi); }
+    else if(o.t==='del') hits.push(o.bi);
+    else if(o.t==='ins'){ var nb = null; for(var q=k+1;q<ops.length;q++) if(ops[q].bi!=null){ nb = ops[q].bi; break; } hits.push(nb==null ? t.length - 1 : nb); }
+  });
+  var hitIn = function(sp){ return hits.some(function(h){ return h>=sp[0] - (sp[1]-sp[0]>1 ? 0 : 0) && h<sp[1]; }); };
+  if(spans(EPAT.silent.re, t).some(hitIn)) add('silent');
+  if(spans(EPAT.team.re, t).some(hitIn)) add('team');
+  if(spans(EPAT.ending.re, t).some(hitIn)) add('ending');
+  if(spans(EPAT.f.re, t).some(hitIn)) add('f');
+  if(spans(/ck/, t).some(hitIn) || ops.some(function(o){ return o.t==='sub' && /[cks]/.test(o.a) && /[cks]/.test(o.b); })) add('ck');
+  if(spans(EPAT.double.re, t).some(hitIn)) add('double');
+  var covered = [].concat(spans(EPAT.team.re, t), spans(EPAT.ending.re, t), spans(EPAT.silent.re, t));
+  if(vsubs.some(function(h){ return !covered.some(function(sp){ return h>=sp[0] && h<sp[1]; }); })) add('vowel');
+  if(!out.length) add('miss');
+  return out;
+}
+function coachStats(days){
+  var since = today() - (days || 30), st = {};
+  (Array.isArray(S.err) ? S.err : []).forEach(function(e){
+    if(!Array.isArray(e) || (e[2]||0) < since) return;
+    classify(e[0], e[1]).forEach(function(c){ var x = st[c] || (st[c] = { n:0, ex:[], words:{} }); x.n++; x.words[e[0]] = 1; if(x.ex.length<4 && !x.ex.some(function(z){ return z[0]===e[0]; })) x.ex.push([e[0], e[1]]); });
+  });
+  return EORDER.filter(function(c){ return st[c]; }).map(function(c){ return { c:c, n:st[c].n, ex:st[c].ex, words:Object.keys(st[c].words) }; })
+    .sort(function(a, b){ return b.n - a.n || EORDER.indexOf(a.c) - EORDER.indexOf(b.c); });
+}
+function coachDrill(c){
+  var stats = coachStats(30).find(function(x){ return x.c===c; }), seen = {}, out = [];
+  var pushI = function(i){ if(i===undefined || seen[i] || out.length>=10) return; seen[i] = 1; out.push(i); };
+  if(stats) shuffle(stats.words.slice()).forEach(function(w){ pushI(IDX[w]); });
+  var re = EPAT[c] && EPAT[c].re;
+  if(re && out.length<10){
+    var lv = S.levels && S.levels.length ? S.levels : ['A1'];
+    var learn = shuffle(Object.keys(S.p).filter(function(k){ return re.test(k) && IDX[k]!==undefined; }));
+    learn.forEach(function(k){ pushI(IDX[k]); });
+    shuffle(W.map(function(w, i){ return i; }).filter(function(i){ return lv.indexOf(W[i][4])>-1 && /^[a-z]+$/.test(W[i][0]) && re.test(W[i][0]); })).forEach(pushI);
+  }
+  if(!out.length){ toast('ยังไม่มีคำให้ฝึกในหัวข้อนี้'); return; }
+  beginSession(out.map(function(i){ return { i:i, isNew:false }; }), 'free');
+}
+function diffHTML(t, y){
+  var o = align(y, t), a = '', b = '';
+  o.forEach(function(x){ if(x.t==='ok'){ a += esc(x.a); b += esc(x.b); } else if(x.t==='sub'){ a += '<u>'+esc(x.a)+'</u>'; b += '<u>'+esc(x.b)+'</u>'; } else if(x.t==='del'){ b += '<u>'+esc(x.b)+'</u>'; } else { a += '<u>'+esc(x.a)+'</u>'; } });
+  return '<s>'+a+'</s> → <b>'+b+'</b>';
+}
+function renderCoach(){
+  var el = document.getElementById('co-list'); if(!el) return;
+  var st = coachStats(30), total = (Array.isArray(S.err) ? S.err : []).filter(function(e){ return Array.isArray(e) && (e[2]||0) >= today() - 30; }).length;
+  if(total<3){
+    el.innerHTML = '<div class="panel co-empty">ยังมีข้อมูลไม่พอ'+(total ? ' (สะกดผิด '+total+' ครั้ง)' : '')+'<br>สะกดคำหรือเขียนประโยคต่ออีกหน่อย พอผิดครบ 3 ครั้ง แอปจะเริ่มจับรูปแบบให้<br><br><button class="btn small" data-go-dict>ไปฝึกสะกด</button></div>';
+    return;
+  }
+  var max = st.length ? st[0].n : 1;
+  el.innerHTML = '<p class="note">จากการสะกดผิด '+total+' ครั้งใน 30 วัน (หนึ่งคำอาจผิดได้หลายแบบ)</p>' + st.slice(0, 6).map(function(x){
+    var p = EPAT[x.c];
+    return '<article class="co-card"><div class="co-top"><h3>'+p.t+'</h3><span class="co-n">พลาด '+x.n+' ครั้ง</span></div>'+
+      '<div class="co-bar"><i style="width:'+Math.max(6, Math.round(x.n / max * 100))+'%"></i></div>'+
+      '<ul class="co-ex">'+x.ex.map(function(e){ return '<li>'+diffHTML(e[0], e[1])+'</li>'; }).join('')+'</ul>'+
+      '<p class="co-tip">'+p.tip+'</p>'+
+      '<div class="co-acts"><button class="btn small" data-codrill="'+x.c+'">ฝึก 10 คำของจุดนี้</button>'+(p.lesson ? '<button class="btn ghost small" data-lesson="'+p.lesson+'">เรียนบท phonics</button>' : '')+'</div></article>';
+  }).join('');
+}
+function renderCoachTease(){
+  var el = document.getElementById('t-coach'); if(!el) return;
+  var st = coachStats(30), top = st[0];
+  var total = (Array.isArray(S.err) ? S.err : []).filter(function(e){ return Array.isArray(e) && (e[2]||0) >= today() - 30; }).length;
+  if(!top || top.n<2 || total<3){ el.classList.add('hidden'); return; }
+  el.classList.remove('hidden');
+  el.innerHTML = '<p>จุดที่พลาดบ่อยที่สุดตอนนี้<br><b>'+EPAT[top.c].t+'</b> · '+top.n+' ครั้งใน 30 วัน</p><button class="btn small" data-go-coach>ดูและฝึก</button>';
+}
+document.addEventListener('click', function(ev){
+  var b;
+  if((b = ev.target.closest('[data-codrill]'))){ coachDrill(b.getAttribute('data-codrill')); return; }
+  if(ev.target.closest('[data-go-coach]')){ if(window.VN) window.VN.showView('coach'); return; }
+  if(ev.target.closest('[data-go-dict]')){ if(window.VN) window.VN.showView('dictation'); return; }
+  if((b = ev.target.closest('#co-list [data-lesson]')) && window.VN){ window.VN.openPhonics(b.getAttribute('data-lesson')); }
+});
+
+/* ---------- weekly report ---------- */
+var THDAY = ['อา','จ','อ','พ','พฤ','ศ','ส'];
+function dayTotals(d){ var x = (S.log && S.log[d]) || {}; return { n:(x.n||0) + (x.sw||0) + (x.g||0), ok:(x.ok||0) + (x.swok||0) + (x.gok||0), s:x.s||0 }; }
+function renderWeek(){
+  var bars = document.getElementById('wk-bars'); if(!bars) return;
+  var t = today(), days = [], max = 1, tot = { n:0, ok:0, s:0, act:0 }, prev = 0;
+  for(var i=6;i>=0;i--){ var d = t - i, x = dayTotals(d); days.push({ d:d, x:x }); max = Math.max(max, x.n); tot.n += x.n; tot.ok += x.ok; tot.s += x.s; if(x.n || x.s) tot.act++; }
+  for(i=7;i<14;i++) prev += dayTotals(t - i).n;
+  bars.innerHTML = days.map(function(o){
+    var h = o.x.n ? Math.max(6, Math.round(o.x.n / max * 82)) : 3, okp = o.x.n ? Math.round(o.x.ok / o.x.n * 100) : 0;
+    var wd = new Date(o.d * 86400000).getUTCDay();
+    return '<div class="wk-col'+(o.d===t ? ' today' : '')+'"><span class="wk-v">'+(o.x.n || '')+'</span><div class="wk-b" style="height:'+h+'px" title="'+o.x.n+' ข้อ ถูก '+o.x.ok+'"><i style="height:'+okp+'%"></i></div><span class="wk-d">'+(o.d===t ? 'วันนี้' : THDAY[wd])+'</span></div>';
+  }).join('');
+  var cmp = $('wk-cmp');
+  if(!tot.n && !tot.s){ $('wk-sum').textContent = 'ยังไม่มีการฝึกใน 7 วันนี้ เริ่มข้อแรกแล้วกราฟจะขึ้นที่นี่'; cmp.textContent = ''; cmp.className = 'wk-cmp'; return; }
+  var acc = tot.n ? Math.round(tot.ok / tot.n * 100) : 0;
+  $('wk-sum').innerHTML = 'ฝึกไป <b>'+tot.n+'</b> ข้อ · ถูก <b>'+acc+'%</b>'+(tot.s ? ' · เขียน <b>'+tot.s+'</b> ประโยค' : '')+' · ฝึก <b>'+tot.act+'</b> จาก 7 วัน<br><small>ความสูงแท่ง = จำนวนข้อที่ฝึก · ส่วนสีเขียวสด = ตอบถูก (รวมสะกดคำ เขียนประโยค และเกม)</small>';
+  if(prev){ var ch = Math.round((tot.n - prev) / prev * 100); cmp.textContent = ch>0 ? 'มากกว่าสัปดาห์ก่อน '+ch+'%' : ch<0 ? 'น้อยกว่าสัปดาห์ก่อน '+(-ch)+'%' : 'เท่ากับสัปดาห์ก่อน'; cmp.className = 'wk-cmp' + (ch>=0 ? ' up' : ''); }
+  else { cmp.textContent = ''; cmp.className = 'wk-cmp'; }
+}
+
+/* ---------- sentence dictation ---------- */
+var SENT_BANK = [["My sister has a new bike.", "พี่สาว/น้องสาวของฉันมีจักรยานคันใหม่"], ["My husband drinks coffee every morning.", "สามีของฉันดื่มกาแฟทุกเช้า"], ["His wife works at a hospital.", "ภรรยาของเขาทำงานที่โรงพยาบาล"], ["My brother is taller than me.", "พี่ชาย/น้องชายของฉันสูงกว่าฉัน"], ["Our grandmother lives near the sea.", "คุณยายของเราอาศัยอยู่ใกล้ทะเล"], ["I call my mother every Sunday.", "ฉันโทรหาแม่ทุกวันอาทิตย์"], ["The baby is sleeping in the bedroom.", "เด็กทารกกำลังนอนอยู่ในห้องนอน"], ["My uncle has a big farm.", "ลุงของฉันมีฟาร์มใหญ่"], ["Her cousin is a nurse.", "ลูกพี่ลูกน้องของเธอเป็นพยาบาล"], ["We eat dinner together at seven.", "เรากินข้าวเย็นด้วยกันตอนหนึ่งทุ่ม"], ["My parents are very kind.", "พ่อแม่ของฉันใจดีมาก"], ["Their son plays the guitar.", "ลูกชายของพวกเขาเล่นกีตาร์"], ["Please close the door.", "กรุณาปิดประตู"], ["Open the window, please.", "ช่วยเปิดหน้าต่างหน่อย"], ["The kitchen is next to the bathroom.", "ห้องครัวอยู่ติดกับห้องน้ำ"], ["I take a bath before bed.", "ฉันอาบน้ำก่อนนอน"], ["The clock on the wall is broken.", "นาฬิกาบนผนังเสีย"], ["There is a cat under the table.", "มีแมวอยู่ใต้โต๊ะ"], ["My room is small but clean.", "ห้องของฉันเล็กแต่สะอาด"], ["These clothes are dirty.", "เสื้อผ้าพวกนี้สกปรก"], ["I wash my clothes on Saturday.", "ฉันซักเสื้อผ้าวันเสาร์"], ["He cut the grass in the garden.", "เขาตัดหญ้าในสวน"], ["We have a small garden behind the house.", "เรามีสวนเล็กๆ อยู่หลังบ้าน"], ["The dog is playing with a ball.", "สุนัขกำลังเล่นลูกบอล"], ["My dog likes to jump and run.", "สุนัขของฉันชอบกระโดดและวิ่ง"], ["Can you help me with my homework?", "ช่วยทำการบ้านให้ฉันหน่อยได้ไหม"], ["I forgot my key at home.", "ฉันลืมกุญแจไว้ที่บ้าน"], ["Our neighbour has two cats.", "เพื่อนบ้านของเรามีแมวสองตัว"], ["I would like some milk, please.", "ขอนมหน่อยครับ/ค่ะ"], ["Do you want orange juice or apple juice?", "คุณอยากได้น้ำส้มหรือน้ำแอปเปิล"], ["She drinks tea with sugar.", "เธอดื่มชาใส่น้ำตาล"], ["This soup is very hot.", "ซุปนี้ร้อนมาก"], ["The cake is delicious.", "เค้กอร่อยมาก"], ["We had a big meal last night.", "เมื่อคืนเรากินมื้อใหญ่"], ["I eat an egg for breakfast.", "ฉันกินไข่หนึ่งฟองเป็นอาหารเช้า"], ["He does not eat meat.", "เขาไม่กินเนื้อสัตว์"], ["Fruit and vegetables are good for your health.", "ผลไม้และผักดีต่อสุขภาพของคุณ"], ["I am hungry. Let's have lunch.", "ฉันหิวแล้ว ไปกินข้าวเที่ยงกันเถอะ"], ["Can I have a glass of water?", "ขอน้ำหนึ่งแก้วได้ไหม"], ["There is no bread in the kitchen.", "ไม่มีขนมปังในครัว"], ["She bought some cheese and butter.", "เธอซื้อชีสและเนยมานิดหน่อย"], ["The chicken is in the oven.", "ไก่อยู่ในเตาอบ"], ["We need some tomatoes for the soup.", "เราต้องใช้มะเขือเทศสำหรับทำซุป"], ["I don't have any coffee left.", "ฉันไม่มีกาแฟเหลือเลย"], ["Is there any milk in the fridge?", "มีนมในตู้เย็นไหม"], ["The waiter brought our food.", "พนักงานเสิร์ฟนำอาหารมาให้เรา"], ["I can pay by card.", "ฉันจ่ายด้วยบัตรได้"], ["How much is this chocolate?", "ช็อกโกแลตนี้ราคาเท่าไร"], ["The meeting starts at nine.", "การประชุมเริ่มเก้าโมง"], ["Wait a minute, please.", "รอสักครู่นะ"], ["I waited for half an hour.", "ฉันรอไปครึ่งชั่วโมง"], ["The class is one hour long.", "คาบเรียนยาวหนึ่งชั่วโมง"], ["We go to the market on Wednesday.", "เราไปตลาดวันพุธ"], ["My birthday is in January.", "วันเกิดของฉันอยู่ในเดือนมกราคม"], ["School finishes in July.", "โรงเรียนปิดเทอมเดือนกรกฎาคม"], ["I will see you tomorrow.", "แล้วเจอกันพรุ่งนี้"], ["What time is it now?", "ตอนนี้กี่โมงแล้ว"], ["I get up early every day.", "ฉันตื่นเช้าทุกวัน"], ["He arrived late this morning.", "เช้านี้เขามาสาย"], ["Please arrive before eight.", "กรุณามาถึงก่อนแปดโมง"], ["The train will arrive at the station soon.", "รถไฟจะมาถึงสถานีเร็วๆ นี้"], ["We finish work at five.", "เราเลิกงานตอนห้าโมงเย็น"], ["Did you finish your homework?", "ทำการบ้านเสร็จหรือยัง"], ["The film had a happy end.", "ภาพยนตร์จบอย่างมีความสุข"], ["Let's meet at the end of the week.", "เจอกันตอนปลายสัปดาห์นะ"], ["I was at home all weekend.", "ฉันอยู่บ้านตลอดสุดสัปดาห์"], ["It is cold in winter.", "ฤดูหนาวอากาศหนาว"], ["We go to the beach every summer.", "เราไปทะเลทุกฤดูร้อน"], ["My teacher is very strict.", "ครูของฉันเข้มงวดมาก"], ["Write your name on the paper.", "เขียนชื่อของคุณบนกระดาษ"], ["Read the sentence again.", "อ่านประโยคนั้นอีกครั้ง"], ["I don't understand this word.", "ฉันไม่เข้าใจคำนี้"], ["Can you spell your name?", "ช่วยสะกดชื่อของคุณได้ไหม"], ["The topic of the lesson is food.", "หัวข้อของบทเรียนคืออาหาร"], ["We did a survey about sport.", "เราทำแบบสำรวจเรื่องกีฬา"], ["She is taking an English course.", "เธอกำลังเรียนคอร์สภาษาอังกฤษ"], ["Of course you can come.", "แน่นอน คุณมาได้"], ["Let me introduce my friend Tom.", "ขอแนะนำเพื่อนของฉัน ทอม"], ["This is my personal phone number.", "นี่คือเบอร์โทรศัพท์ส่วนตัวของฉัน"], ["Write the number on the line.", "เขียนตัวเลขลงบนเส้น"], ["Please stand in line.", "กรุณาเข้าแถว"], ["The machine is not working.", "เครื่องนี้ไม่ทำงาน"], ["He works in a car factory.", "เขาทำงานในโรงงานรถยนต์"], ["I have a lot of work today.", "วันนี้ฉันมีงานเยอะ"], ["The office is on the second floor.", "สำนักงานอยู่ชั้นสอง"], ["I sent you an email yesterday.", "เมื่อวานฉันส่งอีเมลไปหาคุณ"], ["She wants to be a doctor.", "เธออยากเป็นหมอ"], ["Our team won the game.", "ทีมของเราชนะเกม"], ["I need a pen and some paper.", "ฉันต้องใช้ปากกาและกระดาษ"], ["The library is quiet.", "ห้องสมุดเงียบ"], ["I learn new words every day.", "ฉันเรียนคำศัพท์ใหม่ทุกวัน"], ["Listen and write what you hear.", "ฟังแล้วเขียนสิ่งที่ได้ยิน"], ["Practice makes your spelling better.", "การฝึกทำให้การสะกดของคุณดีขึ้น"], ["This test is not difficult.", "ข้อสอบนี้ไม่ยาก"], ["The answer is correct.", "คำตอบถูกต้อง"], ["Sorry, I made a mistake.", "ขอโทษ ฉันทำผิดพลาด"], ["The supermarket is near my house.", "ซูเปอร์มาร์เก็ตอยู่ใกล้บ้านฉัน"], ["I go to work by bus.", "ฉันไปทำงานด้วยรถบัส"], ["He rides his bike to school.", "เขาปั่นจักรยานไปโรงเรียน"], ["There is a church in the old town.", "มีโบสถ์อยู่ในเมืองเก่า"], ["Turn left at the bank.", "เลี้ยวซ้ายที่ธนาคาร"], ["The hotel is next to the station.", "โรงแรมอยู่ติดกับสถานี"], ["Where is the airport?", "สนามบินอยู่ที่ไหน"], ["We took a taxi to the hotel.", "เรานั่งแท็กซี่ไปโรงแรม"], ["I bought a ticket for the train.", "ฉันซื้อตั๋วรถไฟแล้ว"], ["The shop opens at ten.", "ร้านเปิดสิบโมง"], ["We walked along the river.", "เราเดินเลียบแม่น้ำ"], ["The bridge is very long.", "สะพานยาวมาก"], ["There are many people in the park.", "มีคนมากมายในสวนสาธารณะ"], ["We are going to the fair on Saturday.", "เราจะไปงานออกร้านวันเสาร์"], ["It's not fair!", "ไม่ยุติธรรมเลย"], ["I am spending my holiday in Japan.", "ฉันกำลังใช้วันหยุดอยู่ที่ญี่ปุ่น"], ["Don't spend all your money.", "อย่าใช้เงินหมดนะ"], ["How much did you pay for it?", "คุณจ่ายไปเท่าไรสำหรับมัน"], ["The museum is closed on Monday.", "พิพิธภัณฑ์ปิดวันจันทร์"], ["My city has a big park.", "เมืองของฉันมีสวนสาธารณะขนาดใหญ่"], ["You should wear a hat in the sun.", "คุณควรใส่หมวกเวลาอยู่กลางแดด"], ["She is wearing a blue dress.", "เธอใส่ชุดเดรสสีน้ำเงิน"], ["These shoes are too small.", "รองเท้าคู่นี้เล็กเกินไป"], ["I need a new jacket for winter.", "ฉันต้องการเสื้อแจ็กเก็ตตัวใหม่สำหรับฤดูหนาว"], ["He has a red nose.", "เขามีจมูกสีแดง"], ["Wash your hands before you eat.", "ล้างมือก่อนกินข้าว"], ["My leg hurts.", "ขาของฉันเจ็บ"], ["I have a headache today.", "วันนี้ฉันปวดหัว"], ["Brush your teeth twice a day.", "แปรงฟันวันละสองครั้ง"], ["Her hair is long and black.", "ผมของเธอยาวและดำ"], ["I like swimming in the sea.", "ฉันชอบว่ายน้ำในทะเล"], ["Swimming is good exercise.", "การว่ายน้ำเป็นการออกกำลังกายที่ดี"], ["My children love cartoons.", "ลูกๆ ของฉันชอบการ์ตูน"], ["The film was very funny.", "หนังเรื่องนั้นตลกมาก"], ["He told a funny story.", "เขาเล่าเรื่องตลก"], ["She likes to paint pictures of flowers.", "เธอชอบวาดภาพดอกไม้"], ["We will paint the wall white.", "เราจะทาผนังสีขาว"], ["I play cards with my friends.", "ฉันเล่นไพ่กับเพื่อน"], ["I sent her a birthday card.", "ฉันส่งการ์ดวันเกิดให้เธอ"], ["Do you play any sport?", "คุณเล่นกีฬาอะไรบ้างไหม"], ["They play football after school.", "พวกเขาเล่นฟุตบอลหลังเลิกเรียน"], ["I listen to music on the bus.", "ฉันฟังเพลงบนรถบัส"], ["She sings in a band.", "เธอร้องเพลงในวงดนตรี"], ["We watched a movie last night.", "เมื่อคืนเราดูหนัง"], ["Reading is my favourite hobby.", "การอ่านเป็นงานอดิเรกที่ฉันชอบที่สุด"], ["He takes photos of birds.", "เขาถ่ายรูปนก"], ["Let's go to the cinema.", "ไปดูหนังกันเถอะ"], ["I enjoy cooking for my family.", "ฉันสนุกกับการทำอาหารให้ครอบครัว"], ["There is nothing on TV tonight.", "คืนนี้ไม่มีอะไรน่าดูในทีวี"], ["I have nothing to do.", "ฉันไม่มีอะไรทำ"], ["I am afraid of dogs.", "ฉันกลัวสุนัข"], ["Don't be afraid to ask.", "อย่ากลัวที่จะถาม"], ["She is happy today.", "วันนี้เธอมีความสุข"], ["He was angry with me.", "เขาโกรธฉัน"], ["I am tired after work.", "ฉันเหนื่อยหลังเลิกงาน"], ["My friend is very clever.", "เพื่อนของฉันฉลาดมาก"], ["He is shy but friendly.", "เขาขี้อายแต่เป็นมิตร"], ["Thank you for your help.", "ขอบคุณสำหรับความช่วยเหลือ"], ["I am sorry I am late.", "ขอโทษที่มาสาย"], ["Nice to meet you.", "ยินดีที่ได้รู้จัก"], ["Some people like coffee and some like tea.", "บางคนชอบกาแฟ และบางคนชอบชา"], ["Give some to them.", "แบ่งให้พวกเขาบ้าง"], ["I saw them at the party.", "ฉันเห็นพวกเขาที่งานปาร์ตี้"], ["There are two books on my desk.", "มีหนังสือสองเล่มบนโต๊ะของฉัน"], ["Is there a bank near here?", "แถวนี้มีธนาคารไหม"], ["He is my best friend.", "เขาเป็นเพื่อนสนิทที่สุดของฉัน"], ["You can have tea or coffee.", "คุณเลือกชาหรือกาแฟก็ได้"], ["She works as a teacher.", "เธอทำงานเป็นครู"], ["Do it as soon as you can.", "ทำให้เร็วที่สุดเท่าที่ทำได้"], ["I don't have any money.", "ฉันไม่มีเงินเลย"], ["Any child can do it.", "เด็กคนไหนก็ทำได้"], ["It is sunny today.", "วันนี้แดดออก"], ["Take an umbrella. It might rain.", "เอาร่มไปด้วย ฝนอาจจะตก"], ["The weather is warm in April.", "อากาศเดือนเมษายนอบอุ่น"], ["The sky is blue and clear.", "ท้องฟ้าสีฟ้าและแจ่มใส"], ["Birds sing in the trees.", "นกร้องเพลงอยู่บนต้นไม้"], ["The grass is green after the rain.", "หญ้าเขียวหลังฝนตก"], ["There is snow on the mountain.", "มีหิมะบนภูเขา"], ["The moon is bright tonight.", "คืนนี้พระจันทร์สว่าง"], ["We planted a tree in the yard.", "เราปลูกต้นไม้ในสนามหลังบ้าน"], ["The flowers in my garden are pink.", "ดอกไม้ในสวนของฉันเป็นสีชมพู"], ["I visited my aunt last week.", "ฉันไปเยี่ยมป้าเมื่อสัปดาห์ที่แล้ว"], ["We played tennis yesterday.", "เมื่อวานเราเล่นเทนนิส"], ["She lived in London for two years.", "เธออาศัยอยู่ที่ลอนดอนสองปี"], ["He bought a new phone.", "เขาซื้อโทรศัพท์เครื่องใหม่"], ["I lost my bag on the bus.", "ฉันทำกระเป๋าหายบนรถบัส"], ["They went to the beach on Sunday.", "พวกเขาไปทะเลวันอาทิตย์"], ["I saw a big bird in the park.", "ฉันเห็นนกตัวใหญ่ในสวนสาธารณะ"], ["We had a great time.", "เรามีช่วงเวลาที่ดีมาก"], ["She wrote a letter to her friend.", "เธอเขียนจดหมายถึงเพื่อน"], ["I didn't sleep well last night.", "เมื่อคืนฉันนอนไม่ค่อยหลับ"], ["He forgot to call me.", "เขาลืมโทรหาฉัน"], ["The children jumped into the pool.", "เด็กๆ กระโดดลงสระว่ายน้ำ"], ["I am going to learn to swim.", "ฉันจะไปเรียนว่ายน้ำ"], ["We will travel to Chiang Mai next month.", "เดือนหน้าเราจะไปเที่ยวเชียงใหม่"], ["Will you come to my party?", "คุณจะมางานปาร์ตี้ของฉันไหม"], ["I hope it doesn't rain tomorrow.", "หวังว่าพรุ่งนี้ฝนจะไม่ตก"], ["She wants to buy a house.", "เธออยากซื้อบ้าน"], ["I'm going to clean my room.", "ฉันจะทำความสะอาดห้อง"], ["Let's start the lesson.", "เริ่มบทเรียนกันเถอะ"], ["I will try again.", "ฉันจะลองอีกครั้ง"], ["Where do you live?", "คุณอาศัยอยู่ที่ไหน"], ["What is your name?", "คุณชื่ออะไร"], ["How old are you?", "คุณอายุเท่าไร"], ["Why are you so happy?", "ทำไมคุณถึงดีใจนัก"], ["Who is that man?", "ผู้ชายคนนั้นคือใคร"], ["When does the shop close?", "ร้านปิดกี่โมง"], ["Which bag is yours?", "กระเป๋าใบไหนเป็นของคุณ"], ["How do you spell that?", "คำนั้นสะกดอย่างไร"], ["Do you like your new job?", "คุณชอบงานใหม่ไหม"], ["Can you speak English?", "คุณพูดภาษาอังกฤษได้ไหม"], ["Are you ready?", "พร้อมหรือยัง"], ["Have you ever been to Japan?", "คุณเคยไปญี่ปุ่นไหม"], ["I usually walk to work, but today I took the bus.", "ปกติฉันเดินไปทำงาน แต่วันนี้ฉันนั่งรถบัส"], ["If it rains, we will stay at home.", "ถ้าฝนตก เราจะอยู่บ้าน"], ["She has worked here since January.", "เธอทำงานที่นี่ตั้งแต่เดือนมกราคม"], ["I have never seen such a beautiful garden.", "ฉันไม่เคยเห็นสวนที่สวยขนาดนี้มาก่อน"], ["The more you practise, the better you spell.", "ยิ่งฝึกมาก ก็ยิ่งสะกดได้ดี"], ["He was reading a book when I called.", "ตอนที่ฉันโทรไป เขากำลังอ่านหนังสืออยู่"], ["We should protect the environment.", "เราควรปกป้องสิ่งแวดล้อม"], ["Could you tell me the way to the station?", "ช่วยบอกทางไปสถานีหน่อยได้ไหม"], ["I'm not sure, but I think he is right.", "ฉันไม่แน่ใจ แต่คิดว่าเขาพูดถูก"], ["My sister is spending a lot of money on clothes.", "พี่สาวของฉันใช้เงินซื้อเสื้อผ้าเยอะมาก"], ["Before you arrive, please send me a message.", "ก่อนคุณมาถึง กรุณาส่งข้อความหาฉัน"], ["The survey shows that people like swimming.", "แบบสำรวจแสดงว่าคนชอบว่ายน้ำ"], ["This machine can wash and dry your clothes.", "เครื่องนี้ซักและอบผ้าให้คุณได้"], ["I want to introduce a new topic today.", "วันนี้ฉันอยากแนะนำหัวข้อใหม่"], ["Writing every day helps you remember spelling.", "การเขียนทุกวันช่วยให้คุณจำตัวสะกดได้"]];
+var SB = null;
+var CONTR = { dont:'do not', doesnt:'does not', didnt:'did not', isnt:'is not', arent:'are not', wasnt:'was not', werent:'were not', cant:'can not', cannot:'can not', wont:'will not', im:'i am', ive:'i have', youre:'you are', theyre:'they are', hes:'he is', shes:'she is', thats:'that is', whats:'what is', lets:'let us', havent:'have not', hasnt:'has not', couldnt:'could not', shouldnt:'should not', wouldnt:'would not', ill:null };
+function sToks(s){ return String(s).replace(/[’‘`]/g, "'").split(/\s+/).map(function(w){ return w.replace(/^[^A-Za-z0-9']+|[^A-Za-z0-9']+$/g, ''); }).filter(Boolean); }
+function sNorm(tok){ return tok.toLowerCase().replace(/'/g, ''); }
+function sExpand(toks){ var out = []; toks.forEach(function(t, i){ var n = sNorm(t), x = CONTR[n]; (x ? x.split(' ') : [n]).forEach(function(p){ out.push({ w:p, o:i }); }); }); return out; }
+function wkey(tok){
+  var t = sNorm(tok); if(!t) return null; if(IDX[t]!==undefined) return t;
+  var c = [t.replace(/ies$/, 'y'), t.replace(/es$/, ''), t.replace(/s$/, ''), t.replace(/ed$/, ''), t.replace(/ed$/, 'e'), t.replace(/d$/, ''), t.replace(/ing$/, ''), t.replace(/ing$/, 'e'), t.replace(/([a-z])\1ing$/, '$1'), t.replace(/([a-z])\1ed$/, '$1')];
+  for(var i=0;i<c.length;i++) if(c[i]!==t && c[i].length>1 && IDX[c[i]]!==undefined) return c[i];
+  return null;
+}
+function sbank(){
+  if(SB) return SB;
+  SB = SENT_BANK.map(function(x){ return { en:x[0], th:x[1] }; });
+  try{ if(window.VN && window.VN.sentences) window.VN.sentences().forEach(function(x){ var en = String(x.en || '').replace(/[’]/g, "'").trim();
+    if(/^[A-Za-z][A-Za-z ,.'?!-]+[.?!]$/.test(en) && en.split(/\s+/).length<=12 && !SB.some(function(y){ return y.en===en; })) SB.push({ en:en, th:x.th || '' }); }); }catch(e){}
+  SB.forEach(function(x){ x.toks = sToks(x.en); x.keys = x.toks.map(wkey); });
+  return SB;
+}
+var SN = { list:[], i:0, res:[], tried:false };
+function SNS(){ if(!S.sent || typeof S.sent!=='object') S.sent = {}; var o = S.sent; if(!o.src) o.src = 'learn'; if(!o.len) o.len = 5; if(!Array.isArray(o.recent)) o.recent = []; return o; }
+function snPool(src){
+  var b = sbank(), o = SNS();
+  if(src==='learn'){
+    var t = today();
+    return b.map(function(x){ var sc = 0; x.keys.forEach(function(k){ var e = k && S.p[k]; if(e) sc += 1 + Math.max(0, (e.w||0) - (e.c||0)) + (e.d<=t ? 1 : 0); }); return { x:x, sc:sc }; })
+      .filter(function(z){ return z.sc>0; }).map(function(z){ return z; });
+  }
+  return b.map(function(x){ return { x:x, sc:1 }; });
+}
+function snPick(src, n){
+  var o = SNS(), pool = snPool(src), rec = o.recent;
+  pool.forEach(function(z){ z.r = Math.random() + z.sc * 0.6 - (rec.indexOf(z.x.en)>-1 ? 5 : 0); });
+  pool.sort(function(a, b){ return b.r - a.r; });
+  var out = pool.slice(0, n).map(function(z){ return z.x; });
+  if(out.length<n) shuffle(sbank().filter(function(x){ return out.indexOf(x)<0; })).slice(0, n - out.length).forEach(function(x){ out.push(x); });
+  return out;
+}
+function renderSnHome(){
+  var o = SNS(), nL = snPool('learn').length;
+  if(o.src==='learn' && !nL) o.src = 'all';
+  $('sn-src').innerHTML = [['learn','จากคำที่ฝึกอยู่', nL], ['all','ทุกประโยค', sbank().length]].map(function(x){
+    return '<button class="chip" data-snsrc="'+x[0]+'" aria-pressed="'+(o.src===x[0])+'"'+(x[2] ? '' : ' disabled')+'>'+x[1]+'<small>'+x[2]+'</small></button>'; }).join('');
+  $('sn-len').innerHTML = [3,5,10].map(function(n){ return '<button class="chip" data-snlen="'+n+'" aria-pressed="'+(o.len===n)+'">'+n+' ประโยค</button>'; }).join('');
+  $('sn-note').textContent = o.src==='learn' ? (nL ? 'เลือกประโยคที่มีคำที่คุณกำลังฝึก โดยเน้นคำที่ยังผิดบ่อย' : 'ยังไม่มีคำที่กำลังฝึก ลองสะกดคำก่อน หรือเลือก "ทุกประโยค"') : 'ประโยคสั้นในชีวิตประจำวัน ระดับ A1–B1';
+}
+$('sn-src').addEventListener('click', function(ev){ var b = ev.target.closest('[data-snsrc]'); if(!b || b.disabled) return; SNS().src = b.getAttribute('data-snsrc'); save(); renderSnHome(); });
+$('sn-len').addEventListener('click', function(ev){ var b = ev.target.closest('[data-snlen]'); if(!b) return; SNS().len = +b.getAttribute('data-snlen'); save(); renderSnHome(); });
+function snShow(id){ document.body.classList.toggle('dl-focus', id==='play'); ['home','play','sum'].forEach(function(x){ $('sn-'+x).classList.toggle('hidden', x!==id); }); window.scrollTo(0, 0); }
+$('sn-start').addEventListener('click', function(){
+  var o = SNS(); SN = { list:snPick(o.src, o.len), i:0, res:[], tried:false, wrong:{} };
+  if(!SN.list.length) return;
+  var t = today(); if(S.lastDay!==t){ S.streak = (S.lastDay===t-1) ? S.streak+1 : 1; S.lastDay = t; save(); }
+  snShow('play'); snLoad();
+});
+function snCur(){ return SN.list[SN.i]; }
+function snLoad(){
+  var x = snCur(); SN.tried = false;
+  $('sn-bar').style.width = (SN.i / SN.list.length * 100) + '%'; $('sn-count').textContent = (SN.i + 1) + '/' + SN.list.length;
+  $('sn-ask').classList.remove('hidden'); $('sn-res').classList.add('hidden');
+  $('sn-in').value = '';
+  var showTh = !!SNS().th && x.th; $('sn-th').textContent = x.th || ''; $('sn-th').classList.toggle('hidden', !showTh); $('sn-thBtn').classList.toggle('hidden', showTh || !x.th);
+  if(U().auto) speak(x.en);
+  setTimeout(function(){ $('sn-in').focus(); }, 60);
+}
+$('sn-thBtn').addEventListener('click', function(){ SNS().th = 1; save(); $('sn-th').classList.remove('hidden'); this.classList.add('hidden'); });
+$('sn-say').addEventListener('click', function(){ speak(snCur().en); });
+$('sn-slow').addEventListener('click', function(){ speak(snCur().en, true); });
+function snParts(en){
+  var out = [];
+  String(en).split(/,\s*/).forEach(function(part){ var w = part.split(/\s+/).filter(Boolean); while(w.length){ var n = w.length<=5 ? w.length : (w.length<=8 ? Math.ceil(w.length / 2) : 4); out.push(w.splice(0, n).join(' ')); } });
+  return out;
+}
+var SN_PT = null;
+$('sn-parts').addEventListener('click', function(){
+  var parts = snParts(snCur().en), k = 0; clearTimeout(SN_PT);
+  var step = function(){ if(k>=parts.length) return; var p = parts[k++]; speak(p, true); SN_PT = setTimeout(step, 900 + p.length * 95); };
+  step();
+});
+function snAlign(tw, yw){
+  var n = yw.length, m = tw.length, D = [], i, j;
+  var sim = function(a, b){ if(a===b) return 0; var o = align(a, b).filter(function(x){ return x.t!=='ok'; }).length; return o <= Math.max(1, Math.floor(b.length / 2)) ? 1 : 2.2; };
+  for(i=0;i<=n;i++){ D[i] = [i]; } for(j=0;j<=m;j++) D[0][j] = j;
+  for(i=1;i<=n;i++) for(j=1;j<=m;j++) D[i][j] = Math.min(D[i-1][j] + 1, D[i][j-1] + 1, D[i-1][j-1] + sim(yw[i-1].w, tw[j-1].w));
+  var ops = []; i = n; j = m;
+  while(i>0 || j>0){
+    if(i>0 && j>0 && Math.abs(D[i][j] - (D[i-1][j-1] + sim(yw[i-1].w, tw[j-1].w)))<1e-9){ ops.push({ t: yw[i-1].w===tw[j-1].w ? 'ok' : 'sub', y:yw[i-1], x:tw[j-1] }); i--; j--; }
+    else if(j>0 && D[i][j]===D[i][j-1] + 1){ ops.push({ t:'del', x:tw[j-1] }); j--; }
+    else { ops.push({ t:'ins', y:yw[i-1] }); i--; }
+  }
+  return ops.reverse();
+}
+function snCheck(){
+  if(!$('sn-res').classList.contains('hidden')) return;
+  var typed = $('sn-in').value.trim(); if(!typed){ $('sn-in').focus(); return; }
+  var x = snCur(), yt = sToks(typed), tw = sExpand(x.toks), yw = sExpand(yt);
+  var ops = snAlign(tw, yw), state = x.toks.map(function(){ return { ok:true, typed:[] }; }), extra = [];
+  ops.forEach(function(o){
+    if(o.t==='ok') return;
+    if(o.t==='ins'){ extra.push(yt[o.y.o]); return; }
+    var st = state[o.x.o]; st.ok = false;
+    if(o.t==='sub'){ st.kind = st.kind==='miss' ? 'miss' : 'typo'; st.typed.push(o.y.w); } else if(!st.kind) st.kind = 'miss';
+  });
+  var good = state.filter(function(z){ return z.ok; }).length, pct = Math.round(good / state.length * 100);
+  if(!SN.tried){
+    SN.res.push(pct); logDay('s'); logDay('sw', state.length); logDay('swok', good);
+    state.forEach(function(z, i){ var k = x.keys[i]; if(!k) return;
+      if(z.ok){ if(S.p[k]) freeGrade(k, true); }
+      else { freeGrade(k, false); SN.wrong[k] = 1; if(z.kind==='typo') recordErr(sNorm(x.toks[i]), z.typed.join('')); } });
+    var o = SNS(); o.recent = o.recent.filter(function(e){ return e!==x.en; }).concat([x.en]).slice(-60); save();
+  }
+  SN.tried = true;
+  sfx(pct===100 ? 'ok' : 'no');
+  var v = $('sn-verdict'); v.className = 'verdict ' + (pct===100 ? 'ok' : 'bad');
+  v.textContent = pct===100 ? 'ถูกทั้งประโยค' : pct>=70 ? 'เกือบแล้ว ถูก ' + good + ' จาก ' + state.length + ' คำ' : 'ถูก ' + good + ' จาก ' + state.length + ' คำ ลองกด "ฟังทีละท่อน"';
+  $('sn-out').innerHTML = x.toks.map(function(tok, i){ var z = state[i];
+    if(z.ok) return '<span class="snw">'+esc(tok)+'</span>';
+    if(z.kind==='typo') return '<span class="snw typo"><small>'+esc(z.typed.join(' '))+'</small>'+esc(tok)+'</span>';
+    return '<span class="snw miss">'+esc(tok)+'</span>'; }).join(' ');
+  $('sn-extra').innerHTML = extra.length ? 'คำที่พิมพ์เกินมา: ' + extra.map(function(e){ return '<s>'+esc(e)+'</s>'; }).join(', ') : '';
+  $('sn-th').textContent = x.th || ''; $('sn-th').classList.toggle('hidden', !x.th); $('sn-thBtn').classList.add('hidden');
+  $('sn-ask').classList.add('hidden'); $('sn-res').classList.remove('hidden');
+  $('sn-retry').classList.toggle('hidden', pct===100);
+  $('sn-next').textContent = SN.i + 1>=SN.list.length ? 'ดูสรุป' : 'ประโยคต่อไป';
+  speak(x.en);
+  setTimeout(function(){ $('sn-next').focus(); }, 60);
+}
+$('sn-check').addEventListener('click', snCheck);
+$('sn-in').addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); snCheck(); } });
+$('sn-retry').addEventListener('click', function(){ $('sn-res').classList.add('hidden'); $('sn-ask').classList.remove('hidden'); $('sn-in').value = ''; $('sn-in').focus(); speak(snCur().en); });
+$('sn-next').addEventListener('click', function(){ SN.i++; if(SN.i>=SN.list.length) snFinish(); else snLoad(); });
+$('sn-quit').addEventListener('click', snFinish);
+function snFinish(){
+  clearTimeout(SN_PT); flush();
+  var n = SN.res.length, avg = n ? Math.round(SN.res.reduce(function(a, b){ return a + b; }, 0) / n) : 0, perfect = SN.res.filter(function(p){ return p===100; }).length;
+  $('sn-sumScore').innerHTML = avg + '<small>%</small>';
+  $('sn-sumNote').textContent = n ? ('ความแม่นยำเฉลี่ยจาก ' + n + ' ประโยค · ถูกทั้งประโยค ' + perfect + ' ประโยค') : 'ยังไม่ได้เขียนประโยคไหนในรอบนี้';
+  var wrong = Object.keys(SN.wrong || {});
+  $('sn-sumWrongPanel').classList.toggle('hidden', !wrong.length);
+  $('sn-sumWrong').innerHTML = wrong.map(wordRow).join('');
+  snShow('sum'); renderHome();
+}
+$('sn-again').addEventListener('click', function(){ renderSnHome(); snShow('home'); });
+
+/* ---------- welcome (first time a player opens the app) ---------- */
+var OB = null;
+function isFresh(st){ return !st.onboarded && !Object.keys(st.p || {}).length && !((st.garden || {}).f) && !((st.garden || {}).s); }
+function maybeOnboard(){
+  if(!isFresh(S)){ if(!S.onboarded){ S.onboarded = 1; } return; }
+  if(!$('pf-sheet').classList.contains('hidden')) return;
+  openOnboard();
+}
+function openOnboard(){
+  var p = curP();
+  OB = { step: /^ผู้เล่น \d+$/.test(p.name) ? 1 : 2, name: /^ผู้เล่น \d+$/.test(p.name) ? '' : p.name, icon:p.icon, lvl:(S.levels && S.levels[0]) || 'A1', per:S.newPer || 10, heard:null };
+  renderOnboard(); $('ob-sheet').classList.remove('hidden');
+}
+function closeOnboard(){ $('ob-sheet').classList.add('hidden'); OB = null; }
+function renderOnboard(){
+  if(!OB) return;
+  var b = $('ob-body'), total = 3, h = '';
+  if(OB.step===1){
+    h = '<p class="ob-step">ขั้นที่ 1 จาก '+total+'</p><h2 id="ob-title">ยินดีต้อนรับสู่ Dictation Lab</h2>'+
+      '<p>แอปนี้ฝึกให้จำตัวสะกดได้จริง ไม่ใช่แค่จำเสียง ทุกวันทำ 3 อย่าง:</p>'+
+      '<ol class="ob-how"><li><b>1</b><span>ฟังเสียงคำ แล้วพิมพ์เอง</span></li><li><b>2</b><span>ดูว่าพลาดตรงไหน แอปแบ่งคำเป็นก้อนเสียงให้เห็น</span></li><li><b>3</b><span>คำที่ผิดจะกลับมาให้ทบทวน จนจำได้ถาวร</span></li></ol>'+
+      '<label class="pf-lab" for="ob-name">ชื่อเล่นของคุณ</label><input class="pf-in" id="ob-name" maxlength="20" autocomplete="off" value="'+esc(OB.name)+'" placeholder="เช่น บอส">'+
+      '<p class="pf-lab">เลือกไอคอน</p><div class="pf-icons">'+PICONS.map(function(i){ return '<button data-obi="'+i+'" aria-pressed="'+(OB.icon===i)+'">'+i+'</button>'; }).join('')+'</div>'+
+      '<div class="ob-acts" style="margin-top:16px"><button class="btn" data-obnext>ต่อไป</button></div>'+
+      '<p class="center" style="margin-top:10px"><button class="linkbtn" data-obimport>มีไฟล์สำรองจากเครื่องอื่น? เปิดไฟล์</button></p>';
+  } else if(OB.step===2){
+    var L = [['A1','เพิ่งเริ่ม','รู้คำง่ายๆ เช่น cat, book, happy'],['A2','พอรู้พื้นฐาน','อ่านประโยคสั้นๆ ได้'],['B1','ระดับกลาง','อ่านเรื่องง่ายๆ เข้าใจ'],['B2','ค่อนข้างดี','อ่านบทความได้ แต่ยังสะกดพลาด']];
+    h = '<p class="ob-step">ขั้นที่ 2 จาก '+total+'</p><h2 id="ob-title">เริ่มจากระดับไหนดี?</h2><p>ไม่แน่ใจให้เลือก A1 ก่อน เปลี่ยนทีหลังได้ในตั้งค่า</p>'+
+      '<div class="ob-lv">'+L.map(function(x){ return '<button data-oblv="'+x[0]+'" aria-pressed="'+(OB.lvl===x[0])+'"><b>'+x[0]+'</b><span><strong>'+x[1]+'</strong>'+x[2]+'</span></button>'; }).join('')+'</div>'+
+      '<p class="pf-lab">คำใหม่ต่อวัน</p><div class="chips">'+[5,10,15].map(function(n){ return '<button class="chip" data-obper="'+n+'" aria-pressed="'+(OB.per===n)+'">'+n+' คำ'+(n===5 ? ' (สบายๆ)' : n===10 ? ' (แนะนำ)' : '')+'</button>'; }).join('')+'</div>'+
+      '<div class="ob-acts" style="margin-top:16px"><button class="btn ghost" data-obback'+(/^ผู้เล่น \d+$/.test(curP().name) ? '' : ' hidden')+'>ย้อนกลับ</button><button class="btn" data-obnext>ต่อไป</button></div>';
+  } else {
+    h = '<p class="ob-step">ขั้นที่ 3 จาก '+total+'</p><h2 id="ob-title">ทดสอบเสียง</h2><p>แอปต้องใช้เสียงอ่านภาษาอังกฤษ แตะปุ่มแล้วฟังว่าได้ยินไหม</p>'+
+      '<div class="ob-hear"><button class="play" data-obplay aria-label="ฟังเสียงทดสอบ">'+SPK+'</button><span class="th">แตะเพื่อฟัง "Hello! Let\'s learn English."</span></div>'+
+      (OB.heard===false ? '<ul class="ob-tips"><li>iPhone: ดูว่าสวิตช์ปิดเสียงด้านข้างไม่ได้เปิดอยู่ แล้วกดเพิ่มเสียง</li><li>Android: ติดตั้งหรืออัปเดตแอป Google Text-to-speech</li><li>คอมพิวเตอร์: ลองเปิดด้วย Chrome, Edge หรือ Safari รุ่นล่าสุด</li><li>ถ้ายังไม่ได้ยิน ยังฝึกต่อได้จากความหมายไทย</li></ul>' : '')+
+      '<div class="ob-acts"><button class="btn ghost" data-obheard="0">ไม่ได้ยิน</button><button class="btn" data-obdone>ได้ยินแล้ว เริ่มเลย</button></div>';
+  }
+  b.innerHTML = h + '<button class="linkbtn ob-skip" data-obskip>ข้ามไปก่อน</button>';
+  if(OB.step===1) setTimeout(function(){ var i = $('ob-name'); if(i && !i.value) i.focus(); }, 40);
+}
+function finishOnboard(){
+  if(!OB) return;
+  var p = curP(), nm = String(OB.name || '').trim().slice(0, 20);
+  if(nm) p.name = nm; p.icon = OB.icon || p.icon;
+  S.levels = [OB.lvl]; S.newPer = OB.per; S.onboarded = 1; S.free = S.free || {}; S.free.src = OB.lvl;
+  save(); saveProfiles(); closeOnboard(); renderHome(); renderProfileUI();
+  if(window.VN) window.VN.showView('today');
+  toast('พร้อมแล้ว เริ่มจากข้อ 1 "ฟังแล้วสะกด" ได้เลย');
+}
+$('ob-sheet').addEventListener('input', function(ev){ if(ev.target.id==='ob-name' && OB) OB.name = ev.target.value; });
+$('ob-sheet').addEventListener('keydown', function(ev){ if(ev.target.id==='ob-name' && ev.key==='Enter'){ ev.preventDefault(); OB.step = 2; renderOnboard(); } });
+$('ob-sheet').addEventListener('click', function(ev){
+  var t = ev.target, b; if(!OB) return;
+  if((b = t.closest('[data-obi]'))){ OB.icon = b.getAttribute('data-obi'); renderOnboard(); return; }
+  if((b = t.closest('[data-oblv]'))){ OB.lvl = b.getAttribute('data-oblv'); renderOnboard(); return; }
+  if((b = t.closest('[data-obper]'))){ OB.per = +b.getAttribute('data-obper'); renderOnboard(); return; }
+  if(t.closest('[data-obnext]')){ OB.step++; renderOnboard(); return; }
+  if(t.closest('[data-obback]')){ OB.step = Math.max(1, OB.step - 1); renderOnboard(); return; }
+  if(t.closest('[data-obplay]')){ var was = U().mute; if(was) setUI('mute', false); pickVoice(); speak("Hello! Let's learn English."); return; }
+  if(t.closest('[data-obheard]')){ OB.heard = false; renderOnboard(); return; }
+  if(t.closest('[data-obdone]')){ finishOnboard(); return; }
+  if(t.closest('[data-obimport]')){ $('bk-file').value = ''; $('bk-file').click(); return; }
+  if(t.closest('[data-obskip]')){ S.onboarded = 1; save(); closeOnboard(); }
+});
+document.addEventListener('keydown', function(ev){ if(ev.key==='Escape' && OB){ S.onboarded = 1; save(); closeOnboard(); } });
+$('ob-again').addEventListener('click', function(){ closeSheet(); openOnboard(); });
+
+/* ---------- problem report ---------- */
+$('rp-make').addEventListener('click', function(){
+  var vs = []; try{ vs = speechSynthesis.getVoices().filter(function(v){ return /^en/i.test(v.lang); }); }catch(e){}
+  var errs = (window.__dlErrs || []).slice(-5);
+  var lines = [
+    'Dictation Lab ' + APP_VER + (window.DL_STANDALONE ? ' · แอปบนเว็บ' + (isInstalled() ? ' (ติดตั้งแล้ว)' : '') : ' · claude.ai'),
+    'เวลา: ' + new Date().toLocaleString('th-TH'),
+    'เครื่อง: ' + navigator.userAgent,
+    'จอ: ' + innerWidth + '×' + innerHeight + ' @' + (window.devicePixelRatio || 1) + 'x',
+    'เสียงอังกฤษ: ' + vs.length + (voice ? ' · ใช้ ' + voice.name : '') + (U().mute ? ' · ปิดเสียงอยู่' : ''),
+    'ผู้เล่น: ' + PROF.list.length + ' คน · คนนี้ฝึก ' + Object.keys(S.p).length + ' คำ · ซิงก์: ' + SYNC,
+    'หน้า: ' + ((document.querySelector('.view.active') || {}).id || '-'),
+    'ข้อผิดพลาด: ' + (errs.length ? errs.join(' | ') : 'ไม่มี')
+  ];
+  var o = $('rp-out'); o.value = lines.join('\n'); o.classList.remove('hidden'); o.focus(); o.select();
+  try{ if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(o.value).then(function(){ toast('คัดลอกแล้ว วางในแชตกับ Claude ได้เลย'); }, function(){}); else { document.execCommand('copy'); toast('คัดลอกแล้ว'); } }catch(e){}
+});
 
 /* ---------- install as an app (standalone build only) ---------- */
 var INS = { evt:null };
@@ -5274,7 +5811,7 @@ function msVal(m, k){ return k==='games' ? Object.keys(m.games).length : k==='ok
 function msDone(m){ return MISSIONS.every(function(x){ return msVal(m, x.k) >= x.goal; }); }
 function gEvent(game, ok){
   var m = MS(), before = MISSIONS.map(function(x){ return msVal(m, x.k) >= x.goal; }), allBefore = msDone(m);
-  m.games[game] = 1;
+  m.games[game] = 1; logDay('g'); if(ok) logDay('gok');
   if(ok){ m.ok++; m.run[game] = (m.run[game] || 0) + 1; m.streak = Math.max(m.streak, m.run[game]); } else m.run[game] = 0;
   var msgs = [];
   MISSIONS.forEach(function(x, k){ if(!before[k] && msVal(m, x.k) >= x.goal) msgs.push('ภารกิจสำเร็จ: '+x.n); });
@@ -5879,12 +6416,17 @@ function gamesViewChange(name){
   if(GAMES[name]){ renderBar(name); if(!GAMES[name].ready()) GAMES[name].reset(); }
   if(name==='rain') rSetup();
   if(name==='friends'){ friendsSub(); renderFriends(); }
+  if(name==='sentence'){ if(!SN.list.length || $('sn-play').classList.contains('hidden')){ renderSnHome(); if($('sn-sum').classList.contains('hidden')) snShow('home'); } }
+  else if(SN.list.length && !$('sn-play').classList.contains('hidden')){ clearTimeout(SN_PT); }
+  if(name==='coach') renderCoach();
+  if(name==='today'){ renderWeek(); renderCoachTease(); }
   if(name==='match'){ mTheme(); mOpts(); }
   if(name==='fill') fDiffUI();
 }
 
 window.DL = {
   viewChange: gamesViewChange,
+  classify: classify,
   speak: speak,
   autoSpeak: function(t){ if(U().auto) speak(t); },
   misspell: function(w){ return misspell(w); },
@@ -5916,6 +6458,7 @@ bootStep(updateSummary); bootStep(applyShowR); bootStep(applyUI); bootStep(rende
 setSync('บันทึกในเครื่องนี้');
 bootStep(function(){ if(window.DL_STANDALONE && navigator.storage && navigator.storage.persist){ navigator.storage.persist().catch(function(){}); } });
 bootStep(askWho);
+bootStep(maybeOnboard);
 bootStep(function(){ if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; } });
 connectDb();
 })();
