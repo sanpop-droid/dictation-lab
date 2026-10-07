@@ -1,0 +1,30 @@
+{
+  "name": "Dictation Lab — ฝึกสะกดคำอังกฤษ",
+  "short_name": "Dictation Lab",
+  "description": "ฝึกฟัง สะกด และอ่านคำศัพท์ภาษาอังกฤษ เล่นได้สูงสุด 5 คนต่อเครื่อง",
+  "lang": "th",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#E8EEE9",
+  "theme_color": "#1F5FA8",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
