@@ -4935,7 +4935,6 @@ function freePool(src){
   return W.map(function(w,i){ return i; }).filter(function(i){ return src==='all' || W[i][4]===src; });
 }
 function renderFree(){
-  var tl = document.getElementById('d-examLink'); if(tl) tl.classList.toggle('hidden', !!window.DL_STANDALONE);
   if(!S.free) S.free = {src:'A1', len:10};
   $('d-fSrc').innerHTML = FREE_SRC.map(function(x){ var n = freePool(x[0]).length;
     return '<button class="chip" data-src="'+x[0]+'" aria-pressed="'+(S.free.src===x[0])+'"'+(n?'':' disabled')+'>'+x[1]+'<small>'+n+'</small></button>'; }).join('');
@@ -5180,7 +5179,7 @@ function renderBackupNote(){
 $('bk-save').addEventListener('click', function(){
   save();
   var out = { app:'dictationlab', v:1, savedAt:new Date().toISOString(), active:PROF.active,
-    profiles: PROF.list.map(function(p){ return { id:p.id, name:p.name, icon:p.icon, color:p.color, share:p.share!==false, data:readPlayer(p.id) }; }) };
+    profiles: PROF.list.map(function(p){ return { id:p.id, name:p.name, icon:p.icon, color:p.color, share:p.share!==false, data:readPlayer(p.id), exam:examRead(p.id) }; }) };
   var blob = new Blob([JSON.stringify(out)], { type:'application/json' }), name = backupName();
   if(!window.DL_STANDALONE && window.claude && typeof window.claude.use==='function'){
     window.claude.use('downloads').then(function(dl){
@@ -5223,6 +5222,7 @@ function importBackup(text){
     var id = /^p[0-9a-z]{1,16}$/.test(String(ip.id || '')) ? String(ip.id) : 'p' + Date.now().toString(36) + added;
     var name = String(ip.name || '').trim().slice(0, 20), icon = PICONS.indexOf(ip.icon)>-1 ? ip.icon : null, color = /^#[0-9A-Fa-f]{6}$/.test(ip.color || '') ? ip.color : null;
     var data = Object.assign(JSON.parse(S_DEF), ip.data);
+    if(ip.exam && typeof ip.exam==='object') examMerge(id, ip.exam);
     var p = PROF.list.find(function(x){ return x.id===id; });
     if(p){
       var st = mergeState(readPlayer(id), data); st.updatedAt = Date.now(); writePlayer(id, st);
@@ -5244,7 +5244,7 @@ function importBackup(text){
 
 
 /* ---------- practice log + mistakes (feed the weekly report and the coach) ---------- */
-var APP_VER = 'v17 · 2026-10-13';
+var APP_VER = 'v18 · 2026-10-13 · offline';
 function logDay(field, n){
   var t = today(); if(!S.log || typeof S.log!=='object') S.log = {};
   var d = S.log[t] || (S.log[t] = {}); d[field] = (d[field] || 0) + (n==null ? 1 : n);
@@ -5369,7 +5369,7 @@ document.addEventListener('click', function(ev){
 
 /* ---------- weekly report ---------- */
 var THDAY = ['อา','จ','อ','พ','พฤ','ศ','ส'];
-function dayTotals(d){ var x = (S.log && S.log[d]) || {}; return { n:(x.n||0) + (x.sw||0) + (x.g||0), ok:(x.ok||0) + (x.swok||0) + (x.gok||0), s:x.s||0 }; }
+function dayTotals(d){ var x = (S.log && S.log[d]) || {}; return { n:(x.n||0) + (x.sw||0) + (x.g||0) + (x.x||0), ok:(x.ok||0) + (x.swok||0) + (x.gok||0) + (x.xok||0), s:x.s||0 }; }
 function renderWeek(){
   var bars = document.getElementById('wk-bars'); if(!bars) return;
   var t = today(), days = [], max = 1, tot = { n:0, ok:0, s:0, act:0 }, prev = 0;
@@ -5383,7 +5383,7 @@ function renderWeek(){
   var cmp = $('wk-cmp');
   if(!tot.n && !tot.s){ $('wk-sum').textContent = 'ยังไม่มีการฝึกใน 7 วันนี้ เริ่มข้อแรกแล้วกราฟจะขึ้นที่นี่'; cmp.textContent = ''; cmp.className = 'wk-cmp'; return; }
   var acc = tot.n ? Math.round(tot.ok / tot.n * 100) : 0;
-  $('wk-sum').innerHTML = 'ฝึกไป <b>'+tot.n+'</b> ข้อ · ถูก <b>'+acc+'%</b>'+(tot.s ? ' · เขียน <b>'+tot.s+'</b> ประโยค' : '')+' · ฝึก <b>'+tot.act+'</b> จาก 7 วัน<br><small>ความสูงแท่ง = จำนวนข้อที่ฝึก · ส่วนสีเขียวสด = ตอบถูก (รวมสะกดคำ เขียนประโยค และเกม)</small>';
+  $('wk-sum').innerHTML = 'ฝึกไป <b>'+tot.n+'</b> ข้อ · ถูก <b>'+acc+'%</b>'+(tot.s ? ' · เขียน <b>'+tot.s+'</b> ประโยค' : '')+' · ฝึก <b>'+tot.act+'</b> จาก 7 วัน<br><small>ความสูงแท่ง = จำนวนข้อที่ฝึก · ส่วนสีเขียวสด = ตอบถูก (รวมสะกดคำ เขียนประโยค เกม และข้อสอบ)</small>';
   if(prev){ var ch = Math.round((tot.n - prev) / prev * 100); cmp.textContent = ch>0 ? 'มากกว่าสัปดาห์ก่อน '+ch+'%' : ch<0 ? 'น้อยกว่าสัปดาห์ก่อน '+(-ch)+'%' : 'เท่ากับสัปดาห์ก่อน'; cmp.className = 'wk-cmp' + (ch>=0 ? ' up' : ''); }
   else { cmp.textContent = ''; cmp.className = 'wk-cmp'; }
 }
@@ -5629,6 +5629,28 @@ function examOpen(){
 }
 window.addEventListener('resize', examFit);
 function examReload(){ var f = document.getElementById('exam-frame'); if(f && f.getAttribute('src')) f.setAttribute('src', 'exam/index.html?p=' + encodeURIComponent(PROF.active)); }
+window.addEventListener('message', function(e){ var f = document.getElementById('exam-frame'); var d = e.data || {}; if(!f || e.source!==f.contentWindow) return;
+  if(d.dl==='go') examGo(d.where); if(d.dl==='ready') examTheme();
+  if(d.dl==='log' && (d.f==='x' || d.f==='xok')){ logDay(d.f, 1); save(); } });
+function examTheme(){ var f = document.getElementById('exam-frame'); if(f && f.contentWindow) try{ f.contentWindow.postMessage({ dl:'theme', t: document.documentElement.getAttribute('data-theme') || '' }, '*'); }catch(e){} }
+try{ new MutationObserver(examTheme).observe(document.documentElement, { attributes:true, attributeFilter:['data-theme'] }); }catch(e){}
+function examRead(pid){ var pre = 'exam.' + pid + '.', out = {}; try{ for(var i=0;i<localStorage.length;i++){ var k = localStorage.key(i); if(k && k.indexOf(pre)===0 && !/lclab_(exam|last)$/.test(k)) out[k.slice(pre.length)] = JSON.parse(localStorage.getItem(k)); } }catch(e){} return out; }
+function examMerge(pid, ex){
+  var pre = 'exam.' + pid + '.';
+  Object.keys(ex).forEach(function(k){
+    if(!/^lclab_/.test(k) || /lclab_(exam|last)$/.test(k)) return;
+    var cur = null; try{ cur = JSON.parse(localStorage.getItem(pre + k) || 'null'); }catch(e){}
+    var inc = ex[k], out = inc;
+    if(cur){
+      if(/^lclab_t\d+$/.test(k)) out = { answers: Object.assign({}, (inc && inc.answers) || {}, cur.answers || {}) };
+      else if(/^lclab_dict_t/.test(k)){ out = Object.assign({}, cur); Object.keys(inc || {}).forEach(function(q){ out[q] = Math.max(out[q] || 0, inc[q] || 0); }); }
+      else if(k==='lclab_vocab'){ out = Object.assign({}, cur); Object.keys(inc || {}).forEach(function(w){ var a = out[w], b = inc[w]; if(!a || ((b.ok||0)+(b.no||0)) > ((a.ok||0)+(a.no||0))) out[w] = b; }); }
+      else if(k==='lclab_hist'){ var seen = {}; out = (cur || []).concat(inc || []).filter(function(r){ var id = JSON.stringify(r); if(seen[id]) return false; seen[id] = 1; return true; }).slice(-200); }
+    }
+    try{ localStorage.setItem(pre + k, JSON.stringify(out)); }catch(e){}
+  });
+  examReload();
+}
 function examGo(where){
   if(where==='dictation'){ S.free = S.free || {}; S.free.src = 'exam'; save(); if(window.VN) window.VN.showView('dictation'); try{ renderFree(); }catch(e){} return; }
   if(window.VN) window.VN.showView(where);
@@ -5639,7 +5661,7 @@ var INS = { evt:null };
 function isInstalled(){ try{ return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone===true; }catch(e){ return false; } }
 function renderInstall(){
   var box = document.getElementById('ins-box'); if(!box) return;
-  if(!window.DL_STANDALONE){ box.classList.add('hidden'); return; }
+  if(!window.DL_STANDALONE || location.protocol==='file:'){ box.classList.add('hidden'); return; }
   box.classList.remove('hidden');
   var btn = $('ins-btn'), note = $('ins-note'), ua = navigator.userAgent;
   var ios = /iPad|iPhone|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
@@ -6500,7 +6522,7 @@ bootStep(function(){ if(window.VN){ var vp = window.VN.getProgress(); if(!S.ext)
 bootStep(updateSummary); bootStep(applyShowR); bootStep(applyUI); bootStep(renderHome); bootStep(renderProfileUI);
 setSync('บันทึกในเครื่องนี้');
 bootStep(function(){ if(window.DL_STANDALONE && navigator.storage && navigator.storage.persist){ navigator.storage.persist().catch(function(){}); } });
-bootStep(function(){ if(window.DL_STANDALONE) document.querySelectorAll('.exam-tab').forEach(function(b){ b.classList.remove('hidden'); }); });
+bootStep(function(){ document.querySelectorAll('.exam-tab').forEach(function(b){ b.classList.remove('hidden'); }); });
 bootStep(askWho);
 bootStep(maybeOnboard);
 bootStep(function(){ if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; } });

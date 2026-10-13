@@ -145,12 +145,12 @@ body.embedded{padding-bottom:24px}
 <div class="wrap">
 <header>
   <div class="brand"><h1>ข้อสอบ</h1><span class="sub" id="sub">กำลังโหลด…</span>
-    <span class="right"><select id="testSel" aria-label="เลือกชุดข้อสอบ"></select></span></div>
+    <span class="right"><select id="testSel" aria-label="เลือกชุดข้อสอบ"></select><a href="../index.html">← แอปหลัก</a></span></div>
   <nav role="tablist">
     <button role="tab" aria-selected="true" data-v="home">ภาพรวม</button>
     <button role="tab" aria-selected="false" data-v="test">ข้อสอบ</button>
     <button role="tab" aria-selected="false" data-v="review">ข้อที่ผิด</button>
-    <button role="tab" aria-selected="false" data-v="dict">Dictation</button>
+    <button role="tab" aria-selected="false" data-v="dict">ฟังแล้วเขียน</button>
     <button role="tab" aria-selected="false" data-v="vocab">คำศัพท์</button>
     <button role="tab" aria-selected="false" data-v="books">หนังสือ</button>
   </nav>
@@ -167,13 +167,16 @@ const $=s=>document.querySelector(s);
 const aud=$('#aud'); let D=null, cur=null, token=0, rate=1, stopAt=null, contEnd=null, contData=null;
 const LEAD=0.12, TAIL=0.03;
 const blobs={};
+const loadJS=name=>new Promise((res,rej)=>{ const X=(window.__X=window.__X||{}); if(X[name]) return res(X[name]); const s=document.createElement('script'); s.src='data/'+name+'.js'; s.onload=()=>X[name]?res(X[name]):rej(new Error(name)); s.onerror=()=>rej(new Error(name)); document.head.appendChild(s); });
+const ONFILE=location.protocol==='file:';
+function xlog(ok){ if(window.parent===window) return; try{ window.parent.postMessage({dl:'log',f:'x'},'*'); if(ok) window.parent.postMessage({dl:'log',f:'xok'},'*'); }catch(e){} }
 const PFX=(()=>{ try{ const p=JSON.parse(localStorage.getItem('dictationlab.profiles')||'null'); return 'exam.'+((p&&p.active)||'p1')+'.'; }catch(e){ return 'exam.p1.'; } })();
 const LS={get(k,d){try{const v=localStorage.getItem(PFX+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(PFX+k,JSON.stringify(v))}catch(e){}}};
 function toast(t){const el=$('#toast'); el.textContent=t; el.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>el.hidden=true,2600);}
 const today=()=>{const d=new Date();return Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/86400000)};
 
 /* ---------- audio: one segment at a time, or a whole Part straight through ---------- */
-function chunkURL(c){ if(!blobs[c.file]) blobs[c.file]=fetch(c.file).then(r=>{if(!r.ok) throw 0; return r.blob();}).then(b=>URL.createObjectURL(b)).catch(()=>c.file); return blobs[c.file]; }
+function chunkURL(c){ if(ONFILE) return Promise.resolve(c.file); if(!blobs[c.file]) blobs[c.file]=fetch(c.file).then(r=>{if(!r.ok) throw 0; return r.blob();}).then(b=>URL.createObjectURL(b)).catch(()=>c.file); return blobs[c.file]; }
 function chunkEnd(data,c){ const i=data.audio_chunks.indexOf(c), n=data.audio_chunks[i+1]; return n?n.offset:Infinity; }
 function tick(){
   if(stopAt!==null && aud.currentTime>=stopAt){
@@ -204,11 +207,11 @@ const fmt=t=>{t=Math.max(0,Math.floor(t));return `${Math.floor(t/60)}:${String(t
 const CACHE={};
 function loadData(t){
   if(CACHE[t]) return CACHE[t];
-  CACHE[t]=fetch(`data/lc${t}.json`).then(r=>r.json()).then(d=>{
+  CACHE[t]=loadJS(`lc${t}`).then(d=>{
     d._q={}; d.t=t;
     for(const p of ['1','2']) for(const q of d.parts[p]) d._q[q.n]=q;
     for(const p of ['3','4']) for(const s of d.parts[p]) for(const q of s.questions){ d._q[q.n]=q; q._set=s; }
-    return fetch(`data/rc${t}.json`).then(r=>r.ok?r.json():null).catch(()=>null).then(rc=>{
+    return loadJS(`rc${t}`).catch(()=>null).then(rc=>{
       d.rc=rc;
       if(rc){ for(const q of rc.parts['5']) d._q[q.n]=q; for(const p of ['6','7']) for(const s of rc.parts[p]) for(const q of s.questions){ d._q[q.n]=q; q._set=s; } }
       const vm=new Map();
@@ -248,7 +251,7 @@ function armTimer(){ clearInterval(EXT); if(!EX||!EX.endsAt) return; EXT=setInte
 function submitExam(){
   if(!EX) return; const ex=EX; EX=null; LS.set('lclab_exam',null); clearInterval(EXT); stopAudio();
   const qs=qsOfPart(ex.part); let right=0, blank=0;
-  for(const q of qs){ const a=ex.pending[q.n]; if(a){ state.answers[q.n]=a; if(a===q.answer) right++; } else { delete state.answers[q.n]; blank++; } }
+  for(const q of qs){ const a=ex.pending[q.n]; if(a){ state.answers[q.n]=a; if(a===q.answer) right++; xlog(a===q.answer); } else { delete state.answers[q.n]; blank++; } }
   save();
   const used=Math.round((Date.now()-ex.start)/1000);
   const hist=LS.get('lclab_hist',[]); hist.push({t:ex.t,part:ex.part,right,total:qs.length,sec:used,d:today()}); LS.set('lclab_hist',hist.slice(-200));
@@ -540,7 +543,7 @@ function vDeck(){
     return [...m.values()]; }
   return [];
 }
-function needBooks(){ if(B) return Promise.resolve(B); return fetch('data/books.json').then(r=>r.json()).then(d=>{B=d; return d;}); }
+function needBooks(){ if(B) return Promise.resolve(B); return loadJS('books').then(d=>{B=d; return d;}); }
 function speakEN(t){ try{ if(!('speechSynthesis' in window)) return; speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.lang='en-US'; const v=speechSynthesis.getVoices().find(v=>/^en[-_]US/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; u.rate=.85; speechSynthesis.speak(u); }catch(e){} }
 function renderVocab(){
   if((VV.src==='ess'||VV.src==='due') && !B){ $('#main').innerHTML='<p class="note">กำลังโหลด 600 Essential Words…</p>'; needBooks().then(()=>{ if(view==='vocab') renderVocab(); }).catch(()=>{ VV.src='test'; renderVocab(); }); return; }
@@ -644,7 +647,7 @@ document.addEventListener('click',e=>{
   if(t.matches('.opt')){ const n=t.dataset.q, q=D._q[n];
     if(examActive()){ EX.pending[n]=t.dataset.k; LS.set('lclab_exam',EX); t.parentElement.querySelectorAll('.opt').forEach(o=>o.classList.toggle('sel',o===t)); renderExamBar(); return; }
     if(state.answers[n]){ if(q.segments&&q.segments[t.dataset.k]) play(q.segments[t.dataset.k]); return; }
-    state.answers[n]=t.dataset.k; save(); const y=window.scrollY; render(); window.scrollTo(0,y); return; }
+    state.answers[n]=t.dataset.k; save(); xlog(t.dataset.k===q.answer); const y=window.scrollY; render(); window.scrollTo(0,y); return; }
   if(t.id==='reset'){ if(state.confirmReset){ qsOfPart(state.part).forEach(q=>delete state.answers[q.n]); state.confirmReset=false; save(); lastResult=null; toast('ล้างคำตอบ Part '+state.part+' แล้ว'); } else state.confirmReset=true; render(); return; }
   if(t.id==='exStart'){ startExam(); return; }
   if(t.id==='exSubmit'){ if(!t.dataset.armed){ t.dataset.armed='1'; t.textContent='ยืนยันส่ง?'; setTimeout(()=>{ if(t.isConnected){ delete t.dataset.armed; t.textContent='ส่งคำตอบ'; } },3000); return; } submitExam(); return; }
@@ -687,14 +690,14 @@ document.addEventListener('keydown',e=>{
   if(e.target.id==='vflip'&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); e.target.click(); }
 });
 
-const EMB=(()=>{ try{ return window.parent!==window && !!window.parent.VN; }catch(e){ return false; } })();
+const EMB=window.parent!==window;
 if(EMB) document.body.classList.add('embedded');
-function syncTheme(){ try{ const t=window.parent.document.documentElement.getAttribute('data-theme'); if(t) document.documentElement.setAttribute('data-theme',t); else document.documentElement.removeAttribute('data-theme'); }catch(e){} }
-if(EMB){ syncTheme(); try{ new MutationObserver(syncTheme).observe(window.parent.document.documentElement,{attributes:true,attributeFilter:['data-theme']}); }catch(e){} }
-document.addEventListener('click',e=>{ const b=e.target.closest('[data-app]'); if(b&&EMB){ try{ window.parent.DL && window.parent.DL.examGo && window.parent.DL.examGo(b.dataset.app); }catch(_){} } });
+window.addEventListener('message',e=>{ const d=e.data||{}; if(d.dl==='theme'){ if(d.t) document.documentElement.setAttribute('data-theme',d.t); else document.documentElement.removeAttribute('data-theme'); } });
+if(EMB) try{ window.parent.postMessage({dl:'ready'},'*'); }catch(e){}
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-app]'); if(!b) return; if(EMB){ try{ window.parent.postMessage({dl:'go',where:b.dataset.app},'*'); }catch(_){} } else location.href='../index.html'; });
 const setHH=()=>{ const h=document.querySelector('header'); if(h) document.documentElement.style.setProperty('--hh',h.getBoundingClientRect().bottom+'px'); };
 addEventListener('resize',setHH); setHH();
-fetch('data/tests.json').then(r=>r.json()).then(async M=>{
+loadJS('tests').then(async M=>{
   AMAP=M.audio||{}; TESTS=M.tests;
   const want=(/^#?t(\d{2})$/.exec(location.hash)||[])[1], last=LS.get('lclab_last',null);
   const t=TESTS.includes(want)?want:TESTS.includes(last)?last:TESTS[0];
