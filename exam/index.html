@@ -27,6 +27,7 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var
 .brand{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .brand h1{font-family:var(--display);font-weight:800;font-size:1.6rem;margin:0;letter-spacing:-.01em}
 .brand .sub{color:var(--muted);font-size:.85rem}
+.brand .who{font-weight:600;font-size:.9rem}
 .brand .right{margin-left:auto;display:flex;gap:8px;align-items:center}
 .brand a{color:var(--accent);font-size:.85rem;font-weight:500;text-decoration:none;white-space:nowrap}
 .brand a:hover{text-decoration:underline}
@@ -144,7 +145,7 @@ body.embedded{padding-bottom:24px}
 
 <div class="wrap">
 <header>
-  <div class="brand"><h1>ข้อสอบ</h1><span class="sub" id="sub">กำลังโหลด…</span>
+  <div class="brand"><h1>ข้อสอบ</h1><span class="who" id="who"></span><span class="sub" id="sub">กำลังโหลด…</span>
     <span class="right"><select id="testSel" aria-label="เลือกชุดข้อสอบ"></select><a href="../index.html">← แอปหลัก</a></span></div>
   <nav role="tablist">
     <button role="tab" aria-selected="true" data-v="home">ภาพรวม</button>
@@ -231,7 +232,8 @@ const PARTQ={1:6,2:25,3:39,4:30,5:30,6:16,7:54};
 const answersOf=t=>{const s=LS.get('lclab_t'+t,{}); return s.answers||{};};
 
 let state={part:'1',hideText:true,answers:{},confirmReset:false};
-const save=()=>LS.set('lclab_t'+TEST,{answers:state.answers});
+function writeSum(){ if(!D) return; let r=0,n=0; for(const k in state.answers){ const q=D._q[k]; if(!q||!q.options[state.answers[k]]) continue; n++; if(state.answers[k]===q.answer) r++; } const sm=LS.get('sum',{}); sm[TEST]={r,n}; LS.set('sum',sm); }
+const save=()=>{ LS.set('lclab_t'+TEST,{answers:state.answers}); writeSum(); };
 const pairs=p=>(p||[]).map(x=>`${esc(x[0])} → ${esc(x[1])}`).join('<br>');
 
 /* ---------- exam mode ---------- */
@@ -529,10 +531,17 @@ function renderDict(){
 
 /* ---------- vocabulary practice (flashcards + listen & spell, spaced review) ---------- */
 const IVL=[0,1,3,7,14,30];
-const VS=()=>LS.get('lclab_vocab',{});
+const PID=(()=>{ try{ const p=JSON.parse(localStorage.getItem('dictationlab.profiles')||'null'); return (p&&p.active)||'p1'; }catch(e){ return 'p1'; } })();
+const PINFO=(()=>{ try{ const p=JSON.parse(localStorage.getItem('dictationlab.profiles')||'null'); return ((p&&p.list)||[]).find(x=>x.id===PID)||null; }catch(e){ return null; } })();
+const MAINKEY=PID==='p1'?'dictationlab.v1':'dictationlab.v1.'+PID;
+const VOVER={};
+const SHARED=()=>window.parent!==window;
+function mainVS(){ let P={}; try{ const o=JSON.parse(localStorage.getItem(MAINKEY)||'null'); P=(o&&o.p)||{}; }catch(e){} const out={}; Object.keys(P).forEach(k=>{ const e=P[k]; out[k]={b:Math.min(5,e.b||0),d:e.d,ok:e.c||0,no:e.w||0}; }); return Object.assign(out,VOVER); }
+const VS=()=>SHARED()?mainVS():LS.get('lclab_vocab',{});
 function vSave(o){ LS.set('lclab_vocab',o); }
-function vGrade(w,ok){ const o=VS(), k=w.toLowerCase(), e=o[k]||{b:0,d:0,ok:0,no:0}; if(ok){ e.ok++; e.b=Math.min(5,e.b+1); } else { e.no++; e.b=0; } e.d=today()+IVL[e.b]; o[k]=e; vSave(o); }
-function vDueAdd(words){ const o=VS(), t=today(); let n=0; words.forEach(w=>{ const k=w.toLowerCase(); if(!o[k]){ o[k]={b:0,d:t,ok:0,no:0}; n++; } else if(o[k].d>t){ o[k].d=t; o[k].b=0; n++; } }); vSave(o); return n; }
+function vGrade(w,ok){ const o=VS(), k=w.toLowerCase(), e=o[k]||{b:0,d:0,ok:0,no:0}; if(ok){ e.ok++; e.b=Math.min(5,e.b+1); } else { e.no++; e.b=0; } e.d=today()+IVL[e.b]; if(SHARED()){ VOVER[k]=e; try{ window.parent.postMessage({dl:'vgrade',w:k,ok:!!ok},'*'); }catch(_){} } else { o[k]=e; vSave(o); } }
+function vDueAdd(words){ if(SHARED()){ const t=today(); words.forEach(w=>{ const k=w.toLowerCase(), e=VS()[k]||{b:0,d:t,ok:0,no:0}; e.d=t; e.b=Math.min(e.b,1); VOVER[k]=e; }); try{ window.parent.postMessage({dl:'vdue',words},'*'); }catch(_){} return words.length; }
+  const o=VS(), t=today(); let n=0; words.forEach(w=>{ const k=w.toLowerCase(); if(!o[k]){ o[k]={b:0,d:t,ok:0,no:0}; n++; } else if(o[k].d>t){ o[k].d=t; o[k].b=0; n++; } }); vSave(o); return n; }
 function vocabDue(){ const o=VS(), t=today(); return Object.keys(o).filter(k=>o[k].d<=t && o[k].b<5); }
 let B=null, VV={src:'test',lesson:0,mode:'list',q:[],i:0,flip:false,checked:false,ok:0,n:0};
 function vDeck(){
@@ -555,7 +564,7 @@ function renderVocab(){
   if(!deck.length){ $('#main').innerHTML=h+`<div class="item"><p>${VV.src==='due'?'ไม่มีคำที่ต้องทบทวนวันนี้ เก่งมาก':'ไม่มีคำในชุดนี้'}</p></div>`; return; }
   if(VV.mode==='list'){
     h+=`<div class="bar"><input type="search" id="vq" placeholder="ค้นหาคำ (อังกฤษหรือไทย)"><span class="note" id="vcount"></span></div><div class="vgrid" id="vgrid"></div>
-      <p class="note">จุดสี: เทา = ยังไม่ฝึก · ส้ม = กำลังจำ · เขียว = จำได้แล้ว · คำชุดเดียวกันนี้ฝึกสะกดต่อได้ในเมนู <button class="btn small" data-app="dictation">ฝึก → สะกด → คำศัพท์ข้อสอบ</button></p>`;
+      <p class="note">จุดสี: เทา = ยังไม่ฝึก · ส้ม = กำลังจำ · เขียว = จำได้แล้ว · คำที่ฝึกที่นี่เข้าคิวทบทวนเดียวกับหน้าฝึก ฝึกสะกดต่อได้ในเมนู <button class="btn small" data-app="dictation">ฝึก → สะกด → คำศัพท์ข้อสอบ</button></p>`;
     $('#main').innerHTML=h; drawVocab(''); return;
   }
   if(!VV.q.length || VV.qsrc!==VV.src+VV.lesson+VV.mode+TEST){
@@ -621,7 +630,7 @@ async function loadTest(t){
   for(const n in state.answers) if(!D._q[n]||!D._q[n].options[state.answers[n]]) delete state.answers[n];
   $('#testSel').value=t; try{ history.replaceState(null,'','#t'+t); }catch(e){}
   $('#sub').textContent=`Test ${t} · LC 100${D.rc?' + RC 100':''} ข้อ`;
-  di=0; buildDict(); LS.set('lclab_last',t);
+  di=0; buildDict(); LS.set('lclab_last',t); writeSum();
 }
 async function goTo(t,p,qn){
   if(EX && (t!==EX.t)) { toast('กำลังสอบอยู่ ส่งคำตอบหรือยกเลิกก่อน'); return; }
@@ -692,8 +701,7 @@ document.addEventListener('keydown',e=>{
 
 const EMB=window.parent!==window;
 if(EMB) document.body.classList.add('embedded');
-window.addEventListener('message',e=>{ const d=e.data||{}; if(d.dl==='theme'){ if(d.t) document.documentElement.setAttribute('data-theme',d.t); else document.documentElement.removeAttribute('data-theme'); } });
-if(EMB) try{ window.parent.postMessage({dl:'ready'},'*'); }catch(e){}
+window.addEventListener('message',e=>{ const d=e.data||{}; if(d.dl==='goto'){ goTo(d.t,d.p); } if(d.dl==='theme'){ if(d.t) document.documentElement.setAttribute('data-theme',d.t); else document.documentElement.removeAttribute('data-theme'); } });
 document.addEventListener('click',e=>{ const b=e.target.closest('[data-app]'); if(!b) return; if(EMB){ try{ window.parent.postMessage({dl:'go',where:b.dataset.app},'*'); }catch(_){} } else location.href='../index.html'; });
 const setHH=()=>{ const h=document.querySelector('header'); if(h) document.documentElement.style.setProperty('--hh',h.getBoundingClientRect().bottom+'px'); };
 addEventListener('resize',setHH); setHH();
@@ -704,8 +712,11 @@ loadJS('tests').then(async M=>{
   $('#testSel').innerHTML=TESTS.map(x=>`<option value="${x}" ${x===t?'selected':''}>Test ${x}</option>`).join('');
   $('#testSel').onchange=async e=>{ if(EX){ toast('กำลังสอบอยู่ ส่งคำตอบหรือยกเลิกก่อน'); e.target.value=TEST; return; } await loadTest(e.target.value); lastResult=null; VV.q=[]; render(); };
   await loadTest(t);
+  $('#who').textContent=PINFO?(PINFO.icon+' '+PINFO.name):'';
+  if(SHARED() && !LS.get('vmig',0)){ const old=LS.get('lclab_vocab',null); if(old && Object.keys(old).length){ try{ window.parent.postMessage({dl:'vimport',map:old},'*'); }catch(e){} } LS.set('vmig',1); }
   const ex=LS.get('lclab_exam',null);
   if(ex && ex.t===TEST && (!ex.endsAt || ex.endsAt>Date.now())){ EX=ex; state.part=ex.part; armTimer(); setView('test'); toast('กลับมาสอบต่อจากเดิม'); }
-  else { if(ex) LS.set('lclab_exam',null); setView(testsWithAnswers().length?'home':'home'); }
+  else { if(ex) LS.set('lclab_exam',null); setView('home'); }
+  if(window.parent!==window) try{ window.parent.postMessage({dl:'ready'},'*'); }catch(e){}
 }).catch(()=>{ $('#main').innerHTML='<p class="note">โหลดข้อมูลไม่สำเร็จ ลองรีเฟรชหน้าอีกครั้ง</p>'; });
 </script>

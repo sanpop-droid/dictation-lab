@@ -802,6 +802,7 @@
   .fr-stats b{font-family:var(--en);font-size:20px;color:var(--ink)}
   .fr-card .garden.mini{min-height:26px}
   .spine-btn.hidden{display:none!important}
+  .fr-exam{font-family:var(--th);font-size:13.5px;color:var(--ink2);margin:6px 0 2px}
   #view-exam{padding:0!important;max-width:none!important}
   #exam-frame{display:block;width:100%;border:0;background:var(--bg);height:calc(100vh - 80px)}
 
@@ -1507,6 +1508,7 @@
         <li class="step" id="t-step1"><span class="num">1</span><div class="sbody"><b>ฟังแล้วสะกด</b><span id="t-s1"></span></div><button class="btn small" id="t-go1">เริ่ม</button></li>
         <li class="step" id="t-step2"><span class="num">2</span><div class="sbody"><b>อ่านเรื่องสั้น</b><span id="t-s2"></span></div><button class="btn small" id="t-go2">อ่าน</button></li>
         <li class="step" id="t-step3"><span class="num">3</span><div class="sbody"><b>ทบทวนความหมาย</b><span id="t-s3"></span></div><button class="btn small" id="t-go3">ทบทวน</button></li>
+        <li class="step exam-step" id="t-step4"><span class="num">4</span><div class="sbody"><b>ทำข้อสอบ 1 Part</b><span id="t-s4"></span></div><button class="btn small" id="t-go4">ทำข้อสอบ</button></li>
       </ol>
     <div class="panel co-tease hidden" id="t-coach"></div>
     <div class="panel wk" id="wk-panel">
@@ -4614,11 +4616,14 @@ function cleanList(l){
 }
 function num(v){ v = parseInt(v, 10); return isFinite(v) && v>0 ? v : 0; }
 function agoText(d){ d = parseInt(d, 10); if(!isFinite(d) || d<0) return 'ยังไม่ได้เริ่มเล่น'; var n = today() - d; return n<=0 ? 'เล่นวันนี้' : n===1 ? 'เล่นเมื่อวาน' : 'เล่นล่าสุด '+n+' วันก่อน'; }
+function examLine(pid){ var sm = exGet(pid, 'sum', null); if(!sm) return ''; var n = 0, r = 0, best = null; Object.keys(sm).forEach(function(t){ n += sm[t].n||0; r += sm[t].r||0; if(sm[t].n>=20 && (!best || sm[t].r/sm[t].n > best.v)) best = { t:t, v:sm[t].r/sm[t].n }; });
+  if(!n) return ''; return '<p class="fr-exam">ข้อสอบ: ทำแล้ว <b>'+n+'</b> ข้อ · ถูก <b>'+Math.round(r/n*100)+'%</b>'+(best ? ' · ชุดที่ดีที่สุด Test '+esc(best.t)+' ('+Math.round(best.v*100)+'%)' : '')+'</p>'; }
 function friendCard(p, mine, local){
   var sum = (p && typeof p.sum==='object' && p.sum) || {}, icon = PICONS.indexOf(p.icon)>-1 ? p.icon : '🙂', color = /^#[0-9A-Fa-f]{6}$/.test(p.color || '') ? p.color : '#4A5862';
   var last = parseInt(sum.last, 10), streak = (isFinite(last) && today() - last <= 1) ? num(sum.streak) : 0, list = cleanList(sum.list);
   return '<article class="fr-card'+(mine ? ' mine' : '')+(local && !mine ? ' tap' : '')+'"'+(local && !mine ? ' data-pfcard="'+esc(p.id)+'" role="button" tabindex="0" aria-label="เล่นเป็น '+esc(String(p.name || ''))+'"' : '')+'><div class="fr-top"><span class="av" style="background:'+color+'">'+icon+'</span><div class="fr-who"><b>'+esc(String(p.name || 'ผู้เล่น').slice(0, 20))+'</b>'+(mine ? '<span class="fr-me">'+(local ? 'กำลังเล่น' : 'บัญชีนี้')+'</span>' : (local ? '<span class="fr-go">แตะเพื่อเล่นเป็นคนนี้</span>' : ''))+'<small>'+agoText(sum.last)+'</small></div></div>'+
     '<div class="fr-stats"><span><b>'+num(sum.words)+'</b>คำที่ฝึกสะกด</span><span><b>'+num(sum.mastered)+'</b>สะกดได้แล้ว</span><span><b>'+num(sum.f)+'</b>ดอกไม้</span><span><b>'+streak+'</b>วันติดต่อกัน</span></div>'+
+    (local ? examLine(p.id) : '')+
     '<div class="garden mini">'+(list.length ? plantsHTML(list, false) : '<p class="g-empty">ยังไม่ได้ปลูกดอกไม้</p>')+'</div></article>';
 }
 function renderFriends(){
@@ -5093,6 +5098,7 @@ function renderToday(c){
   var lk = Object.keys(S.p).length;
   setStep(2, ds.story, lk>=3 ? 'เรื่องสั้นที่สร้างจากคำที่คุณกำลังฝึก แตะคำเพื่อฟัง' : 'ฝึกสะกดก่อนอย่างน้อย 3 คำ แล้วจะได้เรื่องจากคำของคุณ', ds.story ? 'อ่านอีกเรื่อง' : 'อ่าน', false);
   var rk = reviewKeys().length;
+  try{ renderExamStep(); }catch(e){}
   setStep(3, ds.cards, rk ? ('บัตรคำ '+rk+' คำที่ยังสะกดพลาดบ่อย') : 'ยังไม่มีคำที่ต้องทบทวน', ds.cards ? 'ทบทวนอีกครั้ง' : 'ทบทวน', !rk);
 }
 $('t-go1').addEventListener('click', function(){ if(!$('d-start').disabled) beginSession(buildQueue(), 'daily'); else if(window.VN) window.VN.showView('dictation'); });
@@ -5244,7 +5250,7 @@ function importBackup(text){
 
 
 /* ---------- practice log + mistakes (feed the weekly report and the coach) ---------- */
-var APP_VER = 'v18 · 2026-10-13 · offline';
+var APP_VER = 'v19 · 2026-10-13 · offline';
 function logDay(field, n){
   var t = today(); if(!S.log || typeof S.log!=='object') S.log = {};
   var d = S.log[t] || (S.log[t] = {}); d[field] = (d[field] || 0) + (n==null ? 1 : n);
@@ -5628,9 +5634,9 @@ function examOpen(){
   setTimeout(examFit, 30);
 }
 window.addEventListener('resize', examFit);
-function examReload(){ var f = document.getElementById('exam-frame'); if(f && f.getAttribute('src')) f.setAttribute('src', 'exam/index.html?p=' + encodeURIComponent(PROF.active)); }
+function examReload(){ EXQ.ready = false; var f = document.getElementById('exam-frame'); if(f && f.getAttribute('src')) f.setAttribute('src', 'exam/index.html?p=' + encodeURIComponent(PROF.active)); }
 window.addEventListener('message', function(e){ var f = document.getElementById('exam-frame'); var d = e.data || {}; if(!f || e.source!==f.contentWindow) return;
-  if(d.dl==='go') examGo(d.where); if(d.dl==='ready') examTheme();
+  if(d.dl==='go') examGo(d.where); examMsg(d);
   if(d.dl==='log' && (d.f==='x' || d.f==='xok')){ logDay(d.f, 1); save(); } });
 function examTheme(){ var f = document.getElementById('exam-frame'); if(f && f.contentWindow) try{ f.contentWindow.postMessage({ dl:'theme', t: document.documentElement.getAttribute('data-theme') || '' }, '*'); }catch(e){} }
 try{ new MutationObserver(examTheme).observe(document.documentElement, { attributes:true, attributeFilter:['data-theme'] }); }catch(e){}
@@ -5651,6 +5657,50 @@ function examMerge(pid, ex){
   });
   examReload();
 }
+
+/* ---------- exam ↔ app: shared word queue, today's exam step, per-player results ---------- */
+var EXQ = { ready:false, pending:null };
+var EXPARTQ = {1:6,2:25,3:39,4:30,5:30,6:16,7:54};
+function exPart(n){ n = +n; return n<=6?1:n<=31?2:n<=70?3:n<=100?4:n<=130?5:n<=146?6:7; }
+function exGet(pid, k, d){ try{ var v = localStorage.getItem('exam.' + pid + '.' + k); return v ? JSON.parse(v) : d; }catch(e){ return d; } }
+function examNext(){
+  var pid = PROF.active, t = exGet(pid, 'lclab_last', '01') || '01';
+  for(var step=0; step<10; step++){
+    var A = (exGet(pid, 'lclab_t' + t, {}) || {}).answers || {}, cnt = {};
+    Object.keys(A).forEach(function(n){ var p = exPart(n); cnt[p] = (cnt[p]||0) + 1; });
+    for(var p=1;p<=7;p++) if((cnt[p]||0) < EXPARTQ[p]) return { t:t, p:p, left:EXPARTQ[p] - (cnt[p]||0) };
+    t = ('0' + (Math.min(10, +t + 1))).slice(-2);
+  }
+  return { t:'01', p:1, left:6 };
+}
+function renderExamStep(){
+  var li = document.getElementById('t-step4'); if(!li) return;
+  var x = (S.log && S.log[today()]) || {}, done = (x.x||0) >= 6, nx = examNext();
+  var mins = { 1:5, 2:10, 3:20, 4:15, 5:11, 6:8, 7:56 }[nx.p];
+  setStep(4, done, done ? ('วันนี้ทำข้อสอบแล้ว ' + x.x + ' ข้อ ถูก ' + Math.round((x.xok||0) / x.x * 100) + '%') : ('ต่อที่ Test ' + nx.t + ' · Part ' + nx.p + ' (เหลือ ' + nx.left + ' ข้อ ประมาณ ' + mins + ' นาที)'), done ? 'ทำต่อ' : 'ทำข้อสอบ', false);
+}
+$('t-go4').addEventListener('click', function(){ var nx = examNext(); examGoto(nx.t, nx.p); });
+function examGoto(t, p){
+  EXQ.pending = { dl:'goto', t:t, p:String(p) };
+  if(window.VN) window.VN.showView('exam');
+  examOpen();
+  if(EXQ.ready) examFlush();
+}
+function examFlush(){ var f = document.getElementById('exam-frame'); if(EXQ.pending && f && f.contentWindow){ try{ f.contentWindow.postMessage(EXQ.pending, '*'); }catch(e){} EXQ.pending = null; } }
+function srsTouch(k, ok){
+  if(IDX[k]===undefined) return false;
+  var t = today(), e = S.p[k] || (S.p[k] = { b:0, d:t, w:0, c:0 });
+  if(ok){ e.c++; e.b = Math.min(6, e.b + 1); e.d = t + INTERVALS[e.b]; } else { e.w++; e.b = 1; e.d = t + 1; }
+  return true;
+}
+function srsDue(k){ if(IDX[k]===undefined) return false; var t = today(), e = S.p[k] || (S.p[k] = { b:0, d:t, w:0, c:0 }); e.d = Math.min(e.d, t); e.b = Math.min(e.b, 1); return true; }
+function examMsg(d){
+  if(d.dl==='ready'){ EXQ.ready = true; examTheme(); examFlush(); return; }
+  if(d.dl==='vgrade'){ if(srsTouch(String(d.w || '').toLowerCase(), !!d.ok)){ save(); } return; }
+  if(d.dl==='vdue'){ var n = 0; (d.words || []).forEach(function(w){ if(srsDue(String(w).toLowerCase())) n++; }); if(n){ save(); } return; }
+  if(d.dl==='vimport'){ var m = d.map || {}, n2 = 0; Object.keys(m).forEach(function(w){ var k = w.toLowerCase(), x = m[w]; if(IDX[k]!==undefined && !S.p[k]){ S.p[k] = { b:Math.min(6, x.b||0), d:x.d||today(), w:x.no||0, c:x.ok||0 }; n2++; } }); if(n2) save(); return; }
+}
+
 function examGo(where){
   if(where==='dictation'){ S.free = S.free || {}; S.free.src = 'exam'; save(); if(window.VN) window.VN.showView('dictation'); try{ renderFree(); }catch(e){} return; }
   if(window.VN) window.VN.showView(where);
