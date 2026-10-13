@@ -1,0 +1,708 @@
+<meta charset="utf-8">
+<!doctype html><html lang="th"><head><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ข้อสอบ · Dictation Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: answer-sheet workbench — sticky header with tabs, single readable column, OMR-style answer bubbles */
+:root{
+  --paper:#E8EEE9; --card:#F7F9F6; --ink:#17232B; --muted:#4A5862; --line:#C6D1CA;
+  --accent:#1F5FA8; --accentSoft:#DDE8F5; --good:#2D7D4F; --goodSoft:#DCEDE2; --bad:#BF3B2B; --badSoft:#F6E0DB;
+  --warn:#9A5B00; --warnSoft:#F8ECD6;
+  --display:"Atkinson Hyperlegible","IBM Plex Sans Thai",system-ui,sans-serif;
+  --body:"IBM Plex Sans Thai","Atkinson Hyperlegible",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#11191E; --card:#19242B; --ink:#E5ECE7; --muted:#A6B3AC; --line:#2B3940;
+  --accent:#6EA8EE; --accentSoft:#1C2C3F; --good:#5CC08A; --goodSoft:#1D3328; --bad:#EE7A6A; --badSoft:#3A2420;
+  --warn:#E3AE52; --warnSoft:#3A2F1C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11191E; --card:#19242B; --ink:#E5ECE7; --muted:#A6B3AC; --line:#2B3940;
+  --accent:#6EA8EE; --accentSoft:#1C2C3F; --good:#5CC08A; --goodSoft:#1D3328; --bad:#EE7A6A; --badSoft:#3A2420;
+  --warn:#E3AE52; --warnSoft:#3A2F1C; color-scheme:dark}
+html,body{background:var(--paper);color:var(--ink)}
+body{font-family:var(--body);font-size:15px;line-height:1.6;padding-inline:16px;padding-block:0 48px}
+.wrap{max-width:780px;margin:0 auto}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);padding-block:14px 0;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.brand h1{font-family:var(--display);font-weight:800;font-size:1.6rem;margin:0;letter-spacing:-.01em}
+.brand .sub{color:var(--muted);font-size:.85rem}
+.brand .right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.brand a{color:var(--accent);font-size:.85rem;font-weight:500;text-decoration:none;white-space:nowrap}
+.brand a:hover{text-decoration:underline}
+nav{display:flex;gap:4px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{font:inherit;font-weight:500;border:0;background:none;color:var(--muted);padding:8px 12px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+nav button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav button:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main{padding-top:18px}
+h2{font-family:var(--display);font-weight:800;font-size:1.25rem;margin:4px 0 10px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+select,input[type=text],input[type=search]{font:inherit;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 10px;max-width:100%}
+.btn{font:inherit;font-weight:500;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+.btn.good{background:var(--good);border-color:var(--good);color:#fff}
+.btn.small{padding:3px 10px;font-size:.85rem}
+.btn:disabled{opacity:.5;cursor:default}
+.item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px;min-width:0}
+.qhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.qn{font-family:var(--display);font-weight:800;font-size:1.3rem;color:var(--accent);min-width:2.2ch}
+.tag{font-family:var(--mono);font-size:.72rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 8px;letter-spacing:.03em}
+.qtext{font-weight:500}
+.th{color:var(--muted);font-size:.9rem}
+.opts{display:grid;gap:6px;margin-top:10px}
+.opt{display:flex;gap:10px;align-items:flex-start;background:none;border:1px solid var(--line);border-radius:10px;padding:8px 10px;text-align:left;font:inherit;color:var(--ink);cursor:pointer}
+.opt .bub{flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--muted);display:grid;place-items:center;font-family:var(--mono);font-size:.8rem;font-weight:600}
+.opt.right{background:var(--goodSoft);border-color:var(--good)}
+.opt.right .bub{background:var(--good);border-color:var(--good);color:#fff}
+.opt.wrong{background:var(--badSoft);border-color:var(--bad)}
+.opt.wrong .bub{background:var(--bad);border-color:var(--bad);color:#fff}
+.opt.sel{border-color:var(--ink)}
+.opt.sel .bub{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.opt .txt{min-width:0}
+.hidden-text .opts:not(.answered) .opt .txt .en{filter:blur(5px)}
+.explain{margin-top:10px;padding:10px 12px;border-left:3px solid var(--accent);background:var(--accentSoft);border-radius:0 8px 8px 0;font-size:.92rem}
+.explain .ev{font-family:var(--mono);font-size:.8rem;color:var(--ink);display:block;margin-top:4px}
+.photo{max-width:100%;border-radius:8px;display:block;margin:6px 0}
+.script{margin-top:8px;display:grid;gap:6px}
+.line{display:grid;grid-template-columns:56px 1fr;gap:8px;align-items:start}
+.spk{font-family:var(--mono);font-size:.75rem;color:var(--muted);padding-top:3px}
+.line .en{cursor:pointer}
+.line .en:hover{text-decoration:underline;text-decoration-color:var(--accent)}
+.passage{margin:8px 0;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper)}
+.ptext{white-space:pre-wrap;overflow-wrap:anywhere}
+.blank{display:inline-block;min-width:3em;border-bottom:2px solid var(--accent);font-family:var(--mono);font-size:.85em;padding:0 4px}
+b.blank.ok{color:var(--good)}b.blank.no{color:var(--bad)}
+.gimg{max-width:100%;display:block;margin:8px 0;border-radius:6px;background:#fff}
+.graphic{font-family:var(--mono);font-size:.8rem;background:var(--paper);border:1px dashed var(--line);border-radius:8px;padding:8px 10px;margin:8px 0;overflow-x:auto;white-space:pre}
+details summary{cursor:pointer;color:var(--muted);font-size:.9rem;margin-top:8px}
+.score{font-family:var(--display);font-weight:800;font-size:1.1rem}
+.dict-card{text-align:left}
+textarea.din{width:100%;box-sizing:border-box;font:inherit;font-size:1.05rem;min-height:84px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px}
+.diff{overflow-wrap:anywhere}
+.diff span{padding:0 2px;border-radius:3px}
+.diff .ok{color:var(--good)}
+.diff .miss{background:var(--badSoft);color:var(--bad);text-decoration:underline}
+.diff .extra{color:var(--muted);text-decoration:line-through}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.v{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-width:0}
+.v b{font-weight:600}
+.v .src{font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--line);margin-right:6px;vertical-align:1px}
+.dot.l1,.dot.l2{background:var(--warn)} .dot.l3,.dot.l4,.dot.l5{background:var(--good)}
+.note{color:var(--muted);font-size:.85rem}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:8px 14px;border-radius:999px;font-size:.85rem;z-index:9;max-width:90vw;text-align:center}
+.time{font-family:var(--mono);font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums}
+/* overview */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.kpi b{display:block;font-family:var(--display);font-weight:800;font-size:1.5rem;line-height:1.2}
+.kpi span{color:var(--muted);font-size:.82rem}
+.grid10{width:100%;border-collapse:separate;border-spacing:3px;font-size:.82rem}
+.grid10 th{font-weight:500;color:var(--muted);font-size:.75rem;text-align:center;padding:2px}
+.grid10 td{text-align:center;border-radius:6px;padding:6px 2px;font-family:var(--mono);font-variant-numeric:tabular-nums;background:var(--paper);cursor:pointer}
+.grid10 td.cg{background:var(--goodSoft)} .grid10 td.cw{background:var(--warnSoft)} .grid10 td.cb{background:var(--badSoft)} .grid10 td.full{font-weight:600;color:var(--ink)}
+.grid10 td.t{font-family:var(--display);font-weight:800;color:var(--accent);background:none;cursor:pointer}
+.grid10 td.est{background:none;color:var(--ink);font-weight:600}
+.tblwrap{overflow-x:auto}
+.start ol{margin:6px 0 0;padding-left:1.3em}
+.start li{margin:4px 0}
+/* review */
+.wk{display:grid;gap:8px}
+.wkrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;align-items:center;background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.wkrow .lab{font-size:.9rem;min-width:0;overflow-wrap:anywhere}
+.wkrow .val{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.wkrow .bar2{grid-column:1/-1;height:7px;border-radius:4px;background:var(--line);overflow:hidden}
+.wkrow .bar2 i{display:block;height:100%;background:var(--bad)}
+.wkrow.on .lab{font-weight:700;color:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:.85rem;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:3px 12px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.wrongq .yours{color:var(--bad)} .wrongq .right{color:var(--good)}
+/* exam */
+.exambar{position:sticky;top:calc(var(--hh,100px) + 6px);z-index:4;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--warnSoft);border:1px solid var(--warn);border-radius:12px;padding:8px 12px;margin-bottom:14px}
+.exambar .clock{font-family:var(--mono);font-weight:600;font-size:1.1rem;color:var(--warn);font-variant-numeric:tabular-nums}
+.exambar .clock.low{color:var(--bad)}
+.result{background:var(--goodSoft);border:1px solid var(--good);border-radius:12px;padding:10px 14px;margin-bottom:14px}
+/* vocab practice */
+.card3{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 16px;text-align:center;margin-bottom:12px}
+.card3 .w{font-family:var(--display);font-weight:800;font-size:2rem;line-height:1.2;overflow-wrap:anywhere}
+.card3 .m{font-size:1.15rem;margin-top:8px}
+.card3 input{font:inherit;font-size:1.4rem;text-align:center;width:100%;box-sizing:border-box;margin-top:12px;padding:8px;border-radius:10px;border:2px solid var(--line);background:var(--paper);color:var(--ink)}
+.card3 input.okk{border-color:var(--good)} .card3 input.bad{border-color:var(--bad)}
+.lt{font-family:var(--mono);font-size:1.3rem;letter-spacing:.05em}
+.lt .x{color:var(--bad);text-decoration:underline}
+.prog{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin:6px 0 12px}
+.prog i{display:block;height:100%;background:var(--good)}
+.row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.hidden{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+body.embedded .brand h1, body.embedded .brand .sub, body.embedded .brand a{display:none}
+body.embedded{padding-bottom:24px}
+@media (max-width:520px){.brand h1{font-size:1.3rem}.line{grid-template-columns:44px 1fr}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="brand"><h1>ข้อสอบ</h1><span class="sub" id="sub">กำลังโหลด…</span>
+    <span class="right"><select id="testSel" aria-label="เลือกชุดข้อสอบ"></select></span></div>
+  <nav role="tablist">
+    <button role="tab" aria-selected="true" data-v="home">ภาพรวม</button>
+    <button role="tab" aria-selected="false" data-v="test">ข้อสอบ</button>
+    <button role="tab" aria-selected="false" data-v="review">ข้อที่ผิด</button>
+    <button role="tab" aria-selected="false" data-v="dict">Dictation</button>
+    <button role="tab" aria-selected="false" data-v="vocab">คำศัพท์</button>
+    <button role="tab" aria-selected="false" data-v="books">หนังสือ</button>
+  </nav>
+</header>
+<main id="main"><p class="note">กำลังโหลดข้อมูล…</p></main>
+<audio id="aud" preload="metadata"></audio>
+<div id="loading" class="toast" hidden>กำลังโหลดเสียง…</div>
+<div id="toast" class="toast" hidden></div>
+</div>
+
+<script>
+let TEST=null, TESTS=[], AMAP={};
+const $=s=>document.querySelector(s);
+const aud=$('#aud'); let D=null, cur=null, token=0, rate=1, stopAt=null, contEnd=null, contData=null;
+const LEAD=0.12, TAIL=0.03;
+const blobs={};
+const PFX=(()=>{ try{ const p=JSON.parse(localStorage.getItem('dictationlab.profiles')||'null'); return 'exam.'+((p&&p.active)||'p1')+'.'; }catch(e){ return 'exam.p1.'; } })();
+const LS={get(k,d){try{const v=localStorage.getItem(PFX+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(PFX+k,JSON.stringify(v))}catch(e){}}};
+function toast(t){const el=$('#toast'); el.textContent=t; el.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>el.hidden=true,2600);}
+const today=()=>{const d=new Date();return Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/86400000)};
+
+/* ---------- audio: one segment at a time, or a whole Part straight through ---------- */
+function chunkURL(c){ if(!blobs[c.file]) blobs[c.file]=fetch(c.file).then(r=>{if(!r.ok) throw 0; return r.blob();}).then(b=>URL.createObjectURL(b)).catch(()=>c.file); return blobs[c.file]; }
+function chunkEnd(data,c){ const i=data.audio_chunks.indexOf(c), n=data.audio_chunks[i+1]; return n?n.offset:Infinity; }
+function tick(){
+  if(stopAt!==null && aud.currentTime>=stopAt){
+    aud.pause(); stopAt=null;
+    if(contEnd!==null && cur){ const ce=chunkEnd(contData,cur); if(ce<contEnd-0.05){ const e=contEnd; play({start:ce,end:e},rate,contData,true); return; } }
+    contEnd=null; renderExamBar();
+  }
+  if(!aud.paused) requestAnimationFrame(tick);
+}
+aud.addEventListener('play',()=>requestAnimationFrame(tick));
+async function play(seg,r,data,cont){
+  data=data||D; if(!seg||!data) return; const my=++token; rate=r||1;
+  if(!cont){ contEnd=null; }
+  const c=data.audio_chunks.filter(c=>seg.start>=c.offset).pop();
+  if(AMAP[c.file]&&!c._a){ c._a=1; c.file=AMAP[c.file]; }
+  aud.pause();
+  if(cur!==c){ const lo=$('#loading'); if(lo) lo.hidden=false; const url=await chunkURL(c); if(lo) lo.hidden=true; if(my!==token) return; cur=c; aud.src=url;
+    await new Promise(res=>{ if(aud.readyState>=1) res(); else aud.addEventListener('loadedmetadata',res,{once:true}); }); if(my!==token) return; }
+  aud.currentTime=Math.max(0,seg.start-c.offset-(cont?0:LEAD)); stopAt=Math.min(seg.end,chunkEnd(data,c))-c.offset-(cont?0:TAIL); aud.playbackRate=rate;
+  aud.play().catch(()=>{});
+}
+function playRange(start,end){ contData=D; contEnd=end; play({start,end},1,D,true); renderExamBar(); }
+function stopAudio(){ token++; aud.pause(); stopAt=null; contEnd=null; renderExamBar(); }
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=t=>{t=Math.max(0,Math.floor(t));return `${Math.floor(t/60)}:${String(t%60).padStart(2,'0')}`};
+
+/* ---------- data: every test is loaded once and kept ---------- */
+const CACHE={};
+function loadData(t){
+  if(CACHE[t]) return CACHE[t];
+  CACHE[t]=fetch(`data/lc${t}.json`).then(r=>r.json()).then(d=>{
+    d._q={}; d.t=t;
+    for(const p of ['1','2']) for(const q of d.parts[p]) d._q[q.n]=q;
+    for(const p of ['3','4']) for(const s of d.parts[p]) for(const q of s.questions){ d._q[q.n]=q; q._set=s; }
+    return fetch(`data/rc${t}.json`).then(r=>r.ok?r.json():null).catch(()=>null).then(rc=>{
+      d.rc=rc;
+      if(rc){ for(const q of rc.parts['5']) d._q[q.n]=q; for(const p of ['6','7']) for(const s of rc.parts[p]) for(const q of s.questions){ d._q[q.n]=q; q._set=s; } }
+      const vm=new Map();
+      const add=(v,src)=>{const k=v[0].toLowerCase(); if(!vm.has(k)) vm.set(k,{w:v[0],th:[],src:[]}); const o=vm.get(k); if(!o.th.includes(v[1])) o.th.push(v[1]); if(!o.src.includes(src)) o.src.push(src);};
+      for(const p of ['1','2']) for(const q of d.parts[p]) (q.vocab||[]).forEach(v=>add(v,'Q'+q.n));
+      for(const p of ['3','4']) for(const s of d.parts[p]) (s.vocab||[]).forEach(v=>add(v,s.set));
+      if(rc){ for(const q of rc.parts['5']) (q.vocab||[]).forEach(v=>add(v,'Q'+q.n)); for(const p of ['6','7']) for(const s of rc.parts[p]) (s.vocab||[]).forEach(v=>add(v,s.set)); }
+      d._vocab=[...vm.values()].sort((a,b)=>a.w.localeCompare(b.w));
+      return d;
+    });
+  });
+  CACHE[t].catch(()=>{ delete CACHE[t]; });
+  return CACHE[t];
+}
+const partOf=n=>{n=+n; return n<=6?1:n<=31?2:n<=70?3:n<=100?4:n<=130?5:n<=146?6:7;};
+const PARTQ={1:6,2:25,3:39,4:30,5:30,6:16,7:54};
+const answersOf=t=>{const s=LS.get('lclab_t'+t,{}); return s.answers||{};};
+
+let state={part:'1',hideText:true,answers:{},confirmReset:false};
+const save=()=>LS.set('lclab_t'+TEST,{answers:state.answers});
+const pairs=p=>(p||[]).map(x=>`${esc(x[0])} → ${esc(x[1])}`).join('<br>');
+
+/* ---------- exam mode ---------- */
+let EX=null, EXT=null;   // {t, part, pending:{}, start, endsAt}
+const RC_MIN={5:11,6:8,7:56};
+function examActive(){ return EX && EX.t===TEST && EX.part===state.part; }
+function startExam(){
+  const p=state.part, had=qsOfPart(p).some(q=>state.answers[q.n]);
+  if(had && !startExam.armed){ startExam.armed=true; toast('Part นี้มีคำตอบเดิมอยู่ กดอีกครั้งเพื่อเริ่มสอบใหม่ (คำตอบเดิมของ Part นี้จะถูกแทนที่)'); setTimeout(()=>startExam.armed=false,4000); return; }
+  startExam.armed=false;
+  EX={t:TEST,part:p,pending:{},start:Date.now(),endsAt:RC_MIN[p]?Date.now()+RC_MIN[p]*60000:null};
+  LS.set('lclab_exam',EX); render(); window.scrollTo(0,0);
+  if(['1','2','3','4'].includes(p)){ const r=partRange(p); playRange(r[0],r[1]); }
+  armTimer();
+}
+function armTimer(){ clearInterval(EXT); if(!EX||!EX.endsAt) return; EXT=setInterval(()=>{ if(!EX){clearInterval(EXT);return;} const left=(EX.endsAt-Date.now())/1000; const c=$('#exClock'); if(c){ c.textContent=fmt(left); c.classList.toggle('low',left<60);} if(left<=0){ clearInterval(EXT); toast('หมดเวลา ส่งคำตอบให้อัตโนมัติ'); submitExam(); } },500); }
+function submitExam(){
+  if(!EX) return; const ex=EX; EX=null; LS.set('lclab_exam',null); clearInterval(EXT); stopAudio();
+  const qs=qsOfPart(ex.part); let right=0, blank=0;
+  for(const q of qs){ const a=ex.pending[q.n]; if(a){ state.answers[q.n]=a; if(a===q.answer) right++; } else { delete state.answers[q.n]; blank++; } }
+  save();
+  const used=Math.round((Date.now()-ex.start)/1000);
+  const hist=LS.get('lclab_hist',[]); hist.push({t:ex.t,part:ex.part,right,total:qs.length,sec:used,d:today()}); LS.set('lclab_hist',hist.slice(-200));
+  lastResult={part:ex.part,right,total:qs.length,blank,sec:used};
+  render(); window.scrollTo(0,0);
+}
+let lastResult=null;
+function cancelExam(){ EX=null; LS.set('lclab_exam',null); clearInterval(EXT); stopAudio(); render(); }
+function qsOfPart(p){
+  if(!D) return [];
+  if(p==='1'||p==='2') return D.parts[p];
+  if(p==='3'||p==='4') return D.parts[p].flatMap(s=>s.questions);
+  if(!D.rc) return [];
+  if(p==='5') return D.rc.parts['5'];
+  return D.rc.parts[p].flatMap(s=>s.questions);
+}
+function partRange(p){
+  if(p==='1'||p==='2'){ const P=D.parts[p]; return [P[0].audio.start, P[P.length-1].audio.end]; }
+  const S=D.parts[p]; let a=Infinity,b=0; for(const s of S){ a=Math.min(a,s.audio.start); for(const q of s.questions) b=Math.max(b,q.audio.end); b=Math.max(b,s.audio.end); }
+  return [a,b];
+}
+function renderExamBar(){
+  const el=$('#exBar'); if(!el||!examActive()) return;
+  const lc=['1','2','3','4'].includes(EX.part), n=Object.keys(EX.pending).length, tot=qsOfPart(EX.part).length, playing=!aud.paused;
+  el.innerHTML=`<b>โหมดสอบ · Part ${EX.part}</b><span class="note">ตอบแล้ว ${n}/${tot}</span>
+    ${EX.endsAt?`<span>เหลือ <span class="clock" id="exClock">${fmt((EX.endsAt-Date.now())/1000)}</span></span>`:''}
+    ${lc?`<button class="btn small" id="exPlay">${playing?'❚❚ หยุดเสียง':'▶ เล่นต่อเนื่อง'}</button>`:''}
+    <span style="margin-left:auto;display:flex;gap:6px"><button class="btn small" id="exCancel">ยกเลิก</button><button class="btn small primary" id="exSubmit">ส่งคำตอบ</button></span>`;
+}
+
+/* ---------- test view ---------- */
+function optsHTML(q){
+  if(examActive()){
+    const a=EX.pending[q.n];
+    return `<div class="opts">${Object.keys(q.options).map(k=>`<button class="opt ${a===k?'sel':''}" data-q="${q.n}" data-k="${k}"><span class="bub">${k}</span><span class="txt"><span class="en">${esc(q.options[k])}</span></span></button>`).join('')}</div>`;
+  }
+  const a=state.answers[q.n];
+  return `<div class="opts ${a?'answered':''}">${Object.keys(q.options).map(k=>{
+    let cls=''; if(a){ if(k===q.answer) cls='right'; else if(k===a) cls='wrong'; }
+    return `<button class="opt ${cls}" data-q="${q.n}" data-k="${k}"><span class="bub">${k}</span><span class="txt"><span class="en">${esc(q.options[k])}</span>${a?`<br><span class="th">${esc(q.options_th[k])}</span>`:''}</span></button>`;
+  }).join('')}</div>`;
+}
+function explainHTML(q){
+  if(examActive()||!state.answers[q.n]) return '';
+  return `<div class="explain">${esc(q.explain_th)}${(q.evidence_quotes||[]).map(e=>`<span class="ev">“${esc(e)}”</span>`).join('')}${q.paraphrase?`<span class="ev">paraphrase:<br>${pairs(q.paraphrase)}</span>`:''}</div>`;
+}
+function scriptHTML(lines){
+  return `<div class="script">${lines.map(l=>`<div class="line"><span class="spk">${esc(l.spk)}</span><span><span>${l.sentences.map(x=>`<span class="en" data-s="${x.start}" data-e="${x.end}">${esc(x.en)}</span>`).join(' ')}</span><br><span class="th">${esc(l.th)}</span></span></div>`).join('')}</div>`;
+}
+const vocabHTML=v=>v.map(x=>`<b>${esc(x[0])}</b> ${esc(x[1])}`).join(' · ');
+function partScore(p){ let r=0,t=0; for(const q of qsOfPart(p)){ const a=state.answers[q.n]; if(a){ t++; if(a===q.answer) r++; } } return [r,t]; }
+function fillBlank(t,q){ const a=examActive()?null:state.answers[q.n]; return esc(t).replace('_____',a?`<b class="blank ${a===q.answer?'ok':'no'}">${esc(q.options[q.answer])}</b>`:'<span class="blank">_____</span>'); }
+function passageHTML(p,s){
+  let t=esc(p.text);
+  if(s.part==6) t=t.replace(/\[(1[3-4]\d)\]/g,(m,n)=>{ const q=D._q[n], a=examActive()?null:state.answers[n]; return `<span class="blank">${n}${a&&q.options[q.answer].split(' ').length<6?' '+esc(q.options[q.answer]):''}</span>`; });
+  return `<div class="passage">${p.label?`<div class="tag">${esc(p.label)}</div>`:''}${p.image?`<img class="gimg" src="${p.image}" alt="${esc(p.label||'passage')}" loading="lazy">`:''}<div class="ptext">${t}</div>
+    ${examActive()?'':`<details><summary>คำแปลไทย</summary><div class="ptext th">${esc(p.text_th)}</div></details>`}</div>`;
+}
+function renderRC(P){
+  let h=''; const ex=examActive();
+  if(state.part==='5'){
+    for(const q of P){ const done=!ex&&!!state.answers[q.n];
+      h+=`<div class="item" id="q${q.n}"><div class="qhead"><span class="qn">${q.n}</span>${done?`<span class="tag">${esc(q.category)}</span>`:''}</div>
+      <div class="qtext">${fillBlank(q.sentence,q)}</div>${done?`<div class="th">${esc(q.sentence_th)}</div>`:''}
+      ${optsHTML(q)}${done?`<div class="explain"><b>${esc(q.category_th)}</b><br>${esc(q.explain_th)}</div>`:''}
+      ${done&&q.vocab&&q.vocab.length?`<details><summary>คำศัพท์ (${q.vocab.length})</summary><div class="th">${vocabHTML(q.vocab)}</div></details>`:''}</div>`; }
+    return h;
+  }
+  for(const s of P){
+    h+=`<div class="item"><div class="qhead"><span class="qn">${s.set}</span><span class="tag">${esc(s.type)}</span></div>${s.passages.map(p=>passageHTML(p,s)).join('')}`;
+    for(const q of s.questions){
+      h+=`<div style="margin-top:12px" id="q${q.n}"><div class="qhead"><span class="qn" style="font-size:1rem">${q.n}</span>${q.question?`<span class="qtext">${esc(q.question)}</span>`:''}</div>${!ex&&state.answers[q.n]&&q.question_th?`<div class="th">${esc(q.question_th)}</div>`:''}${optsHTML(q)}${explainHTML(q)}</div>`;
+    }
+    h+=`${!ex&&s.vocab&&s.vocab.length?`<details><summary>คำศัพท์ (${s.vocab.length})</summary><div class="th">${vocabHTML(s.vocab)}</div></details>`:''}</div>`;
+  }
+  return h;
+}
+function renderTest(){
+  if(['5','6','7'].includes(state.part)&&!D.rc) state.part='1';
+  const RC=['5','6','7'].includes(state.part), ex=examActive();
+  const P=RC?D.rc.parts[state.part]:D.parts[state.part]; const [right,total]=partScore(state.part);
+  const listening=state.part==='1'||state.part==='2';
+  let h='';
+  if(EX && !ex) h+=`<div class="result" style="background:var(--warnSoft);border-color:var(--warn)">กำลังสอบ Test ${EX.t} Part ${EX.part} ค้างอยู่ <button class="btn small" id="exResume">กลับไปสอบต่อ</button> <button class="btn small" id="exCancel">ยกเลิกการสอบ</button></div>`;
+  if(lastResult && lastResult.part===state.part && !ex){ const r=lastResult; h+=`<div class="result"><b>ผลสอบ Part ${r.part}: ${r.right}/${r.total} (${Math.round(r.right/r.total*100)}%)</b> · ใช้เวลา ${fmt(r.sec)}${r.blank?` · ไม่ได้ตอบ ${r.blank} ข้อ`:''}<br><span class="note">เฉลยและคำอธิบายแสดงด้านล่างแล้ว ข้อที่ผิดไปรวมอยู่ในแท็บ "ข้อที่ผิด"</span></div>`; }
+  h+=`<div class="bar"><span class="tag">LC</span>${['1','2','3','4'].map(p=>`<button class="btn ${p===state.part?'primary':''}" data-part="${p}" ${ex?'disabled':''}>Part ${p}</button>`).join('')}${D.rc?`<span class="tag">RC</span>`+['5','6','7'].map(p=>`<button class="btn ${p===state.part?'primary':''}" data-part="${p}" ${ex?'disabled':''}>Part ${p}</button>`).join(''):'<span class="note">RC ชุดนี้ยังไม่พร้อม</span>'}</div>`;
+  if(ex) h+=`<div class="exambar" id="exBar"></div>`;
+  else h+=`<div class="bar">${listening?`<label class="note"><input type="checkbox" id="hideText" ${state.hideText?'checked':''}> ซ่อนตัวเลือก (เหมือนข้อสอบจริง)</label>`:''}
+    <span class="score">Part ${state.part}: ${right}/${total}</span>
+    <span style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap"><button class="btn" id="exStart" title="${RC?`จับเวลา ${RC_MIN[state.part]} นาที`:'เสียงเล่นต่อเนื่องทั้ง Part'}">โหมดสอบ${RC?` ${RC_MIN[state.part]} นาที`:''}</button><button class="btn" id="reset">${state.confirmReset?'กดอีกครั้งเพื่อล้าง Part นี้':'ล้างคำตอบ Part นี้'}</button></span></div>`;
+  h+=`<div class="${listening&&(state.hideText||ex)?'hidden-text':''}">`;
+  if(RC){ $('#main').innerHTML=h+renderRC(P)+'</div>'; renderExamBar(); return; }
+  if(listening){
+    for(const q of P){
+      const done=!ex&&!!state.answers[q.n];
+      h+=`<div class="item" id="q${q.n}"><div class="qhead"><span class="qn">${q.n}</span>${ex?'':`<button class="btn" data-play="${q.audio.start},${q.audio.end}">▶ ฟัง</button><span class="tag">${esc(q.voice)}</span><span class="time">${fmt(q.audio.start)}</span>`}</div>
+      ${q.image?`<img class="photo" src="${q.image}" alt="ภาพข้อ ${q.n}" loading="lazy">`:''}
+      ${q.question?`<div class="qtext">${done||(!state.hideText&&!ex)?esc(q.question):'<span class="th">(คำถามจะแสดงหลังตอบ)</span>'}</div>${done?`<div class="th">${esc(q.question_th)}</div>`:''}`:''}
+      ${optsHTML(q)}${explainHTML(q)}
+      ${done&&q.vocab?`<details><summary>คำศัพท์ (${q.vocab.length})</summary><div class="th">${vocabHTML(q.vocab)}</div></details>`:''}</div>`;
+    }
+  } else {
+    for(const s of P){
+      h+=`<div class="item"><div class="qhead"><span class="qn">${s.set}</span>${ex?'':`<button class="btn" data-play="${s.audio.start},${s.audio.end}">▶ ${s.part==3?'บทสนทนา':'บทพูด'}</button>`}<span class="tag">${esc(s.type)}</span><span class="tag">${s.speakers.join(' · ')}</span></div>
+      ${s.graphic?(s.graphic.image?`<img class="gimg" src="${s.graphic.image}" alt="ภาพประกอบชุด ${s.set}" loading="lazy">`:`<div class="graphic">${esc(s.graphic.items.join('\n'))}</div>`):''}`;
+      for(const q of s.questions){
+        h+=`<div style="margin-top:12px" id="q${q.n}"><div class="qhead"><span class="qn" style="font-size:1rem">${q.n}</span>${ex?'':`<button class="btn" data-play="${q.audio.start},${q.audio.end}">▶</button>`}<span class="qtext">${esc(q.question)}</span></div>${!ex&&state.answers[q.n]?`<div class="th">${esc(q.question_th)}</div>`:''}${optsHTML(q)}${explainHTML(q)}</div>`;
+      }
+      if(!ex) h+=`<details><summary>Transcript + คำแปล (คลิกประโยคเพื่อฟัง)</summary>${scriptHTML(s.transcript)}<div class="th" style="margin-top:8px">${vocabHTML(s.vocab)}</div></details>`;
+      h+='</div>';
+    }
+  }
+  $('#main').innerHTML=h+'</div>'; renderExamBar();
+}
+
+/* ---------- question types (for the weakness report) ---------- */
+function qType(q){
+  const p=partOf(q.n);
+  if(p===1) return 'Part 1 · บรรยายภาพ';
+  if(p===2){ const s=String(q.question||'').trim(), w=s.split(/\s+/)[0].toLowerCase().replace(/[^a-z']/g,'');
+    if(['who','whose','whom'].includes(w)) return 'Part 2 · คำถาม Who';
+    if(['what','which'].includes(w)) return 'Part 2 · คำถาม What / Which';
+    if(w==='when') return 'Part 2 · คำถาม When'; if(w==='where') return 'Part 2 · คำถาม Where'; if(w==='why') return 'Part 2 · คำถาม Why'; if(w==='how') return 'Part 2 · คำถาม How';
+    if(/\bor\b/i.test(s) && /\?$/.test(s)) return 'Part 2 · คำถามให้เลือก (A or B)';
+    if(/,\s*(right|isn't it|aren't|don't|doesn't|didn't|won't|haven't|hasn't|isn't|wasn't|can't)[^,]*\?$/i.test(s)) return 'Part 2 · คำถามท้ายประโยค (tag)';
+    if(/^(can|could|would|will|why don't|should|shall)\b/i.test(s) && /\b(you|we|i)\b/i.test(s) && /(help|like|mind|please|let|join|come|send|can you|could you)/i.test(s)) return 'Part 2 · ขอร้อง / เสนอ / ชวน';
+    if(/\?$/.test(s)) return 'Part 2 · คำถาม Yes / No';
+    return 'Part 2 · ประโยคบอกเล่า';
+  }
+  if(p===3||p===4){ const s=String(q.question||'');
+    const pre='Part '+p+' · ';
+    if(/look at the graphic/i.test(s)) return pre+'อ่านกราฟิกประกอบ';
+    if(/mean when|say,\s*"|says,\s*"|imply|suggest when/i.test(s)) return pre+'ความหมายแฝงของคำพูด';
+    if(/mainly|main topic|purpose|why is the (man|woman|speaker) calling|about\?$/i.test(s)) return pre+'ใจความหลัก / จุดประสงค์';
+    if(/who (most likely )?(is|are)|where (do|does|is|are)|what (industry|department|type of business)|work\b/i.test(s)) return pre+'ผู้พูด / สถานที่';
+    if(/(do|happen) next|will .* do|most likely do|plan to|going to/i.test(s)) return pre+'สิ่งที่จะเกิดต่อไป';
+    if(/suggest|recommend|offer|ask .* to|request/i.test(s)) return pre+'ข้อเสนอ / คำขอ';
+    return pre+'รายละเอียด';
+  }
+  const c=String(q.category_th||'อื่น ๆ').split(' – ')[0];
+  return 'Part '+p+' · '+c;
+}
+
+/* ---------- overview of all tests ---------- */
+const LC_T=[[0,5],[10,20],[25,120],[40,195],[50,255],[60,310],[75,390],[85,435],[90,460],[96,485],[100,495]];
+const RC_T=[[0,5],[10,15],[25,95],[40,165],[50,220],[60,270],[75,350],[85,405],[90,430],[96,470],[100,495]];
+function est(raw,T){ for(let i=1;i<T.length;i++){ if(raw<=T[i][0]){ const [a,b]=T[i-1],[c,d]=T[i]; return Math.round((b+(d-b)*(raw-a)/(c-a))/5)*5; } } return 495; }
+function testsWithAnswers(){ return TESTS.filter(t=>Object.keys(answersOf(t)).length); }
+async function statsFor(t){
+  const d=await loadData(t), A=answersOf(t), parts={}; let lcR=0,lcN=0,rcR=0,rcN=0;
+  for(const p of ['1','2','3','4','5','6','7']) parts[p]=[0,0];
+  for(const n in A){ const q=d._q[n]; if(!q||!q.options[A[n]]) continue; const p=partOf(n); parts[p][1]++; if(A[n]===q.answer){ parts[p][0]++; } }
+  for(const p of ['1','2','3','4']){ lcR+=parts[p][0]; lcN+=parts[p][1]; }
+  for(const p of ['5','6','7']){ rcR+=parts[p][0]; rcN+=parts[p][1]; }
+  return {t,parts,lcR,lcN,rcR,rcN,d};
+}
+async function renderHome(){
+  const main=$('#main'); const had=testsWithAnswers();
+  main.innerHTML='<p class="note">กำลังคำนวณภาพรวม…</p>';
+  const all=await Promise.all(had.map(t=>statsFor(t).catch(()=>null))); if(view!=='home') return;
+  const S={}; all.filter(Boolean).forEach(x=>S[x.t]=x);
+  let tot=0,ok=0; Object.values(S).forEach(x=>{ tot+=x.lcN+x.rcN; ok+=x.lcR+x.rcR; });
+  const best=Object.values(S).filter(x=>x.lcN===100&&x.rcN===100).map(x=>est(x.lcR,LC_T)+est(x.rcR,RC_T));
+  const hist=LS.get('lclab_hist',[]), due=vocabDue().length;
+  let h='';
+  if(!had.length) h+=`<div class="item start"><h2>เริ่มตรงนี้</h2><ol>
+    <li>ไปที่แท็บ <b>ข้อสอบ</b> เลือก Test 01 แล้วลองทำ <b>Part 1–2</b> ก่อน (ฟังสั้น ง่ายที่สุด)</li>
+    <li>ตอบแล้วอ่านคำอธิบายทันที ข้อที่ผิดจะไปรวมอยู่ในแท็บ <b>ข้อที่ผิด</b> พร้อมบอกว่าอ่อนเรื่องไหน</li>
+    <li>ฝึกคำศัพท์ของชุดนั้นในแท็บ <b>คำศัพท์</b> และฝึกฟังจับใจความในแท็บ <b>Dictation</b></li>
+    <li>พร้อมแล้วกด <b>โหมดสอบ</b> เพื่อฝึกจับเวลาแบบสอบจริง</li></ol>
+    <div class="bar" style="margin-top:10px"><button class="btn primary" data-goto="${TEST}" data-gp="1">เริ่ม Test ${TEST} Part 1</button></div></div>`;
+  h+=`<div class="kpis"><div class="kpi"><b>${had.length}<small style="font-size:.9rem;color:var(--muted)">/10</small></b><span>ชุดที่เริ่มทำแล้ว</span></div>
+    <div class="kpi"><b>${tot}</b><span>ข้อที่ทำแล้ว</span></div>
+    <div class="kpi"><b>${tot?Math.round(ok/tot*100):0}%</b><span>ตอบถูกโดยรวม</span></div>
+    <div class="kpi"><b>${best.length?Math.max(...best):'–'}</b><span>คะแนนประมาณการสูงสุด</span></div>
+    <div class="kpi"><b>${due}</b><span>คำศัพท์ต้องทบทวนวันนี้</span></div></div>`;
+  h+=`<div class="item"><h2>คะแนนรายชุด</h2><div class="tblwrap"><table class="grid10"><thead><tr><th>ชุด</th>${['1','2','3','4','5','6','7'].map(p=>`<th>P${p}</th>`).join('')}<th>LC</th><th>RC</th></tr></thead><tbody>`+
+    TESTS.map(t=>{ const x=S[t]; return `<tr><td class="t" data-goto="${t}">${t}</td>`+['1','2','3','4','5','6','7'].map(p=>{ const v=x?x.parts[p]:[0,0], pct=v[1]?v[0]/v[1]:null, full=v[1]===PARTQ[p];
+      const cls=pct===null?'':(pct>=.8?'cg':pct>=.6?'cw':'cb')+(full?' full':'');
+      return `<td class="${cls}" data-goto="${t}" data-gp="${p}" title="Part ${p}: ${v[0]}/${v[1]} จาก ${PARTQ[p]} ข้อ">${v[1]?Math.round(pct*100)+'%':'·'}</td>`; }).join('')+
+      `<td class="est">${x&&x.lcN===100?est(x.lcR,LC_T):x&&x.lcN?'…':''}</td><td class="est">${x&&x.rcN===100?est(x.rcR,RC_T):x&&x.rcN?'…':''}</td></tr>`; }).join('')+
+    `</tbody></table></div><p class="note">แตะช่องเพื่อไปทำ Part นั้น · สีเข้ม = ทำครบทั้ง Part · คะแนน LC/RC ขึ้นเมื่อทำครบ 100 ข้อ เป็นการประมาณคร่าว ๆ ไม่ใช่คะแนนจริง</p></div>`;
+  if(hist.length) h+=`<div class="item"><h2>การสอบจับเวลาล่าสุด</h2>${hist.slice(-6).reverse().map(r=>`<div class="bar" style="margin:0 0 4px"><span class="tag">Test ${r.t} · Part ${r.part}</span><b>${r.right}/${r.total}</b><span class="note">${Math.round(r.right/r.total*100)}% · ${fmt(r.sec)}</span></div>`).join('')}</div>`;
+  main.innerHTML=h;
+}
+
+/* ---------- wrong-answer notebook + weak points ---------- */
+let RV={part:'all',type:null,show:40};
+async function renderReview(){
+  const main=$('#main'); const had=testsWithAnswers();
+  if(!had.length){ main.innerHTML='<div class="item"><h2>ยังไม่มีข้อที่ผิด</h2><p>ทำข้อสอบสักพักก่อน ข้อที่ตอบผิดจะมารวมที่นี่ พร้อมบอกว่าอ่อนเรื่องไหน</p></div>'; return; }
+  main.innerHTML='<p class="note">กำลังรวบรวมข้อที่ผิด…</p>';
+  const all=(await Promise.all(had.map(t=>statsFor(t).catch(()=>null)))).filter(Boolean); if(view!=='review') return;
+  const types={}, wrong=[];
+  for(const x of all){ const A=answersOf(x.t); for(const n in A){ const q=x.d._q[n]; if(!q||!q.options[A[n]]) continue; const ty=qType(q), o=types[ty]||(types[ty]={r:0,n:0}); o.n++; if(A[n]===q.answer) o.r++; else wrong.push({t:x.t,n:+n,q,a:A[n],ty,d:x.d}); } }
+  const rows=Object.entries(types).filter(([k,v])=>v.n>=3).map(([k,v])=>({k,acc:v.r/v.n,...v})).sort((a,b)=>a.acc-b.acc);
+  let h=`<div class="item"><h2>จุดอ่อน (ความแม่นยำต่ำสุดอยู่บน)</h2>${rows.length?`<div class="wk">${rows.slice(0,12).map(r=>`<button class="wkrow ${RV.type===r.k?'on':''}" data-type="${esc(r.k)}"><span class="lab">${esc(r.k)}</span><span class="val">${Math.round(r.acc*100)}% · ${r.r}/${r.n}</span><span class="bar2"><i style="width:${Math.round((1-r.acc)*100)}%"></i></span></button>`).join('')}</div><p class="note">นับเฉพาะหัวข้อที่ทำแล้วอย่างน้อย 3 ข้อ · แตะหัวข้อเพื่อดูเฉพาะข้อที่ผิดในหัวข้อนั้น</p>`:'<p class="note">ทำเพิ่มอีกหน่อย (อย่างน้อย 3 ข้อต่อหัวข้อ) แล้วจะเห็นจุดอ่อน</p>'}</div>`;
+  let list=wrong.filter(w=>(RV.part==='all'||String(partOf(w.n))===RV.part)&&(!RV.type||w.ty===RV.type));
+  list.sort((a,b)=>a.t.localeCompare(b.t)||a.n-b.n);
+  h+=`<div class="bar"><div class="chips">${['all','1','2','3','4','5','6','7'].map(p=>`<button class="chip" data-rvp="${p}" aria-pressed="${RV.part===p}">${p==='all'?'ทุก Part':'P'+p}</button>`).join('')}</div>${RV.type?`<button class="chip" data-type="" aria-pressed="true">${esc(RV.type)} ✕</button>`:''}<span class="note" style="margin-left:auto">ผิด ${list.length} ข้อ</span></div>`;
+  h+=list.slice(0,RV.show).map(w=>{ const q=w.q, p=partOf(w.n), lc=p<=4, s=q._set;
+    const stem=p===5?esc(q.sentence).replace('_____','<span class="blank">_____</span>'):q.question?esc(q.question):(p===1?'(ข้อบรรยายภาพ)':'(คำถามแบบฟังอย่างเดียว)');
+    return `<div class="item wrongq"><div class="qhead"><span class="tag">Test ${w.t}</span><span class="qn" style="font-size:1rem">${w.n}</span><span class="tag">${esc(w.ty)}</span></div>
+      <div class="qtext">${stem}</div>
+      ${p===1&&q.image?`<img class="photo" src="${q.image}" alt="ภาพข้อ ${w.n}" loading="lazy" style="max-height:180px">`:''}
+      <div style="margin-top:6px"><span class="yours">✗ (${w.a}) ${esc(q.options[w.a])}</span><br><span class="right">✓ (${q.answer}) ${esc(q.options[q.answer])}</span></div>
+      <details><summary>คำอธิบาย</summary><div class="explain">${esc(q.explain_th)}${(q.evidence_quotes||[]).map(e=>`<span class="ev">“${esc(e)}”</span>`).join('')}</div></details>
+      <div class="bar" style="margin:8px 0 0">${lc?`<button class="btn small" data-rplay="${w.t}|${q.audio.start}|${q.audio.end}">▶ ฟังข้อนี้</button>`:''}<button class="btn small" data-goto="${w.t}" data-gp="${p}" data-gq="${w.n}">ไปที่ข้อนี้</button><button class="btn small" data-redo="${w.t}|${w.n}">ล้างคำตอบเพื่อทำใหม่</button></div></div>`; }).join('');
+  if(list.length>RV.show) h+=`<div class="bar"><button class="btn" id="rvMore">แสดงเพิ่ม (${list.length-RV.show})</button></div>`;
+  main.innerHTML=h;
+}
+
+/* ---------- Dictation (sentences from the real audio) ---------- */
+let dq=[],di=0,dfilter='all';
+function buildDict(){
+  dq=[];
+  for(const q of D.parts['1']) for(const k in q.options) dq.push({part:1,src:`Q${q.n}(${k})`,en:q.options[k],th:q.options_th[k],seg:q.segments[k]});
+  for(const q of D.parts['2']){ dq.push({part:2,src:`Q${q.n}`,en:q.question,th:q.question_th,seg:q.segments.question});
+    for(const k in q.options) dq.push({part:2,src:`Q${q.n}(${k})`,en:q.options[k],th:q.options_th[k],seg:q.segments[k]}); }
+  for(const p of ['3','4']) for(const s of D.parts[p]) s.transcript.forEach((l,i)=>l.sentences.forEach((x,j)=>
+    dq.push({part:+p,src:`${s.set} · ${l.spk}`,en:x.en,th:l.sentences.length>1?`(ทั้งประโยคพูด) ${l.th}`:l.th,seg:x})));
+  dq.forEach(x=>x.key=x.part+'|'+x.seg.start);
+}
+const dScores=()=>LS.get('lclab_dict_t'+TEST,{});
+const dlist=()=>{ const sc=dScores(); return dfilter==='all'?dq:dfilter==='todo'?dq.filter(x=>!(sc[x.key]>=80)):dq.filter(x=>String(x.part)===dfilter); };
+const CON={"i'm":"i am","you're":"you are","we're":"we are","they're":"they are","he's":"he is","she's":"she is","it's":"it is","that's":"that is","there's":"there is","what's":"what is","who's":"who is","how's":"how is","where's":"where is","here's":"here is","let's":"let us","everything's":"everything is","food's":"food is","files'll":"files will","i'll":"i will","you'll":"you will","we'll":"we will","they'll":"they will","it'll":"it will","that'll":"that will","he'll":"he will","she'll":"she will","i've":"i have","we've":"we have","you've":"you have","they've":"they have","i'd":"i would","you'd":"you would","we'd":"we would","they'd":"they would","don't":"do not","doesn't":"does not","didn't":"did not","can't":"cannot","couldn't":"could not","won't":"will not","wouldn't":"would not","shouldn't":"should not","isn't":"is not","aren't":"are not","wasn't":"was not","weren't":"were not","haven't":"have not","hasn't":"has not","hadn't":"had not"};
+const NOAPOS={}; for(const k in CON) NOAPOS[k.replace("'","")]=CON[k];
+const SAFE_NOAPOS=new Set(["weve","wed","youd","hes","shes","im","youre","theyre","dont","doesnt","didnt","cant","couldnt","wont","wouldnt","shouldnt","isnt","arent","wasnt","werent","havent","hasnt","hadnt","ive","youve","theyve","ill","youll","theyll","thats","theres","whats","whos","lets","itll","thatll"]);
+const NUM={zero:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19,twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+function wordsToNum(toks){
+  const out=[]; let acc=null,total=0;
+  const flush=()=>{ if(acc!==null||total){ out.push(String(total+(acc||0))); acc=null; total=0; } };
+  for(const t of toks){
+    if(t in NUM){ const v=NUM[t]; if(acc!==null && !(acc%10===0 && acc>=20 && acc<100 && v<10)) flush(); acc=(acc||0)+v; }
+    else if(t==='hundred'&&acc!==null){ acc*=100; }
+    else if(t==='thousand'&&(acc!==null||total)){ total=(total+(acc||1))*1000; acc=null; }
+    else { flush(); out.push(t); }
+  }
+  flush(); return out;
+}
+function norm(s){
+  s=s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[’‘]/g,"'")
+     .replace(/(\d),(?=\d{3}\b)/g,'$1').replace(/\ba\.m\./g,'am').replace(/\bp\.m\./g,'pm')
+     .replace(/\be-mail/g,'email').replace(/\bo'?clock\b/g,'oclock').replace(/\balright\b/g,'all right')
+     .replace(/(\d)(am|pm)\b/g,'$1 $2').replace(/-/g,' ').replace(/—|–/g,' ');
+  let t=s.replace(/[^a-z0-9'\s]/g,' ').split(/\s+/).filter(Boolean);
+  t=t.flatMap(w=>{ w=w.replace(/^'+|'+$/g,''); const e=CON[w]||(SAFE_NOAPOS.has(w)?NOAPOS[w]:null); return e?e.split(' '):[w.replace(/'s$/,"s")]; }).filter(Boolean);
+  const r=[]; for(let i=0;i<t.length;i++){ if(t[i]==='can'&&t[i+1]==='not'){r.push('cannot');i++;} else r.push(t[i]); }
+  return wordsToNum(r);
+}
+function diff(ref,inp){
+  const a=norm(ref),b=norm(inp),m=a.length,n=b.length;
+  const L=Array.from({length:m+1},()=>Array(n+1).fill(0));
+  for(let i=m-1;i>=0;i--)for(let j=n-1;j>=0;j--)L[i][j]=a[i]===b[j]?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
+  let i=0,j=0,out=[],ok=0; const missed=[];
+  while(i<m||j<n){ if(i<m&&j<n&&a[i]===b[j]){out.push(`<span class="ok">${esc(a[i])}</span>`);ok++;i++;j++;}
+    else if(j<n&&(i>=m||L[i][j+1]>=L[i+1][j])){out.push(`<span class="extra">${esc(b[j])}</span>`);j++;}
+    else {out.push(`<span class="miss">${esc(a[i])}</span>`); missed.push(a[i]); i++;} }
+  return {html:out.join(' '),pct:Math.round(100*ok/Math.max(m,n,1)),missed};
+}
+function renderDict(){
+  const list=dlist(), sc=dScores(); if(di>=list.length) di=0; const it=list[di];
+  const done=dq.filter(x=>sc[x.key]!=null).length, pass=dq.filter(x=>sc[x.key]>=80).length;
+  const head=`<div class="bar"><select id="dfilter">${[['all','ทุก Part'],['todo','ยังไม่ผ่าน (ต่ำกว่า 80%)'],['1','Part 1'],['2','Part 2'],['3','Part 3'],['4','Part 4']].map(([v,t])=>`<option value="${v}" ${v===dfilter?'selected':''}>${t}</option>`).join('')}</select>
+   <span class="note">ทำแล้ว ${done}/${dq.length} · ผ่าน ${pass}</span></div><div class="prog"><i style="width:${dq.length?pass/dq.length*100:0}%"></i></div>`;
+  if(!it){ $('#main').innerHTML=head+'<div class="item"><p>ผ่านครบทุกประโยคในตัวกรองนี้แล้ว 🎉 เลือก "ทุก Part" เพื่อฝึกซ้ำ</p></div>'; return; }
+  $('#main').innerHTML=head+`<div class="item dict-card"><div class="bar"><span class="note">${di+1} / ${list.length}</span><span class="tag">${esc(it.src)}</span>${sc[it.key]!=null?`<span class="tag">ดีที่สุด ${sc[it.key]}%</span>`:''}</div>
+   <div class="bar"><button class="btn primary" id="dplay">▶ ฟังประโยค</button><button class="btn" id="dslow">▶ ช้า 0.75×</button><button class="btn" id="dhint">ใบ้</button><span class="time">${fmt(it.seg.start)}–${fmt(it.seg.end)}</span></div>
+   <div id="dhintBox" class="note" style="font-family:var(--mono)"></div>
+   <textarea class="din" id="dinput" placeholder="พิมพ์สิ่งที่ได้ยิน แล้วกด Enter เพื่อตรวจ" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+   <div class="bar" style="margin-top:8px"><button class="btn primary" id="dcheck">ตรวจ</button><button class="btn" id="dshow">ดูเฉลย</button><button class="btn" id="dprev">← ก่อนหน้า</button><button class="btn" id="dnext">ถัดไป →</button></div>
+   <div id="dres"></div></div>
+   <p class="note">ตรวจแบบยืดหยุ่น: ตัวพิมพ์เล็ก/ใหญ่, เครื่องหมายวรรคตอน, คำย่อ (I'll = I will), ตัวเลข (5,000 = five thousand) และ e-mail/email นับว่าถูก · คำที่ฟังไม่ทันจะถูกส่งเข้าแท็บคำศัพท์ให้ทบทวน (ถ้าเป็นคำศัพท์ของชุดนี้)</p>`;
+}
+
+/* ---------- vocabulary practice (flashcards + listen & spell, spaced review) ---------- */
+const IVL=[0,1,3,7,14,30];
+const VS=()=>LS.get('lclab_vocab',{});
+function vSave(o){ LS.set('lclab_vocab',o); }
+function vGrade(w,ok){ const o=VS(), k=w.toLowerCase(), e=o[k]||{b:0,d:0,ok:0,no:0}; if(ok){ e.ok++; e.b=Math.min(5,e.b+1); } else { e.no++; e.b=0; } e.d=today()+IVL[e.b]; o[k]=e; vSave(o); }
+function vDueAdd(words){ const o=VS(), t=today(); let n=0; words.forEach(w=>{ const k=w.toLowerCase(); if(!o[k]){ o[k]={b:0,d:t,ok:0,no:0}; n++; } else if(o[k].d>t){ o[k].d=t; o[k].b=0; n++; } }); vSave(o); return n; }
+function vocabDue(){ const o=VS(), t=today(); return Object.keys(o).filter(k=>o[k].d<=t && o[k].b<5); }
+let B=null, VV={src:'test',lesson:0,mode:'list',q:[],i:0,flip:false,checked:false,ok:0,n:0};
+function vDeck(){
+  if(VV.src==='test') return (D._vocab||[]).map(v=>({w:v.w,th:v.th.join(' · '),src:v.src.join(', ')}));
+  if(VV.src==='ess'){ if(!B) return []; const L=B.essential600.lessons[VV.lesson]; return L?L.words.map(w=>({w:w.word,th:w.th||w.def,src:'Lesson '+L.n})):[]; }
+  if(VV.src==='due'){ const due=new Set(vocabDue()), m=new Map(); (D._vocab||[]).forEach(v=>{ if(due.has(v.w.toLowerCase())) m.set(v.w.toLowerCase(),{w:v.w,th:v.th.join(' · '),src:'Test '+TEST}); });
+    if(B) B.essential600.lessons.forEach(L=>L.words.forEach(w=>{ const k=w.word.toLowerCase(); if(due.has(k)&&!m.has(k)) m.set(k,{w:w.word,th:w.th||w.def,src:'Lesson '+L.n}); }));
+    return [...m.values()]; }
+  return [];
+}
+function needBooks(){ if(B) return Promise.resolve(B); return fetch('data/books.json').then(r=>r.json()).then(d=>{B=d; return d;}); }
+function speakEN(t){ try{ if(!('speechSynthesis' in window)) return; speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.lang='en-US'; const v=speechSynthesis.getVoices().find(v=>/^en[-_]US/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang)); if(v) u.voice=v; u.rate=.85; speechSynthesis.speak(u); }catch(e){} }
+function renderVocab(){
+  if((VV.src==='ess'||VV.src==='due') && !B){ $('#main').innerHTML='<p class="note">กำลังโหลด 600 Essential Words…</p>'; needBooks().then(()=>{ if(view==='vocab') renderVocab(); }).catch(()=>{ VV.src='test'; renderVocab(); }); return; }
+  const deck=vDeck(), o=VS(), known=deck.filter(v=>(o[v.w.toLowerCase()]||{}).b>=3).length, due=vocabDue().length;
+  let h=`<div class="bar"><select id="vsrc"><option value="test" ${VV.src==='test'?'selected':''}>คำศัพท์ Test ${TEST}</option><option value="ess" ${VV.src==='ess'?'selected':''}>600 Essential Words</option><option value="due" ${VV.src==='due'?'selected':''}>ต้องทบทวนวันนี้ (${due})</option></select>
+    ${VV.src==='ess'&&B?`<select id="vles">${B.essential600.lessons.map((L,i)=>`<option value="${i}" ${i===VV.lesson?'selected':''}>Lesson ${L.n}: ${esc(L.title)}</option>`).join('')}</select>`:''}</div>
+    <div class="bar"><div class="chips">${[['list','รายการ'],['card','บัตรคำ'],['spell','ฟังแล้วสะกด']].map(([m,t])=>`<button class="chip" data-vmode="${m}" aria-pressed="${VV.mode===m}">${t}</button>`).join('')}</div><span class="note" style="margin-left:auto">จำได้ ${known}/${deck.length} คำ</span></div>
+    <div class="prog"><i style="width:${deck.length?known/deck.length*100:0}%"></i></div>`;
+  if(!deck.length){ $('#main').innerHTML=h+`<div class="item"><p>${VV.src==='due'?'ไม่มีคำที่ต้องทบทวนวันนี้ เก่งมาก':'ไม่มีคำในชุดนี้'}</p></div>`; return; }
+  if(VV.mode==='list'){
+    h+=`<div class="bar"><input type="search" id="vq" placeholder="ค้นหาคำ (อังกฤษหรือไทย)"><span class="note" id="vcount"></span></div><div class="vgrid" id="vgrid"></div>
+      <p class="note">จุดสี: เทา = ยังไม่ฝึก · ส้ม = กำลังจำ · เขียว = จำได้แล้ว · คำชุดเดียวกันนี้ฝึกสะกดต่อได้ในเมนู <button class="btn small" data-app="dictation">ฝึก → สะกด → คำศัพท์ข้อสอบ</button></p>`;
+    $('#main').innerHTML=h; drawVocab(''); return;
+  }
+  if(!VV.q.length || VV.qsrc!==VV.src+VV.lesson+VV.mode+TEST){
+    const o2=VS(), t=today();
+    VV.q=deck.slice().sort((a,b)=>{ const ea=o2[a.w.toLowerCase()], eb=o2[b.w.toLowerCase()]; const sa=ea?(ea.d<=t?0:2+ea.b):1, sb=eb?(eb.d<=t?0:2+eb.b):1; return sa-sb||Math.random()-.5; }).slice(0,15);
+    VV.qsrc=VV.src+VV.lesson+VV.mode+TEST; VV.i=0; VV.flip=false; VV.checked=false; VV.ok=0; VV.n=0;
+  }
+  if(VV.i>=VV.q.length){ $('#main').innerHTML=h+`<div class="card3"><div class="w">${VV.ok}/${VV.n}</div><p>จบรอบนี้แล้ว คำที่ยังไม่รู้จะกลับมาก่อนในรอบหน้า</p><div class="row"><button class="btn primary" id="vagain">ฝึกอีกรอบ</button></div></div>`; return; }
+  const v=VV.q[VV.i], e=o[v.w.toLowerCase()];
+  h+=`<p class="note">คำที่ ${VV.i+1}/${VV.q.length} · <span class="dot l${e?e.b:0}"></span>${e?(e.b>=3?'จำได้แล้ว':'กำลังจำ'):'คำใหม่'}</p>`;
+  if(VV.mode==='card'){
+    h+=`<div class="card3" id="vflip" role="button" tabindex="0" style="cursor:pointer"><div class="w">${esc(v.w)}</div>${VV.flip?`<div class="m">${esc(v.th)}</div><div class="note">${esc(v.src)}</div>`:'<div class="note">แตะเพื่อดูความหมาย</div>'}</div>
+      <div class="row"><button class="btn" id="vsay">🔊 ฟัง</button>${VV.flip?`<button class="btn" id="vno" style="color:var(--bad)">ยังไม่รู้</button><button class="btn good" id="vyes">รู้แล้ว</button>`:''}</div>`;
+  } else {
+    h+=`<div class="card3"><div class="m">${esc(v.th)}</div><div class="row" style="margin-top:10px"><button class="btn" id="vsay">🔊 ฟังอีกครั้ง</button></div>
+      <input id="vin" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="พิมพ์คำที่ได้ยิน" ${VV.checked?'disabled':''}>
+      <div id="vres" style="margin-top:10px"></div></div>
+      <div class="row">${VV.checked?'<button class="btn primary" id="vnext">คำต่อไป</button>':'<button class="btn primary" id="vcheck">ตรวจ</button><button class="btn" id="vskip">ไม่รู้ ดูเฉลย</button>'}</div>`;
+  }
+  $('#main').innerHTML=h;
+  if(VV.mode==='spell' && !VV.checked){ setTimeout(()=>{ const i=$('#vin'); if(i) i.focus(); speakEN(v.w); },60); }
+}
+function letterDiff(target,typed){ target=target.toLowerCase(); typed=typed.toLowerCase().trim(); let out=''; for(let i=0;i<target.length;i++){ const c=target[i]; out+= typed[i]===c?esc(c):`<span class="x">${esc(c)}</span>`; } return out; }
+function vCheck(skip){
+  const v=VV.q[VV.i], typed=skip?'':($('#vin').value||''), ok=!skip && typed.trim().toLowerCase().replace(/\s+/g,' ')===v.w.toLowerCase();
+  VV.checked=true; VV.n++; if(ok) VV.ok++; vGrade(v.w,ok);
+  if(!ok && !VV.q.slice(VV.i+1).includes(v)) VV.q.push(v);
+  renderVocab();
+  $('#vin').value=typed; $('#vin').classList.add(ok?'okk':'bad');
+  $('#vres').innerHTML=ok?'<b style="color:var(--good)">ถูกต้อง</b>':`<div class="lt">${letterDiff(v.w,typed)}</div><div class="note">ตัวที่ขีดเส้นใต้คือจุดที่ต่างจากที่คุณพิมพ์</div>`;
+  speakEN(v.w); setTimeout(()=>{ const b=$('#vnext'); if(b) b.focus(); },60);
+}
+function drawVocab(f){
+  const fold=x=>x.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(); f=fold(f.trim()); const o=VS();
+  const list=vDeck().filter(v=>!f||fold(v.w).includes(f)||v.th.includes(f));
+  $('#vcount').textContent=`${list.length} คำ`;
+  $('#vgrid').innerHTML=list.map(v=>{ const e=o[v.w.toLowerCase()]; return `<div class="v"><b><span class="dot l${e?e.b:0}"></span>${esc(v.w)}</b> <button class="btn small" data-say="${esc(v.w)}" aria-label="ฟัง ${esc(v.w)}">🔊</button><div class="th">${esc(v.th)}</div><div class="src">${esc(v.src)}</div></div>`; }).join('');
+}
+
+/* ---------- books ---------- */
+let bu=0, el=0;
+function renderBooks(){
+  if(!B){ $('#main').innerHTML='<p class="note">กำลังโหลด…</p>'; needBooks().then(()=>renderBooks()).catch(()=>{$('#main').innerHTML='<p class="note">โหลดไม่สำเร็จ</p>';}); return; }
+  const u=B.workbook.units[bu];
+  $('#main').innerHTML=`<div class="item"><div class="qhead"><span class="qn" style="font-size:1.1rem">600 Essential Words</span><span class="tag">${B.essential600.tracks.length} tracks</span></div>
+   <div class="bar"><select id="ewSel">${B.essential600.tracks.map(t=>`<option value="${t.url}">Track ${t.n}</option>`).join('')}</select></div>
+   <audio id="ewAud" controls preload="none" style="width:100%" src="${B.essential600.tracks[0].url}"></audio>
+   ${B.essential600.lessons?`<div class="bar" style="margin-top:8px"><select id="ewL">${B.essential600.lessons.map((L,i)=>`<option value="${i}" ${i===el?'selected':''}>Lesson ${L.n}: ${esc(L.title)}</option>`).join('')}</select><button class="btn" id="ewPractice">ฝึกบทนี้ในแท็บคำศัพท์</button></div>
+   <div class="vgrid">${B.essential600.lessons[el].words.map(w=>`<div class="v"><b>${esc(w.word)}</b> <span class="tag">${esc(w.pos)}</span>${w.th?`<div><b>${esc(w.th)}</b></div>`:''}<div class="th">${esc(w.def)}</div>${w.ex.map(e=>`<div class="note">• ${esc(e)}</div>`).join('')}</div>`).join('')}</div>`:''}</div>
+   <div class="item"><div class="qhead"><span class="qn" style="font-size:1.1rem">Check Your English Vocabulary</span></div>
+   <div class="bar"><select id="wbSel">${B.workbook.units.map((x,i)=>`<option value="${i}" ${i===bu?'selected':''}>${esc(x.title)} (p.${x.pages[0]}${x.pages[1]!==x.pages[0]?'–'+x.pages[1]:''})</option>`).join('')}</select></div>
+   <pre class="ptext" style="font-family:var(--mono);font-size:.78rem;overflow-x:auto;white-space:pre">${esc(u.text)}</pre>
+   <details><summary>ดูเฉลย</summary><pre class="ptext" style="font-family:var(--mono);font-size:.78rem;overflow-x:auto;white-space:pre">${esc(u.answers)}</pre></details></div>`;
+}
+
+/* ---------- navigation ---------- */
+let view='home';
+function setView(v){ view=v; document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.v===v))); render(); window.scrollTo(0,0); }
+function render(){ ({home:renderHome,test:renderTest,review:renderReview,dict:renderDict,vocab:renderVocab,books:renderBooks})[view](); }
+async function loadTest(t){
+  const d=await loadData(t);
+  TEST=t; D=d; cur=null; state.answers=answersOf(t);
+  for(const n in state.answers) if(!D._q[n]||!D._q[n].options[state.answers[n]]) delete state.answers[n];
+  $('#testSel').value=t; try{ history.replaceState(null,'','#t'+t); }catch(e){}
+  $('#sub').textContent=`Test ${t} · LC 100${D.rc?' + RC 100':''} ข้อ`;
+  di=0; buildDict(); LS.set('lclab_last',t);
+}
+async function goTo(t,p,qn){
+  if(EX && (t!==EX.t)) { toast('กำลังสอบอยู่ ส่งคำตอบหรือยกเลิกก่อน'); return; }
+  if(t!==TEST) await loadTest(t);
+  if(p) state.part=String(p);
+  setView('test');
+  if(qn) setTimeout(()=>{ const e=document.getElementById('q'+qn); if(e) e.scrollIntoView({block:'center'}); },60);
+}
+document.addEventListener('change',e=>{ if(e.target.id==='ewSel'){ const a=$('#ewAud'); a.src=e.target.value; a.play().catch(()=>{}); } if(e.target.id==='wbSel'){ bu=+e.target.value; renderBooks(); } if(e.target.id==='ewL'){ el=+e.target.value; renderBooks(); } });
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button,[data-s],[data-goto],#vflip'); if(!t) return;
+  if(t.id!=='reset' && state.confirmReset){ state.confirmReset=false; }
+  if(t.matches('nav button')){ setView(t.dataset.v); return; }
+  if(t.dataset.goto!==undefined){ goTo(t.dataset.goto,t.dataset.gp,t.dataset.gq); return; }
+  if(t.dataset.part){ state.part=t.dataset.part; lastResult=null; render(); return; }
+  if(t.dataset.play){ const [s,en]=t.dataset.play.split(',').map(Number); play({start:s,end:en}); return; }
+  if(t.dataset.s){ play({start:+t.dataset.s,end:+t.dataset.e}); return; }
+  if(t.dataset.rplay){ const [tt,s,en]=t.dataset.rplay.split('|'); loadData(tt).then(d=>play({start:+s,end:+en},1,d)); return; }
+  if(t.dataset.redo){ const [tt,n]=t.dataset.redo.split('|'); const A=answersOf(tt); delete A[n]; LS.set('lclab_t'+tt,{answers:A}); if(tt===TEST) delete state.answers[n]; toast('ล้างคำตอบข้อ '+n+' แล้ว ไปทำใหม่ได้ในแท็บข้อสอบ'); renderReview(); return; }
+  if(t.dataset.rvp){ RV.part=t.dataset.rvp; RV.show=40; renderReview(); return; }
+  if(t.dataset.type!==undefined){ RV.type=t.dataset.type&&RV.type!==t.dataset.type?t.dataset.type:null; RV.show=40; renderReview(); return; }
+  if(t.id==='rvMore'){ RV.show+=40; renderReview(); return; }
+  if(t.matches('.opt')){ const n=t.dataset.q, q=D._q[n];
+    if(examActive()){ EX.pending[n]=t.dataset.k; LS.set('lclab_exam',EX); t.parentElement.querySelectorAll('.opt').forEach(o=>o.classList.toggle('sel',o===t)); renderExamBar(); return; }
+    if(state.answers[n]){ if(q.segments&&q.segments[t.dataset.k]) play(q.segments[t.dataset.k]); return; }
+    state.answers[n]=t.dataset.k; save(); const y=window.scrollY; render(); window.scrollTo(0,y); return; }
+  if(t.id==='reset'){ if(state.confirmReset){ qsOfPart(state.part).forEach(q=>delete state.answers[q.n]); state.confirmReset=false; save(); lastResult=null; toast('ล้างคำตอบ Part '+state.part+' แล้ว'); } else state.confirmReset=true; render(); return; }
+  if(t.id==='exStart'){ startExam(); return; }
+  if(t.id==='exSubmit'){ if(!t.dataset.armed){ t.dataset.armed='1'; t.textContent='ยืนยันส่ง?'; setTimeout(()=>{ if(t.isConnected){ delete t.dataset.armed; t.textContent='ส่งคำตอบ'; } },3000); return; } submitExam(); return; }
+  if(t.id==='exCancel'){ if(!t.dataset.armed){ t.dataset.armed='1'; t.textContent='ยกเลิกจริง?'; setTimeout(()=>{ if(t.isConnected){ delete t.dataset.armed; t.textContent='ยกเลิก'; } },3000); return; } cancelExam(); return; }
+  if(t.id==='exResume'){ goTo(EX.t,EX.part); return; }
+  if(t.id==='exPlay'){ if(!aud.paused){ stopAudio(); } else { const r=partRange(EX.part); const from=Math.max(r[0], cur?cur.offset+aud.currentTime:r[0]); playRange(from>r[0]&&from<r[1]?from:r[0], r[1]); } return; }
+  if(t.dataset.say){ speakEN(t.dataset.say); return; }
+  if(t.dataset.vmode){ VV.mode=t.dataset.vmode; VV.q=[]; renderVocab(); return; }
+  if(t.id==='vflip'){ VV.flip=!VV.flip; renderVocab(); if(VV.flip) speakEN(VV.q[VV.i].w); return; }
+  if(t.id==='vsay'){ speakEN(VV.q[VV.i].w); return; }
+  if(t.id==='vyes'||t.id==='vno'){ const ok=t.id==='vyes', v=VV.q[VV.i]; vGrade(v.w,ok); VV.n++; if(ok) VV.ok++; else if(!VV.q.slice(VV.i+1).includes(v)) VV.q.push(v); VV.i++; VV.flip=false; renderVocab(); return; }
+  if(t.id==='vcheck'){ vCheck(false); return; }
+  if(t.id==='vskip'){ vCheck(true); return; }
+  if(t.id==='vnext'){ VV.i++; VV.checked=false; renderVocab(); return; }
+  if(t.id==='vagain'){ VV.q=[]; renderVocab(); return; }
+  if(t.id==='ewPractice'){ VV.src='ess'; VV.lesson=el; VV.mode='card'; VV.q=[]; setView('vocab'); return; }
+  const list=dlist(), it=list[di];
+  if(!it) return;
+  if(t.id==='dplay') play(it.seg,1);
+  if(t.id==='dslow') play(it.seg,.75);
+  if(t.id==='dhint'){ $('#dhintBox').textContent=it.en.split(/\s+/).map(w=>w.replace(/[A-Za-z]/g,(c,i)=>i===0?c:'_')).join(' '); }
+  if(t.id==='dcheck'){ const r=diff(it.en,$('#dinput').value); const sc=dScores(); sc[it.key]=Math.max(sc[it.key]||0,r.pct); LS.set('lclab_dict_t'+TEST,sc);
+    const vk=new Set((D._vocab||[]).map(v=>v.w.toLowerCase())), add=r.missed.filter(w=>vk.has(w)), nAdd=add.length?vDueAdd(add):0;
+    $('#dres').innerHTML=`<p class="score">${r.pct}%</p><p class="diff">${r.html}</p><p>${esc(it.en)}</p><p class="th">${esc(it.th)}</p>${nAdd?`<p class="note">ส่ง ${nAdd} คำที่ฟังไม่ทันไปทบทวนในแท็บคำศัพท์แล้ว</p>`:''}`; }
+  if(t.id==='dshow'){ $('#dres').innerHTML=`<p>${esc(it.en)}</p><p class="th">${esc(it.th)}</p>`; }
+  if(t.id==='dnext'){ di=(di+1)%list.length; renderDict(); if(dAuto) play(dlist()[di].seg,1); }
+  if(t.id==='dprev'){ di=(di-1+list.length)%list.length; renderDict(); }
+});
+let dAuto=true;
+document.addEventListener('change',e=>{
+  if(e.target.id==='hideText'){ state.hideText=e.target.checked; render(); }
+  if(e.target.id==='dfilter'){ dfilter=e.target.value; di=0; renderDict(); }
+  if(e.target.id==='vsrc'){ VV.src=e.target.value; VV.q=[]; renderVocab(); }
+  if(e.target.id==='vles'){ VV.lesson=+e.target.value; VV.q=[]; renderVocab(); }
+});
+document.addEventListener('input',e=>{ if(e.target.id==='vq') drawVocab(e.target.value); });
+document.addEventListener('keydown',e=>{
+  if(e.target.id==='dinput'&&e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); $('#dcheck').click(); }
+  if(e.target.id==='vin'&&e.key==='Enter'){ e.preventDefault(); vCheck(false); }
+  if(e.target.id==='vflip'&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); e.target.click(); }
+});
+
+const EMB=(()=>{ try{ return window.parent!==window && !!window.parent.VN; }catch(e){ return false; } })();
+if(EMB) document.body.classList.add('embedded');
+function syncTheme(){ try{ const t=window.parent.document.documentElement.getAttribute('data-theme'); if(t) document.documentElement.setAttribute('data-theme',t); else document.documentElement.removeAttribute('data-theme'); }catch(e){} }
+if(EMB){ syncTheme(); try{ new MutationObserver(syncTheme).observe(window.parent.document.documentElement,{attributes:true,attributeFilter:['data-theme']}); }catch(e){} }
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-app]'); if(b&&EMB){ try{ window.parent.DL && window.parent.DL.examGo && window.parent.DL.examGo(b.dataset.app); }catch(_){} } });
+const setHH=()=>{ const h=document.querySelector('header'); if(h) document.documentElement.style.setProperty('--hh',h.getBoundingClientRect().bottom+'px'); };
+addEventListener('resize',setHH); setHH();
+fetch('data/tests.json').then(r=>r.json()).then(async M=>{
+  AMAP=M.audio||{}; TESTS=M.tests;
+  const want=(/^#?t(\d{2})$/.exec(location.hash)||[])[1], last=LS.get('lclab_last',null);
+  const t=TESTS.includes(want)?want:TESTS.includes(last)?last:TESTS[0];
+  $('#testSel').innerHTML=TESTS.map(x=>`<option value="${x}" ${x===t?'selected':''}>Test ${x}</option>`).join('');
+  $('#testSel').onchange=async e=>{ if(EX){ toast('กำลังสอบอยู่ ส่งคำตอบหรือยกเลิกก่อน'); e.target.value=TEST; return; } await loadTest(e.target.value); lastResult=null; VV.q=[]; render(); };
+  await loadTest(t);
+  const ex=LS.get('lclab_exam',null);
+  if(ex && ex.t===TEST && (!ex.endsAt || ex.endsAt>Date.now())){ EX=ex; state.part=ex.part; armTimer(); setView('test'); toast('กลับมาสอบต่อจากเดิม'); }
+  else { if(ex) LS.set('lclab_exam',null); setView(testsWithAnswers().length?'home':'home'); }
+}).catch(()=>{ $('#main').innerHTML='<p class="note">โหลดข้อมูลไม่สำเร็จ ลองรีเฟรชหน้าอีกครั้ง</p>'; });
+</script>
