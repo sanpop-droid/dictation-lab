@@ -1240,6 +1240,7 @@
   .dl .xl-def{font-family:var(--en);font-size:14px;color:var(--ink2);margin:6px 0 2px}
   .dl .xl-book{font-family:var(--en);font-size:14px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;margin:0 0 8px}
   .dl .xl-stage{margin:22px 0 6px}
+  .dl .xl-grp{font-family:var(--th);font-weight:700;font-size:15px;color:var(--accent);margin:14px 0 -2px;padding-left:2px}
   .dl .xl-sh{display:flex;gap:12px;align-items:center;margin-bottom:10px;font-family:var(--th)}
   .dl .xl-sh b{display:block;font-size:19px}
   .dl .xl-sh small{display:block;font-size:13.5px;color:var(--ink2)}
@@ -1249,6 +1250,7 @@
   .dl .xl-en{font-family:var(--en);color:var(--ink2);margin:-6px 0 10px}
   .dl .xl-html{margin:6px 0 16px}
   .dl .xl-html .tense-detail-card{cursor:default}
+  .dl .xl-pairs{font-family:var(--th);line-height:1.8;padding-left:20px;margin:8px 0 14px}
   .dl .xl-ptabs{margin:0 0 10px}
   .dl .xl-orig summary{cursor:pointer;font-family:var(--th);font-size:14px;color:var(--accent);margin:8px 0 6px}
   .dl .xl-orig .xl-img{max-height:none;margin-top:6px}
@@ -4348,6 +4350,54 @@
     { t:'why-tricky', q:'คำว่า "two", "too", "to" มีลักษณะอย่างไร?', options:['ออกเสียงเหมือนกัน แต่สะกดและความหมายต่างกัน','สะกดเหมือนกัน','ความหมายเหมือนกัน','ออกเสียงต่างกันทั้งหมด'], correct:0, explain:'คำแบบนี้เรียกว่า homophones ต้องจำตัวสะกดคู่กับความหมาย' },
     { t:'why-tricky', q:'วิธีใดช่วยจำตัวสะกดคำที่ไม่ตรงกับเสียงได้ดีที่สุด?', options:['แบ่งคำเป็นก้อน แล้วเขียนจากความจำซ้ำหลายรอบ','ฟังเสียงอย่างเดียว','จำคำแปลอย่างเดียว','เดาจากเสียงทุกครั้ง'], correct:0, explain:'การเห็นก้อนตัวสะกดและเขียนจากความจำช่วยให้ตาและมือจำ ไม่ต้องพึ่งเสียงอย่างเดียว' }
   ];
+
+  var LEARN_MORE = {
+    phonics: { id:'pairs', en:'Sound pairs Thai speakers mix up', th:'คู่เสียงที่คนไทยมักสับสน',
+      html:'<p class="phonics-note">เสียงบางคู่ไม่มีในภาษาไทย หรือภาษาไทยไม่ออกเสียงท้ายคำ จึงฟังและสะกดพลาดบ่อย ฝึกฟังทีละคู่แล้วพูดตามช้าๆ</p>' +
+        '<ul class="xl-pairs">' +
+        '<li><b>l / r</b> — <b>l</b>ight (ปลายลิ้นแตะหลังฟันบน) / <b>r</b>ight (ลิ้นม้วนไม่แตะเพดาน)</li>' +
+        '<li><b>v / w</b> — <b>v</b>est (ฟันบนแตะริมฝีปากล่าง) / <b>w</b>est (ห่อปาก)</li>' +
+        '<li><b>th / t</b> — <b>th</b>in /θ/ (ปลายลิ้นอยู่ระหว่างฟัน) / <b>t</b>in /t/</li>' +
+        '<li><b>th / d</b> — <b>th</b>ey /ð/ (ลิ้นระหว่างฟันและเสียงก้อง) / <b>d</b>ay /d/</li>' +
+        '<li><b>sh / ch</b> — <b>sh</b>ip (ลมไหลยาว) / <b>ch</b>ip (เสียงหยุดแล้วปล่อย เหมือน ช)</li>' +
+        '<li><b>สระสั้น / ยาว</b> — sh<b>i</b>p / sh<b>ee</b>p, f<b>u</b>ll / f<b>oo</b>l</li>' +
+        '<li><b>เสียงท้ายคำ</b> — ri<b>ce</b> / ri<b>ght</b>, book / book<b>s</b> ภาษาไทยมักไม่ออกเสียงท้าย แต่ภาษาอังกฤษต้องออก ไม่อย่างนั้นความหมายเปลี่ยน</li></ul>' +
+        phonicsTip('ใช้ปุ่มฟังช้าในหน้าฝึกสะกด แล้วพูดตามทีละคู่ ถ้าแยกเสียงได้ จะสะกดคำที่ได้ยินถูกมากขึ้น'),
+      q:[
+        { q:'คำใดขึ้นต้นด้วยเสียง /r/?', options:['right','light','night','white'], correct:0, explain:'right ขึ้นต้นด้วย r ลิ้นม้วนและไม่แตะเพดาน' },
+        { q:'คำใดขึ้นต้นด้วยเสียง /v/ (ฟันบนแตะริมฝีปากล่าง)?', options:['vest','west','best','rest'], correct:0, explain:'v ต่างจาก w ที่ใช้การห่อปาก' },
+        { q:'"thin" กับ "tin" ต่างกันที่ใด?', options:['thin ปลายลิ้นอยู่ระหว่างฟัน /θ/ ส่วน tin เป็นเสียง /t/','เหมือนกันทุกอย่าง','tin ปลายลิ้นอยู่ระหว่างฟัน','ต่างกันที่เสียงสระ'], correct:0, explain:'th ไม่ก้อง /θ/ ปลายลิ้นยื่นออกมาระหว่างฟันเล็กน้อย' },
+        { q:'คู่ใดต่างกันที่สระสั้นกับสระยาว?', options:['ship – sheep','ship – shop','sheep – cheap','ship – chip'], correct:0, explain:'ship สระสั้น /ɪ/ ส่วน sheep สระยาว /iː/' },
+        { q:'"rice" กับ "right" ต่างกันที่ส่วนใดของคำ?', options:['เสียงท้ายคำ /s/ กับ /t/','เสียงต้นคำ','เสียงสระ','ไม่ต่างกัน'], correct:0, explain:'ทั้งสองคำขึ้นต้นด้วย r และสระเดียวกัน ต่างกันที่เสียงท้าย ต้องออกเสียงท้ายให้ชัด' },
+        { q:'คำใดขึ้นต้นด้วยเสียง "ช" /tʃ/?', options:['chip','ship','sip','zip'], correct:0, explain:'ch ใน chip ออกเสียง /tʃ/ ส่วน sh ใน ship ออกเสียง /ʃ/' },
+        { q:'ทำไมต้องออกเสียง s ท้ายคำว่า "books"?', options:['เพราะบอกว่ามีหลายเล่ม ถ้าไม่ออกเสียง ผู้ฟังจะเข้าใจว่ามีเล่มเดียว','ไม่จำเป็นต้องออกเสียง','เพื่อเน้นเสียงให้ดัง','เพราะ books เป็นคำกริยา'], correct:0, explain:'เสียงท้ายคำบอกความหมาย เช่น พหูพจน์ หรือ tense' },
+        { q:'คำใดมีสระเสียงยาว /uː/?', options:['fool','full','foot','book'], correct:0, explain:'fool สระยาว /uː/ ส่วน full, foot, book สระสั้น /ʊ/' },
+        { q:'"they" ขึ้นต้นด้วยเสียงใด?', options:['/ð/ ลิ้นอยู่ระหว่างฟันและเสียงก้อง','/d/ เหมือน ด','/θ/ ไม่ก้อง','/t/ เหมือน ท'], correct:0, explain:'they, this, that ขึ้นต้นด้วย /ð/ ซึ่งก้อง' },
+        { q:'"walk" กับ "work" ออกเสียงต่างกันอย่างไร?', options:['walk = /wɔːk/ (l ไม่ออกเสียง) ส่วน work = /wɜːrk/','ออกเสียงเหมือนกัน','walk ออกเสียง l ชัดเจน','work ไม่มีเสียงสระ'], correct:0, explain:'l ใน walk ไม่ออกเสียง สระของสองคำต่างกัน' }
+      ] },
+    tense: { id:'compare', en:'Choosing the right tense', th:'เลือก tense ให้ถูก (คู่ที่สับสนบ่อย)',
+      html:'<div class="tense-detail-card open"><div class="tense-detail-body">' +
+        '<div class="tense-usage">' +
+        '<p><b>Present Simple กับ Present Continuous</b> — ทำเป็นประจำ (I <b>go</b> every day) กับ กำลังทำตอนนี้ (Listen! The baby <b>is crying</b>.)</p>' +
+        '<p><b>Past Simple กับ Present Perfect</b> — มีเวลาในอดีตชัดเจน (yesterday, last year, ago) ใช้ Past Simple / ไม่ระบุเวลา หรือต่อเนื่องถึงปัจจุบัน (since, for, already, ever) ใช้ Present Perfect</p>' +
+        '<p><b>Past Simple กับ Past Continuous</b> — เหตุการณ์ยาวที่กำลังเกิด (was cooking) ถูกเหตุการณ์สั้นแทรก (rang): While I <b>was cooking</b>, the phone <b>rang</b>.</p>' +
+        '<p><b>will กับ be going to</b> — ตัดสินใจตอนพูด (I <b>will</b> answer it.) กับ วางแผนไว้แล้ว หรือมีหลักฐานเห็นอยู่ (Look at those clouds! It <b>is going to</b> rain.)</p>' +
+        '<p><b>Present Perfect กับ Present Perfect Continuous</b> — เน้นผลหรือจำนวนที่ทำได้ (has written three reports) กับ เน้นระยะเวลาที่ทำต่อเนื่อง (have been working for two hours)</p>' +
+        '<p><b>Past Perfect</b> — เหตุการณ์ที่เกิดก่อนอีกเหตุการณ์ในอดีต: When I arrived, the meeting <b>had</b> already <b>started</b>.</p>' +
+        '</div></div></div>',
+      q:[
+        { q:'Listen! The baby ___.', options:['is crying','cries','cried','has cried'], correct:0, explain:'Listen! = กำลังเกิดตอนนี้ ใช้ Present Continuous' },
+        { q:'I ___ to work by bus every day.', options:['go','am going','went','have gone'], correct:0, explain:'every day = ทำเป็นประจำ ใช้ Present Simple' },
+        { q:'I ___ my keys yesterday.', options:['lost','have lost','lose','am losing'], correct:0, explain:'yesterday = เวลาในอดีตชัดเจน ใช้ Past Simple' },
+        { q:'I ___ in Bangkok since 2015.', options:['have lived','lived','live','am living'], correct:0, explain:'since + จุดเริ่มต้น ต่อเนื่องถึงปัจจุบัน ใช้ Present Perfect' },
+        { q:'While I ___ dinner, the phone rang.', options:['was cooking','cooked','am cooking','have cooked'], correct:0, explain:'เหตุการณ์ยาวที่ถูกแทรก ใช้ Past Continuous' },
+        { q:'Look at those clouds! It ___ rain.', options:['is going to','will','rains','is raining to'], correct:0, explain:'มีหลักฐานให้เห็น ใช้ be going to' },
+        { q:'"The phone is ringing." — "I ___ answer it."', options:['will','am','was','have'], correct:0, explain:'ตัดสินใจตอนพูด ใช้ will' },
+        { q:'She ___ three reports so far today.', options:['has written','has been writing','wrote','writes'], correct:0, explain:'บอกจำนวนที่ทำได้ ใช้ Present Perfect' },
+        { q:'They ___ for two hours, and they still haven\'t finished.', options:['have been working','worked','work','are work'], correct:0, explain:'เน้นระยะเวลาที่ทำต่อเนื่องจนถึงตอนนี้ ใช้ Present Perfect Continuous' },
+        { q:'When I arrived, the meeting ___ already.', options:['had started','has started','starts','was start'], correct:0, explain:'เกิดก่อนเหตุการณ์ในอดีต (arrived) ใช้ Past Perfect' }
+      ] }
+  };
   function learnData(){
     var seed = 20261014, R0 = Math.random;
     Math.random = function(){ seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; };
@@ -4367,6 +4417,11 @@
         for (var k = 0, tries = 0; k < 6 && tries < 40; tries++){ var g = generateTenseQuestion(t.id); if (seen[g.sentence]) continue; seen[g.sentence] = 1; items.push({ s:g.sentence, o:g.options, a:g.correct, x:g.explain }); k++; }
         items.forEach(function(m, i){ m.id = 'tn-' + t.id + '-' + i; m.h = 1; });
         return { id:t.id, en:t.nameEn, th:t.nameTh, group:t.group, html:'<div class="tense-detail-card open">' + body + '</div>', items:items };
+      });
+      [['phonics', ph, 'ph-'], ['tense', tn, 'tn-']].forEach(function(z){
+        var M = LEARN_MORE[z[0]], L = { id:M.id, en:M.en, th:M.th, html:z[0]==='phonics' ? '<div class="tense-detail-card open"><div class="tense-detail-body">' + M.html + '</div></div>' : M.html, items:[] };
+        M.q.forEach(function(q, i){ var m = mix(q); m.id = z[2] + M.id + '-' + i; if (z[0]==='tense'){ m.h = 1; m.s = escapeHTML(q.q); } L.items.push(m); });
+        z[1].push(L);
       });
       return { phonics:ph, tense:tn };
     } finally { Math.random = R0; }
@@ -7052,9 +7107,9 @@ var XL_STAGES = [
 ];
 var XL_MODS = [
   { id:'tips', key:'xtips', stage:0, th:'เทคนิคการเรียน', sub:'5 บทสั้นๆ ทำก่อนเริ่มเรียน', n:25, has:function(k){ return k.indexOf('tp-')===0; } },
-  { id:'phonics', local:'phonics', stage:1, th:'ออกเสียง (Phonics)', sub:'ตัวอักษร สระ พยัญชนะ การเน้นเสียง', n:51, has:function(k){ return k.indexOf('ph-')===0; } },
-  { id:'tense', local:'tense', stage:1, th:'Tense ทั้ง 12 แบบ', sub:'โครงสร้าง วิธีใช้ เส้นเวลา', n:96, has:function(k){ return k.indexOf('tn-')===0; } },
-  { id:'basic', key:'xbasic', stage:1, th:'ไวยากรณ์พื้นฐาน', sub:'a/an/the, นับได้-นับไม่ได้, เปรียบเทียบ, If, modal, คำถาม', n:48, has:function(k){ return k.indexOf('bg-')===0; } },
+  { id:'phonics', local:'phonics', stage:1, th:'ออกเสียง (Phonics)', sub:'ตัวอักษร สระ พยัญชนะ การเน้นเสียง', n:61, has:function(k){ return k.indexOf('ph-')===0; } },
+  { id:'tense', local:'tense', stage:1, th:'Tense ทั้ง 12 แบบ', sub:'โครงสร้าง วิธีใช้ เส้นเวลา', n:106, has:function(k){ return k.indexOf('tn-')===0; } },
+  { id:'basic', key:'xbasic', stage:1, th:'ไวยากรณ์พื้นฐาน', sub:'28 บทใน 5 หมวด: โครงสร้างประโยค คำนาม คำกริยา คำขยาย ประโยคซับซ้อน', n:280, has:function(k){ return k.indexOf('bg-')===0; } },
   { id:'e600', key:'x600', stage:2, th:'600 Essential Words', sub:'50 หัวข้อ 600 คำ พร้อมเสียงจริง', n:1095, has:function(k){ return k.indexOf('e6-')===0; } },
   { id:'cyev', key:'xcyev', stage:2, th:'Check Your English Vocabulary', sub:'42 หน่วย ทำในสมุดแล้วตรวจกับเฉลย', n:42, has:function(k){ return k.indexOf('cy-')===0; } },
   { id:'part1', key:'xpart1', stage:3, th:'Part 1 ภาพ', sub:'ภาพและเสียงจริง', n:60, has:xlRange(1, 6) },
@@ -7153,8 +7208,9 @@ function xlRender(){
   }
   var tot = 0, done = 0, ok = 0;
   var cards = Ls.map(function(L, i){ var st = xlStats(L, P); tot += st.n; done += st.done; ok += st.ok;
+    var head = (L.grp && (!i || Ls[i-1].grp!==L.grp)) ? '<li class="xl-grp">'+esc(L.grp)+'</li>' : '';
     var pct = st.n ? Math.round(st.done/st.n*100) : 0, full = st.n && st.done===st.n;
-    return '<li><button class="xl-card'+(full ? ' done' : '')+'" data-xlles="'+L.id+'"><span class="xl-no">'+(full ? '✓' : i+1)+'</span><span class="xl-cb"><b>'+esc(L.th)+'</b><small>'+esc(L.en)+'</small>'+
+    return head+'<li><button class="xl-card'+(full ? ' done' : '')+'" data-xlles="'+L.id+'"><span class="xl-no">'+(full ? '✓' : i+1)+'</span><span class="xl-cb"><b>'+esc(L.th)+'</b><small>'+esc(L.en)+'</small>'+
       '<span class="xl-meta">'+(st.mark ? (st.done ? 'ทำเสร็จแล้ว' : 'อ่านแล้วทำในสมุด') : st.n ? st.n+' ข้อ'+(st.done ? ' · ทำแล้ว '+st.done+' · ถูก '+st.ok : '') : 'อ่านอย่างเดียว')+'</span><span class="xl-bar"><i style="width:'+pct+'%"></i></span></span></button></li>'; }).join('');
   root.innerHTML = '<button class="xl-back" data-xl="map">← แผนที่การเรียน</button><p class="eyebrow">'+esc(XL_STAGES[M.stage].th)+'</p><h1 class="page-title">'+esc(M.th)+'</h1>'+
     '<div class="xl-sum"><div><b>'+Ls.length+'</b><span>บท</span></div><div><b>'+done+'/'+tot+'</b><span>ข้อที่ทำแล้ว</span></div><div><b>'+(done ? Math.round(ok/done*100) : 0)+'%</b><span>ตอบถูก</span></div></div>'+

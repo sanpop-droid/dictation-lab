@@ -157,15 +157,25 @@ TIPS = [
      ['วิธีใดช่วยให้ชินกับเวลาสอบจริง?', ['ฝึกด้วยโหมดจับเวลา', 'ทำทีละข้อแบบไม่จำกัดเวลาเท่านั้น', 'อ่านเฉลยอย่างเดียว', 'ไม่ต้องฝึก'], 'การจับเวลาทำให้รู้จังหวะของตัวเอง']]),
 ]
 
-def build(lessons, prefix, seed):
-    rnd = random.Random(seed); K = 'ABCD'; out = []
-    for L in lessons:
+def build(lessons, prefix, seed, extra=None, more=None, groups=None):
+    """Option order comes from one seeded stream in a fixed order (first lessons, then added questions, then new lessons),
+    so questions that already existed keep their letters and saved answers stay valid."""
+    rnd = random.Random(seed); K = 'ABCD'; byid = {}
+    def make(L, qs, start):
         items = []
-        for i, (s, opts, x) in enumerate(L['q']):
+        for i, (s, opts, x) in enumerate(qs, start):
             order = list(range(4)); rnd.shuffle(order)
             o = {K[j]: opts[k] for j, k in enumerate(order)}
             items.append(dict(id='%s-%s-%d' % (prefix, L['id'], i), p=0, s=s, gap=1 if '_____' in s else 0, o=o, oth={}, a=K[order.index(0)], x=x, v=[]))
-        out.append(dict(id=L['id'], en=L['en'], th=L['th'], intro=L['intro'], r=L['r'], tips=[], items=items))
+        return items
+    for L in lessons: byid[L['id']] = dict(id=L['id'], en=L['en'], th=L['th'], intro=L['intro'], r=L['r'], tips=[], items=make(L, L['q'], 0))
+    for lid, qs in (extra or {}).items(): byid[lid]['items'] += make(byid[lid], qs, len(byid[lid]['items']))
+    for L in (more or []): byid[L['id']] = dict(id=L['id'], en=L['en'], th=L['th'], intro=L['intro'], r=L['r'], tips=[], items=make(L, L['q'], 0))
+    if not groups: return list(byid.values())
+    out = []
+    for g, ids in groups:
+        for lid in ids: L = byid.pop(lid); L['grp'] = g; out.append(L)
+    assert not byid, 'lessons left out of the groups: %r' % list(byid)
     return out
 
 def write(key, lessons):
@@ -174,5 +184,6 @@ def write(key, lessons):
     print(key, len(lessons), 'lessons', sum(len(L['items']) for L in lessons), 'questions')
 
 if __name__ == '__main__':
-    write('xbasic', build(BASIC, 'bg', 7))
+    import basic_more as M
+    write('xbasic', build(BASIC, 'bg', 7, M.EXTRA, M.NEW, M.GROUPS))
     write('xtips', build(TIPS, 'tp', 8))
