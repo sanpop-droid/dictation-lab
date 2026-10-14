@@ -3,7 +3,7 @@
 Questions: [sentence or question, [correct, wrong, wrong, wrong], explanation]; the options are shuffled with a fixed seed.
 Run:  python3 tools/build_basic.py
 """
-import json, os, random
+import json, os, random, re
 from examdata import D
 
 BASIC = [
@@ -183,7 +183,67 @@ def write(key, lessons):
     open(os.path.join(D, key + '.js'), 'w', encoding='utf-8').write(js)
     print(key, len(lessons), 'lessons', sum(len(L['items']) for L in lessons), 'questions')
 
+
+# ---------- full lesson pages (same look as the Tense lessons) ----------
+import html as _h
+ROLE = {'S': 'ประธาน', 'V': 'กริยา', 'BE': 'be', 'AUX': 'ตัวช่วย', 'NOT': 'ปฏิเสธ', 'O': 'กรรม', 'A': 'คำขยาย', 'ADV': 'adverb',
+        'Q': 'คำถาม', 'C': 'คำเชื่อม', 'T': 'เวลา', 'P': 'สถานที่', 'X': ''}
+SPK = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+BULB = '<svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.5.36.5 1 .5 1.6h6c0-.6 0-1.24.5-1.6A6 6 0 0 0 12 3z"/></svg>'
+def e(x): return _h.escape(str(x), quote=True)
+def mark(x): return re.sub(r'\*\*(.+?)\*\*', r'<mark>\1</mark>', e(x))
+def say(x): return '<button class="icon-btn bv-say" data-say="%s" aria-label="ฟัง">%s</button>' % (e(re.sub(r'\*\*', '', x)), SPK)
+
+def vis_html(v):
+    kind = v[0]
+    if kind == 'blocks':
+        rows = ''.join('<div class="bv-row">%s<div class="bv-chips">%s</div></div>' % (
+            ('<span class="bv-rl">%s</span>' % e(lab)) if lab else '',
+            ''.join('<span class="bv-chip r-%s"><b>%s</b>%s</span>' % (r, e(t), ('<i>%s</i>' % ROLE[r]) if ROLE[r] else '') for t, r in chips)) for lab, chips in v[1])
+        return '<figure class="bv bv-blocks">%s<figcaption>%s</figcaption></figure>' % (rows, e(v[2]))
+    if kind == 'table':
+        head = ''.join('<th>%s</th>' % e(x) for x in v[1])
+        body = ''.join('<tr>%s</tr>' % ''.join('<td>%s</td>' % e(c) for c in row) for row in v[2])
+        return '<figure class="bv bv-table"><div class="bv-tw"><table><thead><tr>%s</tr></thead><tbody>%s</tbody></table></div><figcaption>%s</figcaption></figure>' % (head, body, e(v[3]))
+    if kind == 'scale':
+        rows = ''.join('<div class="bv-sr"><span class="bv-sw">%s</span><span class="bv-sb"><i style="width:%d%%"></i></span><span class="bv-st">%s</span></div>' % (e(w), max(3, p), e(t)) for w, p, t in v[1])
+        return '<figure class="bv bv-scale">%s<figcaption>%s</figcaption></figure>' % (rows, e(v[2]))
+    if kind == 'nest':
+        inner = ''
+        for w, t, pl in reversed(v[1]):
+            inner = '<div class="bv-box"><b>%s</b><p><span>เวลา</span>%s</p><p><span>สถานที่</span>%s</p>%s</div>' % (e(w), e(t), e(pl), inner)
+        return '<figure class="bv bv-nest">%s<figcaption>%s</figcaption></figure>' % (inner, e(v[2]))
+    if kind == 'steps':
+        return '<figure class="bv bv-steps"><ol>%s</ol><figcaption>%s</figcaption></figure>' % (''.join('<li>%s</li>' % e(x) for x in v[1]), e(v[2]))
+    raise SystemExit('unknown picture ' + kind)
+
+def rich_html(L, R):
+    out = ['<div class="tense-detail-card open bv-page"><div class="tense-detail-body">', '<div class="bv-hook">%s</div>' % R['hook']]
+    out += [vis_html(v) for v in R['vis']]
+    if R.get('f'):
+        out.append('<div class="tense-formula-grid">%s</div>' % ''.join('<div class="tense-formula"><div class="tf-label">%s</div><div class="tf-value">%s</div></div>' % (e(a), e(b)) for a, b in R['f']))
+    if L.get('r'):
+        out.append('<h3 class="bv-h">หลักการ</h3><div class="tense-usage">%s</div>' % ''.join(
+            '<p><b>%s</b>%s%s</p>' % (e(r[0]), (' — ' + r[1]) if r[1] else '', ''.join('<br><span class="bv-rx">%s%s</span>' % (x[0], (' <small>' + e(x[1]) + '</small>') if x[1] else '') for x in r[2])) for r in L['r']))
+    out.append('<h3 class="bv-h">ตัวอย่างประโยค</h3><div class="tense-examples">%s</div>' % ''.join(
+        '<div class="tense-example bv-exr">%s<div><div class="ex-en">%s</div><div class="ex-th thai">%s</div></div></div>' % (say(a), e(a), e(b)) for a, b in R['ex']))
+    out.append('<h3 class="bv-h">ข้อผิดพลาดที่คนไทยทำบ่อย</h3><div class="bv-mis">%s</div>' % ''.join(
+        '<div class="bv-m"><p class="no">✗ %s</p><p class="ok">✓ %s</p><small>%s</small></div>' % (e(w), e(r), e(why)) for w, r, why in R['mis']))
+    out.append('<div class="tense-tip">%s<p><b>เกร็ดความรู้:</b> %s</p></div>' % (BULB, e(R['tip'])))
+    en, th = R['story']
+    out.append('<div class="tense-story"><div class="ts-label">ตัวอย่างเนื้อเรื่อง %s</div><div class="ts-en">%s</div><div class="ts-th">%s</div></div>' % (say(en), mark(en), e(th)))
+    out.append('</div></div>')
+    return ''.join(out)
+
+def enrich(lessons):
+    from basic_rich import RICH
+    missing = [L['id'] for L in lessons if L['id'] not in RICH]
+    if missing: raise SystemExit('lessons without a full page: %r' % missing)
+    for L in lessons:
+        L['html'] = rich_html(L, RICH[L['id']]); L['r'] = []
+    return lessons
+
 if __name__ == '__main__':
     import basic_more as M
-    write('xbasic', build(BASIC, 'bg', 7, M.EXTRA, M.NEW, M.GROUPS))
+    write('xbasic', enrich(build(BASIC, 'bg', 7, M.EXTRA, M.NEW, M.GROUPS)))
     write('xtips', build(TIPS, 'tp', 8))
