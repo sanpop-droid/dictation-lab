@@ -1192,6 +1192,16 @@
   .ver-badge{display:inline-block;vertical-align:middle;font-family:var(--en);font-size:12px;font-weight:600;color:var(--ink2);border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin-left:6px}
   /* ===== lessons from the practice tests ===== */
   .dl .xl-mods{margin:0 0 14px}
+  .dl .xl-stage{margin:22px 0 6px}
+  .dl .xl-sh{display:flex;gap:12px;align-items:center;margin-bottom:10px;font-family:var(--th)}
+  .dl .xl-sh b{display:block;font-size:19px}
+  .dl .xl-sh small{display:block;font-size:13.5px;color:var(--ink2)}
+  .dl .xl-sn{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-weight:700;background:var(--accent);color:var(--accent-ink)}
+  .dl .xl-go{flex:none;font-size:26px;color:var(--ink3);line-height:1}
+  .dl .xl-sum.xl-sum2{grid-template-columns:repeat(2,1fr)}
+  .dl .xl-en{font-family:var(--en);color:var(--ink2);margin:-6px 0 10px}
+  .dl .xl-html{margin:6px 0 16px}
+  .dl .xl-html .tense-detail-card{cursor:default}
   .dl .xl-ptabs{margin:0 0 10px}
   .dl .xl-orig summary{cursor:pointer;font-family:var(--th);font-size:14px;color:var(--accent);margin:8px 0 6px}
   .dl .xl-orig .xl-img{max-height:none;margin-top:6px}
@@ -2250,8 +2260,8 @@
   var views = document.querySelectorAll('.view');
   var navBtns = document.querySelectorAll('.spine-btn');
   var TAB_OF = { exam:'exam', friends:'play', play:'play', rain:'play', match:'play', typo:'play', fill:'play', today:'today', dictation:'practice', sentence:'practice', coach:'practice', home:'practice', flashcards:'practice', quiz:'practice', story:'practice', phonics:'learn', tense:'learn', xlearn:'learn', browse:'words' };
-  var SUBS = { play:[['play','สวนคำศัพท์'],['rain','คำตก'],['match','จับคู่'],['typo','จับคำผิด'],['fill','เติมตัวอักษร'],['friends', window.DL_STANDALONE ? 'ผู้เล่นทุกคน' : 'เพื่อน']], practice:[['dictation','สะกด'],['sentence','เขียนประโยค'],['coach','จุดอ่อน'],['home','บัตรคำ'],['quiz','แบบทดสอบ'],['story','อ่านเรื่อง']], learn:[['phonics','อ่านออกเสียง (Phonics)'],['tense','Tense'],['xlearn','บทเรียนจากข้อสอบ']] };
-  var lastInTab = { play:'play', today:'today', practice:'dictation', learn:'phonics', words:'browse', exam:'exam' };
+  var SUBS = { play:[['play','สวนคำศัพท์'],['rain','คำตก'],['match','จับคู่'],['typo','จับคำผิด'],['fill','เติมตัวอักษร'],['friends', window.DL_STANDALONE ? 'ผู้เล่นทุกคน' : 'เพื่อน']], practice:[['dictation','สะกด'],['sentence','เขียนประโยค'],['coach','จุดอ่อน'],['home','บัตรคำ'],['quiz','แบบทดสอบ'],['story','อ่านเรื่อง']], learn:null };
+  var lastInTab = { play:'play', today:'today', practice:'dictation', learn:'xlearn', words:'browse', exam:'exam' };
   var subnavEl = document.getElementById('subnav');
   function renderSubnav(tab, name){
     var list = SUBS[tab];
@@ -4259,7 +4269,63 @@
   document.getElementById('storyGenerateBtn').addEventListener('click', function(){
     document.getElementById('storySpellBtn').textContent = 'ฝึกสะกดคำในเรื่องนี้';
   });
+  /* ---------- lesson data for the learning map (Dictation Lab "เรียน"): topics + practice per topic ---------- */
+  var PHONICS_QUIZ_TOPIC = ['magic-e','alphabet','magic-e','consonants','consonants','digraphs','consonants','digraphs','digraphs','digraphs','digraphs',
+    'silent-letters','silent-letters','silent-letters','silent-letters','stress','stress','endings','endings','endings','endings','endings','endings','why-tricky'];
+  var PHONICS_QUIZ_MORE = [
+    { t:'alphabet', q:'ตัวอักษร "H" มีชื่อว่าอะไร?', options:['เอช','ฮอ','เฮ','เอ'], correct:0, explain:'ชื่อตัว H คือ "เอช" แต่เสียงในคำคือ "ฮ" เช่น hat' },
+    { t:'alphabet', q:'เวลาสะกดคำว่า "dog" ให้คนอื่นฟัง ควรพูดว่าอย่างไร?', options:['ดี-โอ-จี','ด-อ-ก','ดอก','ดี-โอ-เค'], correct:0, explain:'การสะกดคำใช้ "ชื่อ" ตัวอักษร: D (ดี) O (โอ) G (จี)' },
+    { t:'alphabet', q:'ตัวอักษร "W" มีชื่อว่าอะไร?', options:['ดับเบิลยู','วี','วอ','ยู'], correct:0, explain:'W อ่านว่า "ดับเบิลยู" (double-u)' },
+    { t:'alphabet', q:'ตัวอักษรชุดใดเป็นสระ (vowel letters) ทั้งหมด?', options:['a, e, i, o, u','a, b, c, d, e','b, c, d, f, g','y, w, h, k, x'], correct:0, explain:'สระมี 5 ตัวคือ a e i o u (บางครั้ง y ทำหน้าที่เป็นสระ เช่น my, happy)' },
+    { t:'alphabet', q:'ชื่อตัวอักษร "J" กับ "G" ต่างกันอย่างไร?', options:['J = เจ, G = จี','J = จี, G = เจ','ชื่อเหมือนกัน','J = ยอ, G = กอ'], correct:0, explain:'J ชื่อ "เจ" ส่วน G ชื่อ "จี" คนไทยมักสลับกัน ระวังเวลาสะกดคำ' },
+    { t:'vowels', q:'คำว่า "cat" สระ a ออกเสียงแบบใด?', options:['สระเสียงสั้น /æ/ (แอะ)','สระเสียงยาว /eɪ/ (เอ)','ไม่ออกเสียง','/ɑː/ (อา)'], correct:0, explain:'คำพยางค์เดียวแบบ พยัญชนะ-สระ-พยัญชนะ (CVC) สระมักออกเสียงสั้น' },
+    { t:'vowels', q:'คำไหนมีสระเสียงสั้น?', options:['hot','hope','home','hole'], correct:0, explain:'hot เป็นแบบ CVC สระ o จึงสั้น ส่วนคำอื่นมี e ท้ายคำ ทำให้ o ออกเสียงยาว' },
+    { t:'vowels', q:'คำว่า "bed" สระ e ออกเสียงอย่างไร?', options:['/e/ เอะ (สั้น)','/iː/ อี (ยาว)','/aɪ/ ไอ','ไม่ออกเสียง'], correct:0, explain:'e ในคำแบบ CVC ออกเสียงสั้น /e/' },
+    { t:'vowels', q:'คำว่า "sun" สระ u ออกเสียงอย่างไร?', options:['/ʌ/ อะ','/uː/ อู','/juː/ ยู','/ʊ/ อุ'], correct:0, explain:'u สั้นในคำแบบ CVC มักออกเสียง /ʌ/ คล้าย "อะ" เช่น sun, cup, bus' },
+    { t:'vowels', q:'สระเสียงยาว (long vowel) คือเสียงแบบใด?', options:['เสียงเดียวกับชื่อตัวอักษรสระนั้น','เสียงสั้นทุกครั้ง','เสียงที่ไม่ออก','เสียงพยัญชนะ'], correct:0, explain:'long vowel ออกเสียงตรงกับชื่อตัวอักษร เช่น a ใน cake ออกเสียง "เอ"' },
+    { t:'vowels', q:'คำไหนมีสระสองตัวติดกันที่ออกเสียงยาว (vowel team)?', options:['rain','ran','run','rent'], correct:0, explain:'"ai" ใน rain ออกเสียงยาว /eɪ/ สระสองตัวติดกันมักออกเสียงยาวตามชื่อตัวแรก' },
+    { t:'magic-e', q:'คำว่า "hop" เติม e เป็น "hope" เสียงเปลี่ยนอย่างไร?', options:['o เปลี่ยนเป็นเสียงยาว /oʊ/ และเป็นคนละคำ','เสียงเหมือนเดิม','e ออกเสียงเพิ่มท้ายคำ','o ไม่ออกเสียง'], correct:0, explain:'Magic E ทำให้สระข้างหน้าออกเสียงยาว hop (กระโดด) → hope (หวัง)' },
+    { t:'magic-e', q:'ตัว e ท้ายคำว่า "make" ออกเสียงหรือไม่?', options:['ไม่ออกเสียง แต่ทำให้ a ออกเสียงยาว','ออกเสียง "อี"','ออกเสียง "เอะ"','ทำให้ a ไม่ออกเสียง'], correct:0, explain:'e ท้ายคำแบบ Magic E เป็นตัวเงียบ (silent e)' },
+    { t:'magic-e', q:'คำไหนเป็นรูปแบบ Magic E?', options:['cute','cut','cup','cub'], correct:0, explain:'cute มี e ท้ายคำ ทำให้ u ออกเสียงยาว /juː/' },
+    { t:'magic-e', q:'คำว่า "bit" เติม e เป็นคำใด และออกเสียงอย่างไร?', options:['bite ออกเสียง "ไบท์"','bite ออกเสียง "บิท"','bete ออกเสียง "บีท"','bit ไม่เปลี่ยน'], correct:0, explain:'i สั้นเปลี่ยนเป็น i ยาว /aɪ/ เมื่อมี Magic E' },
+    { t:'consonants', q:'คำว่า "cat" ตัว C ออกเสียงว่าอย่างไร?', options:['/k/ ค','/s/ ซ','/tʃ/ ช','ไม่ออกเสียง'], correct:0, explain:'C ตามด้วย a, o, u ออกเสียง /k/' },
+    { t:'consonants', q:'คำว่า "game" ตัว G ออกเสียงว่าอย่างไร?', options:['/g/ ก','/dʒ/ จ','/h/ ฮ','ไม่ออกเสียง'], correct:0, explain:'G ตามด้วย a, o, u ออกเสียง /g/' },
+    { t:'consonants', q:'เสียง V ต่างจาก W อย่างไร?', options:['V ใช้ฟันบนแตะริมฝีปากล่าง ส่วน W ห่อปาก','เหมือนกันทุกอย่าง','V ห่อปาก ส่วน W ใช้ฟันแตะริมฝีปาก','ทั้งสองไม่ออกเสียง'], correct:0, explain:'คนไทยมักออกเสียง V เป็น ว ให้ฟันบนแตะริมฝีปากล่างแล้วให้เสียงสั่น เช่น very' },
+    { t:'silent-letters', q:'ตัวอักษรใดไม่ออกเสียงในคำว่า "hour"?', options:['h','o','u','r'], correct:0, explain:'hour ขึ้นต้นด้วยเสียงสระ h ไม่ออกเสียง จึงใช้ an hour' },
+    { t:'silent-letters', q:'ตัวอักษรใดไม่ออกเสียงในคำว่า "listen"?', options:['t','l','s','n'], correct:0, explain:'listen ออกเสียง /ˈlɪsən/ t ไม่ออกเสียง' },
+    { t:'stress', q:'คำว่า "hotel" เน้นเสียงที่พยางค์ใด?', options:['พยางค์หลัง ho-TEL','พยางค์แรก HO-tel','ไม่เน้นพยางค์ใด','เน้นทั้งสองเท่ากัน'], correct:0, explain:'hotel เน้นพยางค์หลัง /hoʊˈtel/' },
+    { t:'stress', q:'คำว่า "computer" เน้นเสียงที่พยางค์ใด?', options:['com-PU-ter (พยางค์ที่ 2)','COM-pu-ter (พยางค์แรก)','com-pu-TER (พยางค์สุดท้าย)','ไม่เน้น'], correct:0, explain:'computer /kəmˈpjuːtər/ เน้นพยางค์ที่สอง' },
+    { t:'stress', q:'คำที่ลงท้าย -tion มักเน้นเสียงตรงไหน?', options:['พยางค์ที่อยู่ก่อน -tion','พยางค์ -tion','พยางค์แรกเสมอ','ไม่มีหลัก'], correct:0, explain:'เช่น in-for-MA-tion, ed-u-CA-tion เน้นพยางค์ก่อน -tion' },
+    { t:'stress', q:'ทำไมการเน้นพยางค์จึงสำคัญ?', options:['เน้นผิดอาจทำให้ผู้ฟังฟังไม่ออกหรือเข้าใจเป็นคำอื่น','ไม่สำคัญเลย','ทำให้สะกดผิดเสมอ','ทำให้ไวยากรณ์ผิด'], correct:0, explain:'บางคำสะกดเหมือนกันแต่เน้นต่างกันแล้วความหมายเปลี่ยน เช่น REcord (บันทึก, n.) กับ reCORD (บันทึก, v.)' },
+    { t:'why-tricky', q:'คำว่า "read" ออกเสียงได้กี่แบบ?', options:['2 แบบ: /riːd/ (ปัจจุบัน) และ /red/ (อดีต)','1 แบบ','3 แบบ','ไม่ออกเสียง'], correct:0, explain:'สะกดเหมือนกันแต่ออกเสียงต่างตาม tense จึงต้องดูบริบท' },
+    { t:'why-tricky', q:'คำว่า "two", "too", "to" มีลักษณะอย่างไร?', options:['ออกเสียงเหมือนกัน แต่สะกดและความหมายต่างกัน','สะกดเหมือนกัน','ความหมายเหมือนกัน','ออกเสียงต่างกันทั้งหมด'], correct:0, explain:'คำแบบนี้เรียกว่า homophones ต้องจำตัวสะกดคู่กับความหมาย' },
+    { t:'why-tricky', q:'วิธีใดช่วยจำตัวสะกดคำที่ไม่ตรงกับเสียงได้ดีที่สุด?', options:['แบ่งคำเป็นก้อน แล้วเขียนจากความจำซ้ำหลายรอบ','ฟังเสียงอย่างเดียว','จำคำแปลอย่างเดียว','เดาจากเสียงทุกครั้ง'], correct:0, explain:'การเห็นก้อนตัวสะกดและเขียนจากความจำช่วยให้ตาและมือจำ ไม่ต้องพึ่งเสียงอย่างเดียว' }
+  ];
+  function learnData(){
+    var seed = 20261014, R0 = Math.random;
+    Math.random = function(){ seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; };
+    function mix(q){   /* options in a fixed shuffled order, so the answer is not always A */
+      var order = q.options.map(function(_, i){ return i; }); shuffleArray(order);
+      return { s:q.sentence || q.q, o:order.map(function(i){ return q.options[i]; }), a:order.indexOf(q.correct), x:q.explain || '' };
+    }
+    try {
+      var ph = PHONICS_TOPICS.map(function(t){ return { id:t.id, en:t.nameEn, th:t.nameTh, html:'<div class="tense-detail-card open"><div class="tense-detail-body">' + t.body() + '</div></div>', items:[] }; });
+      var byPh = {}; ph.forEach(function(L){ byPh[L.id] = L; });
+      PHONICS_QUIZ.forEach(function(q, i){ var L = byPh[PHONICS_QUIZ_TOPIC[i]] || byPh['why-tricky']; var m = mix(q); m.id = 'ph-' + i; L.items.push(m); });
+      PHONICS_QUIZ_MORE.forEach(function(q, i){ var m = mix(q); m.id = 'ph-m' + i; byPh[q.t].items.push(m); });
+      var tn = TENSES.map(function(t){
+        var h = tenseCardHTML(t), body = h.slice(h.indexOf('<div class="tense-detail-body">'));
+        var items = TENSE_QUIZ.filter(function(q){ return q.id === t.id; }).map(mix), seen = {};
+        items.forEach(function(m){ seen[m.s] = 1; });
+        for (var k = 0, tries = 0; k < 6 && tries < 40; tries++){ var g = generateTenseQuestion(t.id); if (seen[g.sentence]) continue; seen[g.sentence] = 1; items.push({ s:g.sentence, o:g.options, a:g.correct, x:g.explain }); k++; }
+        items.forEach(function(m, i){ m.id = 'tn-' + t.id + '-' + i; m.h = 1; });
+        return { id:t.id, en:t.nameEn, th:t.nameTh, group:t.group, html:'<div class="tense-detail-card open">' + body + '</div>', items:items };
+      });
+      return { phonics:ph, tense:tn };
+    } finally { Math.random = R0; }
+  }
   window.VN = {
+    learnData: learnData,
     VOCAB: VOCAB,
     EXAMW: EXAM_KEY,
     showView: showView,
@@ -6808,19 +6874,41 @@ function gamesViewChange(name){
 /* ---------- lessons from the practice tests (data: exam/data/xgram.js, loaded on first visit) ----------
    Progress per player lives with the exam progress: exam.<pid>.lclab_gram = { "01-101": {f:first answer, l:last answer} }.
    A first answer is also written into that test's answer sheet when the question was not answered there yet. */
-var XL = { D:{}, data:null, loading:false, mod:'grammar', lesson:null, run:null, showText:false };
-var XL_MODS = [ { id:'part1', key:'xpart1', th:'Part 1 ภาพ', sub:'Part 1 · ภาพและเสียงจริง 60 ข้อ' },
-                { id:'part2', key:'xpart2', th:'Part 2 ถาม-ตอบ', sub:'Part 2 · เสียงจริง 250 ข้อ' },
-                { id:'part34', key:'xpart34', th:'Part 3–4 บทสนทนา', sub:'Part 3–4 · บทสนทนาและบทพูด 690 ข้อ' },
-                { id:'grammar', key:'xgram', th:'Part 5–6 ไวยากรณ์', sub:'Part 5–6 · ไวยากรณ์และคำศัพท์ 460 ข้อ' },
-                { id:'part7', key:'xpart7', th:'Part 7 การอ่าน', sub:'Part 7 · การอ่าน 540 ข้อ' } ];
-function xlMod(){ return XL_MODS.find(function(m){ return m.id===XL.mod; }) || XL_MODS[0]; }
+var XL = { D:{}, data:null, loading:false, mod:null, lesson:null, run:null, showText:false };
+/* the learning map: stages in study order; exam modules load their data file, the others are built in the page */
+var XL_STAGES = [
+  { th:'พื้นฐาน', sub:'ออกเสียงให้ถูก แล้วเข้าใจ tense' },
+  { th:'ข้อสอบ', sub:'ข้อสอบจริง 10 ชุด แยกตาม Part' }
+];
+var XL_MODS = [
+  { id:'phonics', local:'phonics', stage:0, th:'ออกเสียง (Phonics)', sub:'ตัวอักษร สระ พยัญชนะ การเน้นเสียง', n:51, has:function(k){ return k.indexOf('ph-')===0; } },
+  { id:'tense', local:'tense', stage:0, th:'Tense ทั้ง 12 แบบ', sub:'โครงสร้าง วิธีใช้ เส้นเวลา', n:96, has:function(k){ return k.indexOf('tn-')===0; } },
+  { id:'part1', key:'xpart1', stage:1, th:'Part 1 ภาพ', sub:'ภาพและเสียงจริง', n:60, has:xlRange(1, 6) },
+  { id:'part2', key:'xpart2', stage:1, th:'Part 2 ถาม-ตอบ', sub:'เสียงจริง', n:250, has:xlRange(7, 31) },
+  { id:'part34', key:'xpart34', stage:1, th:'Part 3–4 บทสนทนา', sub:'บทสนทนาและบทพูด', n:690, has:xlRange(32, 100) },
+  { id:'grammar', key:'xgram', stage:1, th:'Part 5–6 ไวยากรณ์', sub:'ไวยากรณ์และคำศัพท์', n:460, has:xlRange(101, 146) },
+  { id:'part7', key:'xpart7', stage:1, th:'Part 7 การอ่าน', sub:'การอ่าน', n:540, has:xlRange(147, 200) }
+];
+function xlRange(a, b){ return function(k){ var m = /^\d\d-(\d+)$/.exec(k); return !!m && +m[1]>=a && +m[1]<=b; }; }
+function xlMod(){ return XL_MODS.find(function(m){ return m.id===XL.mod; }) || null; }
 function xlKey(k){ return 'exam.' + PROF.active + '.' + k; }
 function xlGet(k, d){ try{ var v = localStorage.getItem(xlKey(k)); return v ? JSON.parse(v) : d; }catch(e){ return d; } }
 function xlSet(k, v){ try{ localStorage.setItem(xlKey(k), JSON.stringify(v)); }catch(e){} }
 function xlProg(){ return xlGet('lclab_gram', {}); }
+function xlLocal(kind){
+  if(XL.D[kind]) return XL.D[kind];
+  var src = (window.VN && window.VN.learnData) ? window.VN.learnData() : { phonics:[], tense:[] }, K = ['A','B','C','D'];
+  var lessons = (src[kind] || []).map(function(L){
+    return { id:L.id, en:L.en, th:L.th, intro:'', html:L.html, r:[], tips:[], items:L.items.map(function(m){
+      var o = {}; m.o.forEach(function(x, i){ o[K[i]] = String(x).replace(/<[^>]+>/g, ''); });
+      return { id:m.id, p:0, s:m.s, h:m.h || 0, o:o, oth:{}, a:K[m.a], x:m.x, v:[] }; }) };
+  });
+  return (XL.D[kind] = { v:1, lessons:lessons });
+}
 function xlLoad(cb){
-  var m = xlMod(), X = window.__X || {}; if(X[m.key]){ XL.data = X[m.key]; cb(); return; }
+  var m = xlMod(); if(!m){ cb(); return; }
+  if(m.local){ XL.data = xlLocal(m.local); cb(); return; }
+  var X = window.__X || {}; if(X[m.key]){ XL.data = X[m.key]; cb(); return; }
   if(XL.loading) return; XL.loading = true; $('xl-root').innerHTML = '<p class="xl-load">กำลังโหลดบทเรียน…</p>';
   var sc = document.createElement('script'); sc.src = 'exam/data/' + m.key + '.js';
   sc.onload = function(){ XL.loading = false; XL.data = (window.__X || {})[m.key] || null; if(XL.data) cb(); else xlFail(); };
@@ -6828,8 +6916,9 @@ function xlLoad(cb){
   document.head.appendChild(sc);
 }
 function xlFail(){ $('xl-root').innerHTML = '<p class="xl-load">โหลดบทเรียนไม่สำเร็จ ตรวจว่ามีโฟลเดอร์ exam/data อยู่ข้างไฟล์ index.html แล้วลองเปิดใหม่</p>'; }
-function xlEnter(){ if(XL.data){ if(!XL.run) xlRender(); return; } xlLoad(xlRender); }
-function xlSwitch(id){ if(XL.mod===id) return; xlStop(); XL.mod = id; XL.lesson = null; XL.run = null; XL.data = null; xlLoad(xlRender); }
+function xlEnter(){ if(XL.run) return; if(!XL.mod || XL.data){ xlRender(); return; } xlLoad(xlRender); }
+function xlSwitch(id){ xlStop(); XL.mod = id; XL.lesson = null; XL.run = null; XL.data = null; if(id) xlLoad(function(){ xlRender(); window.scrollTo(0, 0); }); else { xlRender(); window.scrollTo(0, 0); } }
+function xlOpen(mod, lesson){ xlStop(); XL.mod = mod; XL.run = null; XL.data = null; xlLoad(function(){ XL.lesson = lesson; xlRender(); window.scrollTo(0, 0); }); }
 /* real test audio: one player, plays a slice of the test recording */
 var XLA = null, XLA_END = 0;
 function xlPlay(f, s, e){
@@ -6848,34 +6937,50 @@ function xlStats(L, P){
 }
 function xlEx(e){ var plain = String(e[0]).replace(/<[^>]+>/g, '');
   return '<div class="xl-ex"><button class="icon-btn" data-say="'+esc(plain)+'" aria-label="ฟังตัวอย่าง">'+SPK+'</button><span>'+e[0]+(e[1] ? '<small>'+esc(e[1])+'</small>' : '')+'</span></div>'; }
+function xlModDone(m, P){ var d = 0; for(var k in P) if(m.has(k)) d++; return Math.min(d, m.n); }
 function xlRender(){
   var root = $('xl-root'); XL.run = null;
+  var P = xlProg();
+  if(!XL.mod){   /* the learning map */
+    var tot = 0, done = 0;
+    var html = '<p class="eyebrow">เรียน · แผนที่การเรียน</p><h1 class="page-title">เรียนทีละขั้น</h1>'+
+      '<p class="page-sub">เรียงจากพื้นฐานไปถึงข้อสอบ ทุกบทมีเนื้อหาสั้นๆ แล้วตามด้วยแบบฝึกท้ายบท ความคืบหน้าบันทึกให้อัตโนมัติ</p>';
+    var body = XL_STAGES.map(function(st, si){
+      var mods = XL_MODS.filter(function(m){ return m.stage===si; });
+      return '<section class="xl-stage"><div class="xl-sh"><span class="xl-sn">'+(si+1)+'</span><div><b>'+esc(st.th)+'</b><small>'+esc(st.sub)+'</small></div></div><ul class="xl-list">'+
+        mods.map(function(m){ var d = xlModDone(m, P), pct = Math.round(d/m.n*100); tot += m.n; done += d;
+          return '<li><button class="xl-card'+(d>=m.n ? ' done' : '')+'" data-xlmod="'+m.id+'"><span class="xl-cb"><b>'+esc(m.th)+'</b><small>'+esc(m.sub)+'</small>'+
+            '<span class="xl-meta">'+m.n+' ข้อ'+(d ? ' · ทำแล้ว '+d : '')+'</span><span class="xl-bar"><i style="width:'+pct+'%"></i></span></span><span class="xl-go" aria-hidden="true">›</span></button></li>'; }).join('')+'</ul></section>';
+    }).join('');
+    root.innerHTML = html + '<div class="xl-sum xl-sum2"><div><b>'+done+'/'+tot+'</b><span>ข้อที่ทำแล้วทั้งหมด</span></div><div><b>'+Math.round(done/tot*100)+'%</b><span>ความคืบหน้า</span></div></div>' + body;
+    return;
+  }
   if(!XL.data){ root.innerHTML = '<p class="xl-load">กำลังโหลดบทเรียน…</p>'; return; }
-  var P = xlProg(), Ls = XL.data.lessons;
+  var M = xlMod(), Ls = XL.data.lessons;
   if(XL.lesson){
     var L = Ls.find(function(x){ return x.id===XL.lesson; }); if(!L){ XL.lesson = null; return xlRender(); }
-    var st = xlStats(L, P), idx = Ls.indexOf(L) + 1;
-    root.innerHTML = '<button class="xl-back" data-xl="list">← บทเรียนทั้งหมด</button>'+
-      '<p class="eyebrow">บทที่ '+idx+' · '+esc(L.en)+'</p><h1 class="page-title">'+esc(L.th)+'</h1><p class="page-sub">'+esc(L.intro)+'</p>'+
-      L.r.map(function(r){ return '<div class="panel xl-rule"><h3>'+esc(r[0])+'</h3>'+(r[1] ? '<p>'+r[1]+'</p>' : '')+(r[2] || []).map(xlEx).join('')+'</div>'; }).join('')+
+    var st = xlStats(L, P), idx = Ls.indexOf(L) + 1, real = !M.local;
+    root.innerHTML = '<button class="xl-back" data-xl="list">← '+esc(M.th)+'</button>'+
+      '<p class="eyebrow">'+esc(M.th)+' · บทที่ '+idx+'</p><h1 class="page-title">'+esc(L.th)+'</h1><p class="xl-en">'+esc(L.en)+'</p>'+(L.intro ? '<p class="page-sub">'+esc(L.intro)+'</p>' : '')+
+      (L.html ? '<div class="xl-html">'+L.html+'</div>' : '')+
+      (L.r || []).map(function(r){ return '<div class="panel xl-rule"><h3>'+esc(r[0])+'</h3>'+(r[1] ? '<p>'+r[1]+'</p>' : '')+(r[2] || []).map(xlEx).join('')+'</div>'; }).join('')+
       (L.tips && L.tips.length ? '<div class="panel xl-tips"><b>วิธีดูโจทย์</b><ul>'+L.tips.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')+'</ul></div>' : '')+
-      '<p class="label">แบบฝึกท้ายบท: ข้อสอบจริง '+st.n+' ข้อ</p>'+
+      (st.n ? '<p class="label">แบบฝึกท้ายบท: '+(real ? 'ข้อสอบจริง ' : '')+st.n+' ข้อ</p>'+
       '<div class="xl-sum"><div><b>'+st.done+'/'+st.n+'</b><span>ทำแล้ว</span></div><div><b>'+st.ok+'</b><span>ตอบถูก</span></div><div><b>'+st.wrong+'</b><span>ยังผิดอยู่</span></div></div>'+
       '<div class="xl-acts">'+
         (st.done<st.n ? '<button class="btn" data-xl="go-new">'+(st.done ? 'ทำต่อ (เหลือ '+(st.n-st.done)+' ข้อ)' : 'เริ่มทำแบบฝึก ('+st.n+' ข้อ)')+'</button>' : '')+
         (st.wrong ? '<button class="btn'+(st.done<st.n ? ' ghost' : '')+'" data-xl="go-wrong">ทำข้อที่ผิดอีกครั้ง ('+st.wrong+' ข้อ)</button>' : '')+
         (st.done ? '<button class="btn ghost" data-xl="go-all">ทำใหม่ทั้งบท</button>' : '')+
-      '</div>';
+        (Ls[idx] ? '<button class="btn ghost" data-xlles="'+Ls[idx].id+'">บทถัดไป: '+esc(Ls[idx].th)+' →</button>' : '')+
+      '</div>' : '<div class="xl-acts">'+(Ls[idx] ? '<button class="btn ghost" data-xlles="'+Ls[idx].id+'">บทถัดไป: '+esc(Ls[idx].th)+' →</button>' : '')+'</div>');
     return;
   }
   var tot = 0, done = 0, ok = 0;
   var cards = Ls.map(function(L, i){ var st = xlStats(L, P); tot += st.n; done += st.done; ok += st.ok;
-    var pct = Math.round(st.done/st.n*100), full = st.done===st.n;
+    var pct = st.n ? Math.round(st.done/st.n*100) : 0, full = st.n && st.done===st.n;
     return '<li><button class="xl-card'+(full ? ' done' : '')+'" data-xlles="'+L.id+'"><span class="xl-no">'+(full ? '✓' : i+1)+'</span><span class="xl-cb"><b>'+esc(L.th)+'</b><small>'+esc(L.en)+'</small>'+
-      '<span class="xl-meta">'+st.n+' ข้อ'+(st.done ? ' · ทำแล้ว '+st.done+' · ถูก '+st.ok : '')+'</span><span class="xl-bar"><i style="width:'+pct+'%"></i></span></span></button></li>'; }).join('');
-  root.innerHTML = '<p class="eyebrow">เรียน · '+esc(xlMod().sub)+'</p><h1 class="page-title">บทเรียนจากข้อสอบ</h1>'+
-    '<p class="page-sub">แต่ละบทมีหลักสั้นๆ ภาษาไทย แล้วฝึกด้วยข้อสอบจริงทุกข้อในหมวดนั้น ข้อที่ทำในบทเรียนจะนับในเมนูข้อสอบด้วย</p>'+
-    '<div class="chips xl-mods" role="tablist">'+XL_MODS.map(function(m){ return '<button class="chip" role="tab" data-xlmod="'+m.id+'" aria-pressed="'+(m.id===XL.mod)+'">'+esc(m.th)+'</button>'; }).join('')+'</div>'+
+      '<span class="xl-meta">'+(st.n ? st.n+' ข้อ'+(st.done ? ' · ทำแล้ว '+st.done+' · ถูก '+st.ok : '') : 'อ่านอย่างเดียว')+'</span><span class="xl-bar"><i style="width:'+pct+'%"></i></span></span></button></li>'; }).join('');
+  root.innerHTML = '<button class="xl-back" data-xl="map">← แผนที่การเรียน</button><p class="eyebrow">'+esc(XL_STAGES[M.stage].th)+'</p><h1 class="page-title">'+esc(M.th)+'</h1>'+
     '<div class="xl-sum"><div><b>'+Ls.length+'</b><span>บท</span></div><div><b>'+done+'/'+tot+'</b><span>ข้อที่ทำแล้ว</span></div><div><b>'+(done ? Math.round(ok/done*100) : 0)+'%</b><span>ตอบถูก</span></div></div>'+
     '<ul class="xl-list">'+cards+'</ul>';
 }
@@ -6891,12 +6996,14 @@ function xlQ(){
   var R = XL.run, it = R.q[R.i], root = $('xl-root'), ans = R.picked;
   var ctx = it.cx && XL.data.ctx[it.cx];
   var pass = ctx ? esc(ctx.en).replace(/\[(\d{3})\]/g, function(m, n){ return +n===it.n ? '<mark>'+(ans ? esc(String(it.o[it.a]).replace(/\.$/, '')) : '_____')+'</mark>' : '['+n+']'; }) : '';
-  var html = '<div class="xl-top"><button class="xl-back" data-xl="quit">← ออก</button><span>ข้อ '+(R.i+1)+'/'+R.q.length+' · Test '+it.t+' ข้อ '+it.n+'</span></div>'+
+  var html = '<div class="xl-top"><button class="xl-back" data-xl="quit">← ออก</button><span>ข้อ '+(R.i+1)+'/'+R.q.length+(it.t ? ' · Test '+it.t+' ข้อ '+it.n : '')+'</span></div>'+
     '<div class="xl-prog"><i style="width:'+(R.i/R.q.length*100)+'%"></i></div>';
   if(it.p===7){ html += xlRead(it, ans); root.innerHTML = html; var f7 = root.querySelector(ans ? '[data-xl="next"]' : '.xl-opt'); if(f7) try{ f7.focus({preventScroll:true}); }catch(e){} return; }
   if(it.p===3 || it.p===4){ html += xlTalk(it, ans); root.innerHTML = html; var f3 = root.querySelector(ans ? '[data-xl="next"]' : '[data-xlplay="set"]'); if(f3) try{ f3.focus({preventScroll:true}); }catch(e){} return; }
   if(it.au){ html += xlListen(it, ans); root.innerHTML = html; var f2 = root.querySelector(ans ? '[data-xl="next"]' : '[data-xlplay="all"]'); if(f2) try{ f2.focus({preventScroll:true}); }catch(e){} if(!ans) xlPlay(it.au.f, it.au.s, it.au.e); return; }
   if(it.p===6 && /^_____\.?$/.test(it.s.trim())) html += '<p class="xl-q">เลือกประโยคที่เติมในช่อง <b class="blank">'+it.n+'</b> ของข้อความ</p>';
+  else if(it.h) html += '<p class="xl-q">'+String(it.s).replace('___', '<b class="blank">'+(ans ? esc(it.o[it.a]) : '&nbsp;')+'</b>')+'</p>';
+  else if(it.p===0) html += '<p class="xl-q xl-qth0">'+esc(it.s)+'</p>';
   else html += '<p class="xl-q">'+xlFill(it.s, ans ? it.o[it.a] : '')+'</p>';
   if(ctx) html += '<details class="xl-ctx"'+(it.p===6 && /^_____\.?$/.test(it.s.trim()) ? ' open' : '')+'><summary>ดูข้อความทั้งหมด (Part 6)</summary><div class="xl-pass">'+pass+'</div>'+(ans && ctx.th ? '<div class="xl-pth">'+esc(ctx.th)+'</div>' : '')+'</details>';
   html += '<div class="xl-opts">'+['A','B','C','D'].filter(function(k){ return it.o[k]!=null; }).map(function(k){
@@ -6993,7 +7100,7 @@ function xlAnswer(k){
   sfx(ok ? 'ok' : 'no'); logDay('xl'); if(ok) logDay('xlok');
   var P = xlProg(), first = !P[it.id];
   P[it.id] = { f:first ? k : P[it.id].f, l:k }; xlSet('lclab_gram', P);
-  if(first){   /* also fill that test's answer sheet if the question is still blank there */
+  if(first && it.t){   /* also fill that test's answer sheet if the question is still blank there */
     var sh = xlGet('lclab_t' + it.t, {}), A = sh.answers || {};
     if(!A[it.n]){ A[it.n] = k; xlSet('lclab_t' + it.t, { answers:A }); var sm = xlGet('sum', {}), o = sm[it.t] || { r:0, n:0 }; o.n++; if(ok) o.r++; sm[it.t] = o; xlSet('sum', sm); R.wrote = true; }
   }
@@ -7004,7 +7111,7 @@ function xlEnd(){
   if(R.wrote){ try{ examReload(); }catch(e){} }
   root.innerHTML = '<button class="xl-back" data-xl="lesson">← กลับไปที่บทเรียน</button><div class="panel center"><div class="big">'+R.right+'<small> / '+(R.right + R.wrong.length)+'</small></div><p class="note">'+esc(R.L.th)+'</p></div>'+
     (R.wrong.length ? '<div class="panel"><p class="label">ข้อที่ผิดรอบนี้ (กลับมาทำได้ที่ "ทำข้อที่ผิดอีกครั้ง")</p><ul class="xl-wrong">'+R.wrong.map(function(it){
-      return '<li>'+(it.p===5 ? xlFill(it.s, it.o[it.a]) : it.p===2 ? esc(it.s)+' → '+esc(it.o[it.a]) : (it.p===3 || it.p===4 || it.p===7) ? esc(it.s)+' → '+esc(it.o[it.a]) : it.p===1 ? 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]) : 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]))+'<small>'+esc(it.c || it.sth || '')+'</small></li>'; }).join('')+'</ul></div>' : '')+
+      return '<li>'+(it.p===5 ? xlFill(it.s, it.o[it.a]) : it.p===2 ? esc(it.s)+' → '+esc(it.o[it.a]) : (it.p===3 || it.p===4 || it.p===7) ? esc(it.s)+' → '+esc(it.o[it.a]) : it.p===0 ? (it.h ? String(it.s).replace(/<[^>]+>/g, '') : esc(it.s))+' → '+esc(it.o[it.a]) : it.p===1 ? 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]) : 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]))+'<small>'+esc(it.c || it.sth || '')+'</small></li>'; }).join('')+'</ul></div>' : '')+
     '<button class="btn" data-xl="lesson" style="width:100%">กลับไปที่บทเรียน</button>';
   window.scrollTo(0, 0);
 }
@@ -7018,6 +7125,7 @@ $('view-xlearn').addEventListener('click', function(ev){
   var b = ev.target.closest('[data-xl]'); if(!b) return;
   var a = b.getAttribute('data-xl');
   if(a==='list'){ XL.lesson = null; xlRender(); window.scrollTo(0, 0); }
+  else if(a==='map') xlSwitch(null);
   else if(a==='lesson'){ xlRender(); window.scrollTo(0, 0); }
   else if(a==='go-new') xlStart('new'); else if(a==='go-wrong') xlStart('wrong'); else if(a==='go-all') xlStart('all');
   else if(a==='next'){ xlStop(); var R = XL.run; if(R.i+1>=R.q.length) xlEnd(); else { R.i++; R.picked = null; R.pi = 0; xlQ(); window.scrollTo(0, 0); } }
@@ -7030,6 +7138,9 @@ document.addEventListener('keydown', function(ev){
   if(!XL.run.picked && /^[A-D]$/.test(k) && XL.run.q[XL.run.i].o[k]!=null){ ev.preventDefault(); xlAnswer(k); }
   else if(k===' '){ var it = XL.run.q[XL.run.i]; if(it.au || it.p===3 || it.p===4){ ev.preventDefault(); xlPlayKey(it, it.au ? 'all' : 'set'); } }
 });
+
+/* old links into the Phonics page (dictation readout, coach) now open the same lesson in the learning map */
+if(window.VN){ window.VN.openPhonics = function(id){ window.VN.showView('xlearn'); xlOpen('phonics', id); }; }
 
 window.DL = {
   viewChange: function(n){ gamesViewChange(n); if(n==='xlearn') xlEnter(); else xlStop(); },
