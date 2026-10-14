@@ -1192,6 +1192,7 @@
   .ver-badge{display:inline-block;vertical-align:middle;font-family:var(--en);font-size:12px;font-weight:600;color:var(--ink2);border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin-left:6px}
   /* ===== lessons from the practice tests ===== */
   .dl .xl-mods{margin:0 0 14px}
+  .dl .xl-img{display:block;width:100%;max-height:52vh;object-fit:contain;border-radius:12px;background:var(--surface);border:1px solid var(--line);margin:0 0 12px}
   .dl .xl-how{font-family:var(--th);font-size:14.5px;color:var(--ink2);margin:0 0 8px}
   .dl .xl-play{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
   .dl .xl-play .linkbtn{margin-left:auto}
@@ -6794,8 +6795,9 @@ function gamesViewChange(name){
    Progress per player lives with the exam progress: exam.<pid>.lclab_gram = { "01-101": {f:first answer, l:last answer} }.
    A first answer is also written into that test's answer sheet when the question was not answered there yet. */
 var XL = { D:{}, data:null, loading:false, mod:'grammar', lesson:null, run:null, showText:false };
-var XL_MODS = [ { id:'grammar', key:'xgram', th:'ไวยากรณ์และคำศัพท์', sub:'Part 5–6 · 460 ข้อ' },
-                { id:'part2', key:'xpart2', th:'ถาม-ตอบ', sub:'Part 2 · เสียงจริง 250 ข้อ' } ];
+var XL_MODS = [ { id:'part1', key:'xpart1', th:'Part 1 ภาพ', sub:'Part 1 · ภาพและเสียงจริง 60 ข้อ' },
+                { id:'part2', key:'xpart2', th:'Part 2 ถาม-ตอบ', sub:'Part 2 · เสียงจริง 250 ข้อ' },
+                { id:'grammar', key:'xgram', th:'Part 5–6 ไวยากรณ์', sub:'Part 5–6 · ไวยากรณ์และคำศัพท์ 460 ข้อ' } ];
 function xlMod(){ return XL_MODS.find(function(m){ return m.id===XL.mod; }) || XL_MODS[0]; }
 function xlKey(k){ return 'exam.' + PROF.active + '.' + k; }
 function xlGet(k, d){ try{ var v = localStorage.getItem(xlKey(k)); return v ? JSON.parse(v) : d; }catch(e){ return d; } }
@@ -6875,7 +6877,7 @@ function xlQ(){
   var pass = ctx ? esc(ctx.en).replace(/\[(\d{3})\]/g, function(m, n){ return +n===it.n ? '<mark>'+(ans ? esc(String(it.o[it.a]).replace(/\.$/, '')) : '_____')+'</mark>' : '['+n+']'; }) : '';
   var html = '<div class="xl-top"><button class="xl-back" data-xl="quit">← ออก</button><span>ข้อ '+(R.i+1)+'/'+R.q.length+' · Test '+it.t+' ข้อ '+it.n+'</span></div>'+
     '<div class="xl-prog"><i style="width:'+(R.i/R.q.length*100)+'%"></i></div>';
-  if(it.p===2){ html += xlListen(it, ans); root.innerHTML = html; var f2 = root.querySelector(ans ? '[data-xl="next"]' : '[data-xlplay="all"]'); if(f2) try{ f2.focus({preventScroll:true}); }catch(e){} if(!ans) xlPlay(it.au.f, it.au.s, it.au.e); return; }
+  if(it.au){ html += xlListen(it, ans); root.innerHTML = html; var f2 = root.querySelector(ans ? '[data-xl="next"]' : '[data-xlplay="all"]'); if(f2) try{ f2.focus({preventScroll:true}); }catch(e){} if(!ans) xlPlay(it.au.f, it.au.s, it.au.e); return; }
   if(it.p===6 && /^_____\.?$/.test(it.s.trim())) html += '<p class="xl-q">เลือกประโยคที่เติมในช่อง <b class="blank">'+it.n+'</b> ของข้อความ</p>';
   else html += '<p class="xl-q">'+xlFill(it.s, ans ? it.o[it.a] : '')+'</p>';
   if(ctx) html += '<details class="xl-ctx"'+(it.p===6 && /^_____\.?$/.test(it.s.trim()) ? ' open' : '')+'><summary>ดูข้อความทั้งหมด (Part 6)</summary><div class="xl-pass">'+pass+'</div>'+(ans && ctx.th ? '<div class="xl-pth">'+esc(ctx.th)+'</div>' : '')+'</details>';
@@ -6895,10 +6897,12 @@ function xlQ(){
 }
 function xlPB(key, label){ return '<button class="btn ghost small" data-xlplay="'+key+'">'+SPK+esc(label)+'</button>'; }
 function xlListen(it, ans){
-  var show = XL.showText || !!ans, ks = ['A','B','C'].filter(function(k){ return it.o[k]!=null; });
-  var h = '<p class="xl-how">ฟังคำถามแล้วเลือกคำตอบที่เหมาะสมที่สุด</p><div class="xl-play">'+xlPB('all', 'ฟังทั้งข้อ')+xlPB('q', 'ฟังคำถาม')+
+  var show = XL.showText || !!ans, ks = ['A','B','C','D'].filter(function(k){ return it.o[k]!=null; });
+  var h = '<p class="xl-how">'+(it.img ? 'ดูภาพ ฟังประโยค A–D แล้วเลือกประโยคที่ตรงกับภาพที่สุด' : 'ฟังคำถามแล้วเลือกคำตอบที่เหมาะสมที่สุด')+'</p>'+
+    (it.img ? '<img class="xl-img" src="'+esc(it.img)+'" alt="ภาพประกอบข้อ '+it.n+'">' : '')+
+    '<div class="xl-play">'+xlPB('all', 'ฟังทั้งข้อ')+(it.sg.q ? xlPB('q', 'ฟังคำถาม') : '')+
     (ans ? '' : '<button class="linkbtn" data-xl="text">'+(XL.showText ? 'ซ่อนข้อความ' : 'แสดงข้อความ')+'</button>')+'</div>';
-  h += show ? '<p class="xl-q">'+esc(it.s)+(ans && it.sth ? '<small class="xl-qth">'+esc(it.sth)+'</small>' : '')+'</p>' : '<p class="xl-q xl-hid">คำถามซ่อนอยู่ ฟังจากเสียง</p>';
+  if(it.s) h += show ? '<p class="xl-q">'+esc(it.s)+(ans && it.sth ? '<small class="xl-qth">'+esc(it.sth)+'</small>' : '')+'</p>' : '<p class="xl-q xl-hid">คำถามซ่อนอยู่ ฟังจากเสียง</p>';
   h += '<div class="xl-opts">'+ks.map(function(k){
     var cls = ans ? (k===it.a ? ' ok' : (k===ans ? ' no' : '')) : '';
     return '<div class="xl-orow"><button class="xl-opt'+cls+'" data-xlk="'+k+'"'+(ans ? ' disabled' : '')+'><span class="k">'+k+'</span><span class="t">'+(show ? esc(it.o[k]) : '<span class="xl-hid">ตัวเลือก '+k+'</span>')+(ans && it.oth[k] ? '<small>'+esc(it.oth[k])+'</small>' : '')+'</span></button>'+
@@ -6928,7 +6932,7 @@ function xlEnd(){
   if(R.wrote){ try{ examReload(); }catch(e){} }
   root.innerHTML = '<button class="xl-back" data-xl="lesson">← กลับไปที่บทเรียน</button><div class="panel center"><div class="big">'+R.right+'<small> / '+(R.right + R.wrong.length)+'</small></div><p class="note">'+esc(R.L.th)+'</p></div>'+
     (R.wrong.length ? '<div class="panel"><p class="label">ข้อที่ผิดรอบนี้ (กลับมาทำได้ที่ "ทำข้อที่ผิดอีกครั้ง")</p><ul class="xl-wrong">'+R.wrong.map(function(it){
-      return '<li>'+(it.p===5 ? xlFill(it.s, it.o[it.a]) : it.p===2 ? esc(it.s)+' → '+esc(it.o[it.a]) : 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]))+'<small>'+esc(it.c || it.sth || '')+'</small></li>'; }).join('')+'</ul></div>' : '')+
+      return '<li>'+(it.p===5 ? xlFill(it.s, it.o[it.a]) : it.p===2 ? esc(it.s)+' → '+esc(it.o[it.a]) : it.p===1 ? 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]) : 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]))+'<small>'+esc(it.c || it.sth || '')+'</small></li>'; }).join('')+'</ul></div>' : '')+
     '<button class="btn" data-xl="lesson" style="width:100%">กลับไปที่บทเรียน</button>';
   window.scrollTo(0, 0);
 }
