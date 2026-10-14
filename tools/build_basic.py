@@ -225,18 +225,21 @@ def rich_html(L, R):
     if L.get('r'):
         out.append('<h3 class="bv-h">หลักการ</h3><div class="tense-usage">%s</div>' % ''.join(
             '<p><b>%s</b>%s%s</p>' % (e(r[0]), (' — ' + r[1]) if r[1] else '', ''.join('<br><span class="bv-rx">%s%s</span>' % (x[0], (' <small>' + e(x[1]) + '</small>') if x[1] else '') for x in r[2])) for r in L['r']))
-    out.append('<h3 class="bv-h">ตัวอย่างประโยค</h3><div class="tense-examples">%s</div>' % ''.join(
-        '<div class="tense-example bv-exr">%s<div><div class="ex-en">%s</div><div class="ex-th thai">%s</div></div></div>' % (say(a), e(a), e(b)) for a, b in R['ex']))
-    out.append('<h3 class="bv-h">ข้อผิดพลาดที่คนไทยทำบ่อย</h3><div class="bv-mis">%s</div>' % ''.join(
-        '<div class="bv-m"><p class="no">✗ %s</p><p class="ok">✓ %s</p><small>%s</small></div>' % (e(w), e(r), e(why)) for w, r, why in R['mis']))
+    if R.get('ex'):
+        out.append('<h3 class="bv-h">ตัวอย่างประโยค</h3><div class="tense-examples">%s</div>' % ''.join(
+            '<div class="tense-example bv-exr">%s<div><div class="ex-en">%s</div><div class="ex-th thai">%s</div></div></div>' % (say(a), e(a), e(b)) for a, b in R['ex']))
+    out.append('<h3 class="bv-h">%s</h3><div class="bv-mis">%s</div>' % (e(R.get('mish', 'ข้อผิดพลาดที่คนไทยทำบ่อย')), ''.join(
+        '<div class="bv-m"><p class="no">✗ %s</p><p class="ok">✓ %s</p><small>%s</small></div>' % (e(w), e(r), e(why)) for w, r, why in R['mis'])))
     out.append('<div class="tense-tip">%s<p><b>เกร็ดความรู้:</b> %s</p></div>' % (BULB, e(R['tip'])))
-    en, th = R['story']
-    out.append('<div class="tense-story"><div class="ts-label">ตัวอย่างเนื้อเรื่อง %s</div><div class="ts-en">%s</div><div class="ts-th">%s</div></div>' % (say(en), mark(en), e(th)))
+    if R.get('story'):
+      en, th = R['story']
+      out.append('<div class="tense-story"><div class="ts-label">ตัวอย่างเนื้อเรื่อง %s</div><div class="ts-en">%s</div><div class="ts-th">%s</div></div>' % (say(en), mark(en), e(th)))
     out.append('</div></div>')
     return ''.join(out)
 
-def enrich(lessons):
-    from basic_rich import RICH
+def enrich(lessons, which='RICH'):
+    import basic_rich
+    RICH = getattr(basic_rich, which)
     missing = [L['id'] for L in lessons if L['id'] not in RICH]
     if missing: raise SystemExit('lessons without a full page: %r' % missing)
     for L in lessons:
@@ -246,4 +249,4 @@ def enrich(lessons):
 if __name__ == '__main__':
     import basic_more as M
     write('xbasic', enrich(build(BASIC, 'bg', 7, M.EXTRA, M.NEW, M.GROUPS)))
-    write('xtips', build(TIPS, 'tp', 8))
+    write('xtips', enrich(build(TIPS, 'tp', 8), 'TIPS_RICH'))

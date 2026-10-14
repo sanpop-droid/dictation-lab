@@ -1285,6 +1285,16 @@
   @media (max-width:420px){ .bv-sr{grid-template-columns:1fr;gap:3px} .bv-chip b{font-size:15px} }
   /* ===== lessons from the practice tests ===== */
   .dl .xl-mods{margin:0 0 14px}
+  .dl .xl-work{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:14px;margin:0 0 14px}
+  .dl .xl-wl{font-family:var(--th);font-size:12.5px;color:var(--accent);font-weight:700;margin:0 0 8px}
+  .dl .xl-work .xl-q{font-size:17px}
+  .dl .xl-wo{list-style:none;padding:0;margin:0 0 10px;display:grid;gap:5px}
+  .dl .xl-wo li{font-family:var(--en);font-size:14.5px;padding:7px 10px;border-radius:9px;border:1px solid var(--line)}
+  .dl .xl-wo li small{font-family:var(--th);color:var(--ink2)}
+  .dl .xl-wo li.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,var(--surface))}
+  .dl .xl-wo li span{font-family:var(--th);font-size:12px;color:var(--ok);font-weight:700}
+  .dl .xl-ws{margin:0;padding-left:20px;font-family:var(--th);font-size:14.5px;line-height:1.7}
+  .dl .xl-ws b{color:var(--accent)}
   .dl .xl-wtools{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
   .dl .xl-words{list-style:none;padding:0;margin:0;display:grid;gap:10px}
   .dl .xl-words > li{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
@@ -7250,6 +7260,7 @@ function xlRender(){
       (L.html ? '<div class="xl-html">'+L.html+'</div>' : '')+
       (L.r || []).map(function(r){ return '<div class="panel xl-rule"><h3>'+esc(r[0])+'</h3>'+(r[1] ? '<p>'+r[1]+'</p>' : '')+(r[2] || []).map(xlEx).join('')+'</div>'; }).join('')+
       (L.tips && L.tips.length ? '<div class="panel xl-tips"><b>วิธีดูโจทย์</b><ul>'+L.tips.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')+'</ul></div>' : '')+
+      (real ? xlWorked(L) : '')+
       (st.mark ? '<div class="xl-acts"><button class="btn'+(st.done ? ' ghost' : '')+'" data-xl="mark">'+(st.done ? '✓ ทำบทนี้เสร็จแล้ว (แตะเพื่อยกเลิก)' : 'ทำบทนี้เสร็จแล้ว')+'</button>'+(Ls[idx] ? '<button class="btn ghost" data-xlles="'+Ls[idx].id+'">บทถัดไป: '+esc(Ls[idx].th)+' →</button>' : '')+'</div>' :
       st.n ? '<p class="label">แบบฝึกท้ายบท: '+(real ? 'ข้อสอบจริง ' : '')+st.n+' ข้อ</p>'+
       '<div class="xl-sum"><div><b>'+st.done+'/'+st.n+'</b><span>ทำแล้ว</span></div><div><b>'+st.ok+'</b><span>ตอบถูก</span></div><div><b>'+st.wrong+'</b><span>ยังผิดอยู่</span></div></div>'+
@@ -7270,6 +7281,28 @@ function xlRender(){
   root.innerHTML = '<button class="xl-back" data-xl="map">← แผนที่การเรียน</button><p class="eyebrow">'+esc(XL_STAGES[M.stage].th)+'</p><h1 class="page-title">'+esc(M.th)+'</h1>'+
     '<div class="xl-sum"><div><b>'+Ls.length+'</b><span>บท</span></div><div><b>'+done+'/'+tot+'</b><span>ข้อที่ทำแล้ว</span></div><div><b>'+(done ? Math.round(ok/done*100) : 0)+'%</b><span>ตอบถูก</span></div></div>'+
     '<ul class="xl-list">'+cards+'</ul>';
+}
+/* worked examples for test lessons: two real questions with the answer and the reasoning */
+function xlWorked(L){
+  var pick = [], items = L.items || [];
+  if(items.length) pick.push(items[0]);
+  if(items.length > 4) pick.push(items[Math.floor(items.length / 2)]);
+  if(!pick.length) return '';
+  var K = ['A','B','C','D'];
+  return '<h3 class="bv-h">ตัวอย่างข้อสอบจริงพร้อมวิธีคิด</h3>' + pick.map(function(it, n){
+    var q = it.p===5 || it.p===6 ? (it.p===6 && /^_____\.?$/.test(String(it.s).trim()) ? 'เลือกประโยคที่เติมในช่อง '+it.n+' ของข้อความ' : xlFill(it.s, '')) :
+            it.p===1 ? 'เลือกประโยคที่ตรงกับภาพ' : esc(it.s);
+    var c = (it.p===3 || it.p===4) && XL.data.ctx ? XL.data.ctx[it.cx] : null;
+    var ev = Array.isArray(it.ev) ? it.ev.join(' · ') : (it.ev || '');
+    return '<div class="xl-work"><p class="xl-wl">ตัวอย่างที่ '+(n+1)+' · Test '+it.t+' ข้อ '+it.n+' · Part '+it.p+'</p>'+
+      (it.img ? '<img class="xl-img" src="'+esc(it.img)+'" alt="ภาพประกอบข้อสอบ" loading="lazy">' : '')+
+      (c && c.g && c.g.img ? '<img class="xl-img" src="'+esc(c.g.img)+'" alt="ภาพประกอบข้อสอบ" loading="lazy">' : '')+
+      '<p class="xl-q">'+q+(it.sth ? '<small class="xl-qth">'+esc(it.sth)+'</small>' : '')+'</p>'+
+      '<ul class="xl-wo">'+K.filter(function(k){ return it.o[k]!=null; }).map(function(k){ return '<li class="'+(k===it.a ? 'ok' : '')+'"><b>'+k+'</b> '+esc(it.o[k])+(it.oth && it.oth[k] ? ' <small>'+esc(it.oth[k])+'</small>' : '')+(k===it.a ? ' <span>✓ คำตอบ</span>' : '')+'</li>'; }).join('')+'</ul>'+
+      '<ol class="xl-ws">'+(L.tips && L.tips[0] ? '<li><b>ดูโจทย์:</b> '+esc(L.tips[0])+'</li>' : '')+
+        (ev ? '<li><b>หลักฐาน:</b> "'+esc(ev)+'"</li>' : '')+
+        '<li><b>วิธีคิด:</b> '+esc(it.x)+'</li><li><b>คำตอบ:</b> '+it.a+' '+esc(it.o[it.a])+'</li></ol></div>';
+  }).join('');
 }
 function xlStart(kind){
   var L = XL.data.lessons.find(function(x){ return x.id===XL.lesson; }), P = xlProg();
