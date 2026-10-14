@@ -1,5 +1,5 @@
 /* Dictation Lab service worker: works offline after the first visit */
-const VERSION = 'v29-202610142030';
+const VERSION = 'v30-202610142010';
 const CORE = 'dlab-core-' + VERSION, FONTS = 'dlab-fonts', EXAM = 'dlab-exam';
 const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-32.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CORE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
@@ -15,13 +15,17 @@ self.addEventListener('fetch', e => {
   }
   if (url.origin !== location.origin) return;
   if (req.headers.has('range')) return;                     // media streaming: straight to the network
-  if (url.pathname.includes('/exam/') && !url.pathname.endsWith('/exam/index.html')) {   // test data, pictures and audio: keep once downloaded
+  if (url.pathname.includes('/exam/data/')) {   // lesson and test data change between versions: fresh when online, saved copy when offline
+    e.respondWith(caches.open(EXAM).then(c => fetch(req, { cache: 'no-cache' }).then(res => { if (res.ok && res.status === 200) c.put(req, res.clone()); return res; }).catch(() => c.match(req))));
+    return;
+  }
+  if (url.pathname.includes('/exam/') && !url.pathname.endsWith('/exam/index.html')) {   // pictures and audio: keep once downloaded
     e.respondWith(caches.open(EXAM).then(c => c.match(req).then(hit => hit || fetch(req).then(res => { if (res.ok && res.status === 200) c.put(req, res.clone()); return res; }))));
     return;
   }
   if (req.mode === 'navigate') {   // fresh page when online, cached page when offline
     const isExam = url.pathname.includes('/exam/');
-    e.respondWith(fetch(req).then(res => { const copy = res.clone(); caches.open(CORE).then(c => c.put(isExam ? req : 'index.html', copy)); return res; })
+    e.respondWith(fetch(req, { cache: 'no-cache' }).then(res => { const copy = res.clone(); caches.open(CORE).then(c => c.put(isExam ? req : 'index.html', copy)); return res; })
       .catch(() => (isExam ? caches.match(req) : caches.match('index.html')).then(r => r || caches.match('./'))));
     return;
   }
