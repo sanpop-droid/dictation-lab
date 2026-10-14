@@ -1192,6 +1192,10 @@
   .ver-badge{display:inline-block;vertical-align:middle;font-family:var(--en);font-size:12px;font-weight:600;color:var(--ink2);border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin-left:6px}
   /* ===== lessons from the practice tests ===== */
   .dl .xl-mods{margin:0 0 14px}
+  .dl .xl-ptabs{margin:0 0 10px}
+  .dl .xl-orig summary{cursor:pointer;font-family:var(--th);font-size:14px;color:var(--accent);margin:8px 0 6px}
+  .dl .xl-orig .xl-img{max-height:none;margin-top:6px}
+  .dl .xl-ctx{margin-bottom:12px}
   .dl .xl-gitems{font-family:var(--en);font-size:15px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px 10px 30px;margin:0 0 12px;line-height:1.7}
   .dl .xl-evid{display:flex;flex-direction:column;gap:6px;align-items:flex-start;margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--bg);border:1px solid var(--line)}
   .dl .xl-evid span{font-family:var(--en);font-size:15.5px}
@@ -6808,7 +6812,8 @@ var XL = { D:{}, data:null, loading:false, mod:'grammar', lesson:null, run:null,
 var XL_MODS = [ { id:'part1', key:'xpart1', th:'Part 1 ภาพ', sub:'Part 1 · ภาพและเสียงจริง 60 ข้อ' },
                 { id:'part2', key:'xpart2', th:'Part 2 ถาม-ตอบ', sub:'Part 2 · เสียงจริง 250 ข้อ' },
                 { id:'part34', key:'xpart34', th:'Part 3–4 บทสนทนา', sub:'Part 3–4 · บทสนทนาและบทพูด 690 ข้อ' },
-                { id:'grammar', key:'xgram', th:'Part 5–6 ไวยากรณ์', sub:'Part 5–6 · ไวยากรณ์และคำศัพท์ 460 ข้อ' } ];
+                { id:'grammar', key:'xgram', th:'Part 5–6 ไวยากรณ์', sub:'Part 5–6 · ไวยากรณ์และคำศัพท์ 460 ข้อ' },
+                { id:'part7', key:'xpart7', th:'Part 7 การอ่าน', sub:'Part 7 · การอ่าน 540 ข้อ' } ];
 function xlMod(){ return XL_MODS.find(function(m){ return m.id===XL.mod; }) || XL_MODS[0]; }
 function xlKey(k){ return 'exam.' + PROF.active + '.' + k; }
 function xlGet(k, d){ try{ var v = localStorage.getItem(xlKey(k)); return v ? JSON.parse(v) : d; }catch(e){ return d; } }
@@ -6888,6 +6893,7 @@ function xlQ(){
   var pass = ctx ? esc(ctx.en).replace(/\[(\d{3})\]/g, function(m, n){ return +n===it.n ? '<mark>'+(ans ? esc(String(it.o[it.a]).replace(/\.$/, '')) : '_____')+'</mark>' : '['+n+']'; }) : '';
   var html = '<div class="xl-top"><button class="xl-back" data-xl="quit">← ออก</button><span>ข้อ '+(R.i+1)+'/'+R.q.length+' · Test '+it.t+' ข้อ '+it.n+'</span></div>'+
     '<div class="xl-prog"><i style="width:'+(R.i/R.q.length*100)+'%"></i></div>';
+  if(it.p===7){ html += xlRead(it, ans); root.innerHTML = html; var f7 = root.querySelector(ans ? '[data-xl="next"]' : '.xl-opt'); if(f7) try{ f7.focus({preventScroll:true}); }catch(e){} return; }
   if(it.p===3 || it.p===4){ html += xlTalk(it, ans); root.innerHTML = html; var f3 = root.querySelector(ans ? '[data-xl="next"]' : '[data-xlplay="set"]'); if(f3) try{ f3.focus({preventScroll:true}); }catch(e){} return; }
   if(it.au){ html += xlListen(it, ans); root.innerHTML = html; var f2 = root.querySelector(ans ? '[data-xl="next"]' : '[data-xlplay="all"]'); if(f2) try{ f2.focus({preventScroll:true}); }catch(e){} if(!ans) xlPlay(it.au.f, it.au.s, it.au.e); return; }
   if(it.p===6 && /^_____\.?$/.test(it.s.trim())) html += '<p class="xl-q">เลือกประโยคที่เติมในช่อง <b class="blank">'+it.n+'</b> ของข้อความ</p>';
@@ -6948,6 +6954,31 @@ function xlTalk(it, ans){
   }
   return h;
 }
+function xlMarkEv(html, ev){
+  (ev || []).forEach(function(q){ var e = esc(String(q).replace(/\s+$/, '')); if(e.length < 6) return; var i = html.indexOf(e); if(i<0){ e = e.slice(0, 40); i = html.indexOf(e); } if(i>=0) html = html.slice(0, i) + '<mark>' + html.slice(i, i + e.length) + '</mark>' + html.slice(i + e.length); });
+  return html;
+}
+function xlRead(it, ans){
+  var c = XL.data.ctx[it.cx], ks = ['A','B','C','D'].filter(function(k){ return it.o[k]!=null; }), pi = Math.min(XL.run.pi || 0, c.ps.length - 1), P = c.ps[pi];
+  var h = '<p class="xl-how">Part 7 · '+esc(c.type)+(c.ps.length>1 ? ' · มี '+c.ps.length+' เอกสาร' : '')+'</p>';
+  if(c.ps.length>1) h += '<div class="chips xl-ptabs">'+c.ps.map(function(x, i){ return '<button class="chip" data-xlps="'+i+'" aria-pressed="'+(i===pi)+'">'+(i+1)+'. '+esc(x.l)+'</button>'; }).join('')+'</div>';
+  h += '<div class="xl-ctx"><div class="xl-pass">'+(ans ? xlMarkEv(esc(P.en), it.ev) : esc(P.en))+'</div>'+
+    (P.img ? '<details class="xl-orig"><summary>ดูภาพต้นฉบับ</summary><img class="xl-img" src="'+esc(P.img)+'" alt="ภาพต้นฉบับของเอกสาร" loading="lazy"></details>' : '')+
+    (ans && P.th ? '<details class="xl-orig"><summary>ดูคำแปลเอกสารนี้</summary><div class="xl-pth">'+esc(P.th)+'</div></details>' : '')+'</div>';
+  h += '<p class="xl-q">'+esc(it.s)+(ans && it.sth ? '<small class="xl-qth">'+esc(it.sth)+'</small>' : '')+'</p>';
+  h += '<div class="xl-opts">'+ks.map(function(k){
+    var cls = ans ? (k===it.a ? ' ok' : (k===ans ? ' no' : '')) : '';
+    return '<button class="xl-opt'+cls+'" data-xlk="'+k+'"'+(ans ? ' disabled' : '')+'><span class="k">'+k+'</span><span class="t">'+esc(it.o[k])+(ans && it.oth[k] ? '<small>'+esc(it.oth[k])+'</small>' : '')+'</span></button>'; }).join('')+'</div>';
+  if(ans){
+    var pa = Array.isArray(it.pa) ? it.pa.map(function(x){ return Array.isArray(x) ? x.join(' → ') : String(x); }).join(' · ') : (it.pa || '');
+    h += '<div class="panel xl-exp"><p class="verdict '+(ans===it.a ? 'ok">ถูกต้อง' : 'bad">ยังไม่ถูก คำตอบคือ '+it.a)+'</p>'+(it.c ? '<span class="cat">'+esc(it.c)+'</span>' : '')+'<div>'+esc(it.x)+'</div>'+
+      (it.ev && it.ev.length ? '<div class="sth">หลักฐานในบทความ (ไฮไลต์ไว้ในเอกสาร): "'+it.ev.map(esc).join('" · "')+'"</div>' : '')+
+      (pa ? '<div class="sth">คำที่เปลี่ยน: '+esc(pa)+'</div>' : '')+
+      (it.v && it.v.length ? '<div class="voc">คำศัพท์: '+it.v.map(function(v){ return '<b>'+esc(v[0])+'</b> '+esc(v[1]); }).join(' · ')+'</div>' : '')+'</div>'+
+      '<button class="btn" data-xl="next" style="width:100%">'+(XL.run.i+1<XL.run.q.length ? 'ข้อต่อไป' : 'ดูสรุป')+'</button>';
+  }
+  return h;
+}
 function xlPlayKey(it, key){
   if(it.p===3 || it.p===4){ var c = XL.data.ctx[it.cx];
     if(key==='set') xlPlay(c.f, c.s, c.e); else if(key==='qq') xlPlay(it.qf, it.qa[0], it.qa[1]); else if(key==='ev' && it.ea) xlPlay(c.f, it.ea[0], it.ea[1]);
@@ -6973,13 +7004,14 @@ function xlEnd(){
   if(R.wrote){ try{ examReload(); }catch(e){} }
   root.innerHTML = '<button class="xl-back" data-xl="lesson">← กลับไปที่บทเรียน</button><div class="panel center"><div class="big">'+R.right+'<small> / '+(R.right + R.wrong.length)+'</small></div><p class="note">'+esc(R.L.th)+'</p></div>'+
     (R.wrong.length ? '<div class="panel"><p class="label">ข้อที่ผิดรอบนี้ (กลับมาทำได้ที่ "ทำข้อที่ผิดอีกครั้ง")</p><ul class="xl-wrong">'+R.wrong.map(function(it){
-      return '<li>'+(it.p===5 ? xlFill(it.s, it.o[it.a]) : it.p===2 ? esc(it.s)+' → '+esc(it.o[it.a]) : (it.p===3 || it.p===4) ? esc(it.s)+' → '+esc(it.o[it.a]) : it.p===1 ? 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]) : 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]))+'<small>'+esc(it.c || it.sth || '')+'</small></li>'; }).join('')+'</ul></div>' : '')+
+      return '<li>'+(it.p===5 ? xlFill(it.s, it.o[it.a]) : it.p===2 ? esc(it.s)+' → '+esc(it.o[it.a]) : (it.p===3 || it.p===4 || it.p===7) ? esc(it.s)+' → '+esc(it.o[it.a]) : it.p===1 ? 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]) : 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]))+'<small>'+esc(it.c || it.sth || '')+'</small></li>'; }).join('')+'</ul></div>' : '')+
     '<button class="btn" data-xl="lesson" style="width:100%">กลับไปที่บทเรียน</button>';
   window.scrollTo(0, 0);
 }
 $('view-xlearn').addEventListener('click', function(ev){
   var c = ev.target.closest('[data-xlles]'); if(c){ XL.lesson = c.getAttribute('data-xlles'); xlRender(); window.scrollTo(0, 0); return; }
   var o = ev.target.closest('[data-xlk]'); if(o && !o.disabled){ xlAnswer(o.getAttribute('data-xlk')); return; }
+  var pt = ev.target.closest('[data-xlps]'); if(pt && XL.run){ XL.run.pi = +pt.getAttribute('data-xlps'); var y = window.scrollY; xlQ(); window.scrollTo(0, y); return; }
   var md = ev.target.closest('[data-xlmod]'); if(md){ xlSwitch(md.getAttribute('data-xlmod')); return; }
   var pb = ev.target.closest('[data-xlplay]');
   if(pb && XL.run){ xlPlayKey(XL.run.q[XL.run.i], pb.getAttribute('data-xlplay')); return; }
@@ -6988,7 +7020,7 @@ $('view-xlearn').addEventListener('click', function(ev){
   if(a==='list'){ XL.lesson = null; xlRender(); window.scrollTo(0, 0); }
   else if(a==='lesson'){ xlRender(); window.scrollTo(0, 0); }
   else if(a==='go-new') xlStart('new'); else if(a==='go-wrong') xlStart('wrong'); else if(a==='go-all') xlStart('all');
-  else if(a==='next'){ xlStop(); var R = XL.run; if(R.i+1>=R.q.length) xlEnd(); else { R.i++; R.picked = null; xlQ(); window.scrollTo(0, 0); } }
+  else if(a==='next'){ xlStop(); var R = XL.run; if(R.i+1>=R.q.length) xlEnd(); else { R.i++; R.picked = null; R.pi = 0; xlQ(); window.scrollTo(0, 0); } }
   else if(a==='quit'){ xlStop(); xlEnd(); }
   else if(a==='text'){ XL.showText = !XL.showText; xlQ(); }
 });
