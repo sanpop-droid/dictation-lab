@@ -1188,6 +1188,35 @@
   .dl .step .sbody b{display:block;font-size:16.5px}
   .dl .step .sbody span{font-size:13.5px;color:var(--ink2)}
   .dl .step .btn{flex:none}
+  /* catch-up note + stubborn words */
+  .dl .cu-note{border-left:4px solid var(--vow);font-family:var(--th);font-size:14.5px;line-height:1.6;color:var(--ink2);margin:0 0 14px}
+  .dl .cu-note b{display:block;font-size:16px;color:var(--ink);margin-bottom:2px}
+  .dl .lx-tease{display:flex;align-items:center;gap:14px;border-left:4px solid var(--bad);margin-top:12px}
+  .dl .lx-t{flex:1;min-width:0;font-family:var(--th)}
+  .dl .lx-t b{display:block;font-size:16.5px}
+  .dl .lx-t span{display:block;font-size:13.5px;color:var(--ink2)}
+  .dl .lx-t .lx-ws{font-family:var(--en);color:var(--ink);margin-top:4px;overflow-wrap:anywhere}
+  .dl .lx-tease .btn{flex:none}
+  .dl .lx-sum{margin-bottom:10px}
+  .dl .lx-prog{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin:0 0 12px}
+  .dl .lx-prog i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+  .dl .lx-step{font-family:var(--th);font-size:13px;color:var(--ink2);margin:0}
+  .dl .lx-mean{font-family:var(--th);font-size:20px;font-weight:600;margin:2px 0 8px}
+  .dl .lx-mean small{font-family:var(--en);font-size:13px;font-weight:400;color:var(--ink2)}
+  .dl .lx-how{font-family:var(--th);font-size:14.5px;color:var(--ink2);margin:0 0 10px}
+  .dl .lx-word{margin:8px 0 10px}
+  .dl .lx-read{text-align:center;font-family:var(--th);font-size:14px;color:var(--ink2);margin:0 0 8px}
+  .dl .lx-audio{display:flex;gap:8px;justify-content:center;margin:0 0 12px}
+  .dl .lx-blanks{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 10px;font-family:var(--en);font-size:24px;letter-spacing:1px;color:var(--ink2);margin:6px 0 10px}
+  .dl .lx-blank-note{text-align:center;font-family:var(--th);font-size:14px;color:var(--ink2);margin:4px 0 10px}
+  .dl #lx-body .answer{margin-bottom:10px}
+  .dl #lx-body > .btn, .dl .lx-done .btn{width:100%}
+  .dl #lx-res .readout .L{font-size:30px}
+  .dl .lx-done{text-align:center;font-family:var(--th)}
+  .dl .lx-done .lx-big{font-size:26px;font-weight:700;color:var(--ok);margin:6px 0}
+  .dl .lx-done .lx-tip{font-size:14px;color:var(--ink2)}
+  .dl .lx-done .mist{text-align:left;margin:10px 0 14px}
+  @media (max-width:420px){ .dl .lx-word .L{font-size:32px} .dl .lx-tease{flex-wrap:wrap} .dl .lx-tease .btn{width:100%} }
   .dl .step.done .btn{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
   .sheet-wrap{position:fixed;top:0;right:0;bottom:0;left:0;z-index:100;background:rgba(10,18,22,.45);display:flex;align-items:flex-end;justify-content:center}
   .sheet-wrap .sheet{background:var(--bg);width:100%;max-width:560px;max-height:88%;overflow:auto;border-radius:20px 20px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px))}
@@ -1494,7 +1523,7 @@
       <h1 class="page-title">แผนฝึกวันนี้</h1>
       <p class="page-sub">ทำตามลำดับ 1 → 2 → 3 ใช้เวลาราว 20 นาที <span class="d-sync" id="d-sync"></span></p>
     <div class="stats">
-      <div class="stat"><b id="d-sDue">0</b><span>ต้องทบทวนวันนี้</span></div>
+      <div class="stat"><b id="d-sDue">0</b><span id="d-sDueLbl">ทบทวนวันนี้</span></div>
       <div class="stat"><b id="d-sNew">0</b><span>คำใหม่วันนี้</span></div>
       <div class="stat"><b id="d-sStreak">0</b><span>วันติดต่อกัน</span></div>
     </div>
@@ -1502,6 +1531,7 @@
       <div class="meter-bar" id="d-meterBar"></div>
       <div class="meter-key" id="d-meterKey"></div>
     </div>
+    <div class="panel cu-note hidden" id="t-catch" role="status"></div>
 
 
       <ol class="plan">
@@ -1510,6 +1540,7 @@
         <li class="step" id="t-step3"><span class="num">3</span><div class="sbody"><b>ทบทวนความหมาย</b><span id="t-s3"></span></div><button class="btn small" id="t-go3">ทบทวน</button></li>
         <li class="step exam-step" id="t-step4"><span class="num">4</span><div class="sbody"><b>ทำข้อสอบ 1 Part</b><span id="t-s4"></span></div><button class="btn small" id="t-go4">ทำข้อสอบ</button></li>
       </ol>
+    <div class="panel lx-tease hidden" id="t-leech"></div>
     <div class="panel co-tease hidden" id="t-coach"></div>
     <div class="panel wk" id="wk-panel">
       <div class="wk-head"><p class="label">สัปดาห์นี้</p><span class="wk-cmp" id="wk-cmp"></span></div>
@@ -1614,6 +1645,7 @@
       <p class="label">คำที่ต้องกลับมาพรุ่งนี้</p>
       <ul class="mist" id="d-sumWrong"></ul>
     </div>
+    <button class="btn lx-sum hidden" id="d-sumLeech" data-leech>ฝึกคำดื้อ</button>
     <button class="btn" id="d-again">สะกดอีกรอบ (ชุดเดิม สุ่มใหม่)</button>
     <button class="btn ghost" id="d-home2" style="margin-top:10px">กลับหน้าแรก</button>
   </section>
@@ -4213,6 +4245,13 @@
     <div class="set-group pf-edit hidden" id="pf-edit"></div>
   </div>
 </div>
+<div class="sheet-wrap dl hidden" id="lx-sheet" role="dialog" aria-modal="true" aria-labelledby="lx-title">
+  <div class="sheet lx">
+    <div class="sheet-head"><h2 id="lx-title">ฝึกคำดื้อ</h2><button class="icon-btn" id="lx-close" aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="lx-prog"><i id="lx-bar"></i></div>
+    <div id="lx-body"></div>
+  </div>
+</div>
 <div class="sheet-wrap dl hidden" id="d-sheet" role="dialog" aria-modal="true" aria-labelledby="d-sheetTitle">
   <div class="sheet">
     <div class="sheet-head"><h2 id="d-sheetTitle">ตั้งค่า</h2><button class="icon-btn" id="d-sheetClose" aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
@@ -4239,6 +4278,7 @@
       <div class="set-row col"><div class="set-txt"><b>ระดับคำใหม่</b><span>เลือกได้หลายระดับ</span></div><div class="chips" id="d-levels"></div></div>
       <div class="set-row"><div class="set-txt"><b>คำใหม่ต่อวัน</b></div><select id="d-newPer"><option>5</option><option>10</option><option>15</option><option>20</option></select></div>
       <div class="set-row"><div class="set-txt"><b>ทบทวนสูงสุดต่อวัน</b><span>คำที่เกินจะเลื่อนไปวันถัดไป</span></div><div class="seg" data-seg="maxReview"><button data-v="20">20</button><button data-v="30">30</button><button data-v="50">50</button></div></div>
+<div class="set-row"><div class="set-txt"><b>ผสมคำที่กำลังฝึกในเกม</b><span>เกมที่เลือกระดับ A1–B2 จะมีคำที่คุณกำลังฝึกปนมาราว 1 ใน 3 ช่วยให้จำตัวสะกดแม่นขึ้น</span></div><button class="sw" role="switch" aria-checked="true" data-ui="gmix" aria-label="ผสมคำที่กำลังฝึกในเกม"><i></i></button></div>
 <div class="set-row"><div class="set-txt"><b>พิมพ์ตามเมื่อสะกดผิด</b><span>ต้องพิมพ์คำที่ถูก 1 ครั้งก่อนไปต่อ ช่วยให้มือจำตัวสะกด</span></div><button class="sw" role="switch" aria-checked="false" data-ui="copy" aria-label="พิมพ์ตามเมื่อสะกดผิด"><i></i></button></div>
     </div>
     <div class="set-group">
@@ -4656,7 +4696,7 @@ function renderFriends(){
 }
 
 /* ---------- user settings ---------- */
-var UI_DEF = { mute:false, auto:true, rate:0.85, slowRate:0.6, twice:true, sfx:true, theme:'auto', size:1, calm:false, copy:true, maxReview:30 };
+var UI_DEF = { mute:false, auto:true, rate:0.85, slowRate:0.6, twice:true, sfx:true, theme:'auto', size:1, calm:false, copy:true, maxReview:30, gmix:true };
 try { var _t = localStorage.getItem('vocab-notebook-theme-v1'); if(_t==='light'||_t==='dark') UI_DEF.theme = _t; } catch(e){}
 function U(){ return Object.assign({}, UI_DEF, S.ui || {}); }
 function setUI(k, v){ S.ui = Object.assign({}, S.ui || {}); S.ui[k] = v; save(); applyUI(); }
@@ -4857,17 +4897,35 @@ var SPK = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 4V5L
 var IDX = {}; W.forEach(function(w,i){ IDX[w[0].toLowerCase()] = i; });
 
 /* ---------- home ---------- */
+/* catch-up: many words waiting, or many wrong lately -> fewer new words until it settles */
+var CATCH_NEW = 5;
+function catchUp(){
+  var t = today(), due = 0, n = 0, ok = 0;
+  for(var k in S.p) if(S.p[k].d<=t && IDX[k]!==undefined) due++;
+  for(var d=t-6; d<=t; d++){ var L = S.log && S.log[d]; if(L){ n += L.n||0; ok += L.ok||0; } }
+  var acc = n>=15 ? ok/n : null, heavy = due > U().maxReview, weak = acc!==null && acc < 0.6;
+  return { due:due, acc:acc, heavy:heavy, weak:weak, on:(heavy || weak) && S.newPer > CATCH_NEW, newPer:(heavy || weak) ? Math.min(S.newPer, CATCH_NEW) : S.newPer };
+}
 function counts(){
-  var t = today(), due = 0, buckets = [0,0,0], seen = 0;
+  var t = today(), due = 0, buckets = [0,0,0], seen = 0, cu = catchUp();
   for(var k in S.p){ var e = S.p[k]; seen++; if(e.d<=t) due++; if(e.b<=2) buckets[0]++; else if(e.b<=4) buckets[1]++; else buckets[2]++; }
-  var newLeft = S.newDay===t ? Math.max(0, S.newPer - S.newCount) : S.newPer;
+  var newLeft = S.newDay===t ? Math.max(0, cu.newPer - S.newCount) : cu.newPer;
   var pool = W.filter(function(w,i){ return S.levels.indexOf(w[4])>-1 && !S.p[key(i)]; }).length;
-  return { due:due, newLeft:Math.min(newLeft,pool), seen:seen, buckets:buckets };
+  return { due:due, dueToday:Math.min(due, U().maxReview), newLeft:Math.min(newLeft,pool), seen:seen, buckets:buckets, cu:cu };
+}
+function renderCatch(c){
+  var el = $('t-catch'); if(!el) return;
+  var cu = c.cu, later = c.due - c.dueToday, msg = '';
+  if(cu.heavy) msg = '<b>ค่อยๆ กลับมาฝึก</b>มีคำรอทบทวน '+c.due+' คำ วันนี้ทบทวนแค่ '+c.dueToday+' คำที่รอนานที่สุด ที่เหลือ '+later+' คำเลื่อนไปวันถัดไป'+(cu.on ? ' และคำใหม่ลดเหลือ '+CATCH_NEW+' คำ/วัน จนกว่าคำที่รอจะเหลือไม่เกิน '+U().maxReview+' คำ' : '');
+  else if(cu.weak && cu.on) msg = '<b>เน้นคำเก่าให้แน่นก่อน</b>7 วันที่ผ่านมาสะกดถูกครั้งแรก '+Math.round(cu.acc*100)+'% คำใหม่จึงลดเหลือ '+CATCH_NEW+' คำ/วันชั่วคราว พอถูกเกิน 60% จะกลับเป็น '+S.newPer+' คำตามที่ตั้งไว้';
+  el.innerHTML = msg; el.classList.toggle('hidden', !msg);
 }
 function renderHome(){
   try{ renderWeek(); renderCoachTease(); }catch(e){}
   var c = counts(), t = today();
-  $('d-sDue').textContent = c.due; $('d-sNew').textContent = c.newLeft;
+  $('d-sDue').textContent = c.dueToday; $('d-sNew').textContent = c.newLeft;
+  $('d-sDueLbl').textContent = c.due > c.dueToday ? 'ทบทวนวันนี้ (รออีก '+(c.due - c.dueToday)+')' : 'ทบทวนวันนี้';
+  renderCatch(c);
   $('d-sStreak').textContent = (S.lastDay===t||S.lastDay===t-1) ? S.streak : 0;
   var total = W.length, segs = [[c.buckets[0],'var(--vow)','กำลังฝึกสะกด'],[c.buckets[1],'var(--con)','เริ่มสะกดได้'],[c.buckets[2],'var(--ok)','สะกดได้แล้ว']];
   $('d-meterBar').innerHTML = segs.map(function(s){ return '<i style="width:'+(s[0]/total*100)+'%;background:'+s[1]+'"></i>'; }).join('');
@@ -5075,10 +5133,121 @@ function finish(){
   $('d-sumWrongPanel').querySelector('.label').textContent = 'คำที่จะกลับมาให้ทบทวนพรุ่งนี้';
   $('d-home2').textContent = mode==='free' ? 'เลือกชุดคำใหม่' : 'กลับหน้าวันนี้';
   $('d-again').classList.toggle('hidden', mode!=='free');
+  var nl = leechKeys().length; $('d-sumLeech').classList.toggle('hidden', !nl); $('d-sumLeech').textContent = 'ฝึกคำดื้อ '+nl+' คำ (ราว 5 นาที)';
   show('summary');
 }
 $('d-home2').addEventListener('click', function(){ renderHome(); show('home'); if(mode!=='free' && window.VN) window.VN.showView('today'); });
 $('d-again').addEventListener('click', function(){ renderHome(); show('home'); $('d-fStart').click(); });
+/* ---------- stubborn words (คำดื้อ): wrong 3+ times and still in the first boxes ---------- */
+/* look -> cover -> write -> check, 3 correct writes per word, interleaved so each word comes back after the others.
+   Adds e.x (drills done) and e.xd (day of the last drill) to the word record; old records without them work as before. */
+var LX_MAX = 5;
+function isLeech(e){ return !!e && (e.w||0)>=3 && (e.b||0)<=2; }
+function leechKeys(){
+  var t = today();
+  return Object.keys(S.p).filter(function(k){ var e = S.p[k]; return IDX[k]!==undefined && isLeech(e) && e.xd!==t; })
+    .sort(function(a,b){ return (S.p[b].w - S.p[b].c) - (S.p[a].w - S.p[a].c); });
+}
+function chunkHTML(target){
+  return chunkWord(target).map(function(c){
+    if(c.k==='gap') return '<span class="gap"></span>';
+    var ls = ''; for(var x=0;x<c.t.length;x++) ls += '<span class="L'+((c.k==='me' || (c.k==='sil' && x===0)) ? ' mute' : '')+'">'+esc(c.t[x])+'</span>';
+    return '<span class="chunk '+c.k+'"><span class="ls">'+ls+'</span><span class="band"></span></span>';
+  }).join('');
+}
+function blankHTML(target){
+  return chunkWord(target).map(function(c){ return c.k==='gap' ? '<span class="gap"></span>' : '<span class="lx-bl">'+c.t.split('').map(function(){ return '_'; }).join(' ')+'</span>'; }).join('');
+}
+function renderLeechTease(){
+  var el = $('t-leech'); if(!el) return;
+  var ks = leechKeys(), n = Math.min(ks.length, LX_MAX);
+  el.classList.toggle('hidden', !n); if(!n) return;
+  el.innerHTML = '<div class="lx-t"><b>คำดื้อ '+ks.length+' คำ</b><span>สะกดผิดมาแล้ว 3 ครั้งขึ้นไป ฝึกแบบดู-ปิด-เขียน-ตรวจ วันละ '+n+' คำ ราว 5 นาที</span>'+
+    '<span class="lx-ws">'+ks.slice(0, n).map(function(k){ return esc(W[IDX[k]][0]); }).join(' · ')+'</span></div><button class="btn small" data-leech>ฝึกเลย</button>';
+}
+var LX = null;
+function openLeech(){
+  var ks = leechKeys().slice(0, LX_MAX); if(!ks.length){ toast('ตอนนี้ไม่มีคำดื้อ'); return; }
+  var q = []; for(var r=1;r<=3;r++) ks.forEach(function(k){ q.push({ k:k, rep:r }); });
+  LX = { keys:ks, q:q, qi:0, step:'look', done:{}, total:q.length, wrong:0, focus:document.activeElement };
+  LX.done[ks[0]] = 1; $('lx-sheet').classList.remove('hidden'); renderLeech();
+}
+function closeLeech(){
+  if(!LX) return; var f = LX.focus; LX = null;
+  $('lx-sheet').classList.add('hidden'); try{ speechSynthesis.cancel(); }catch(e){}
+  renderHome(); if(f && f.focus) f.focus();
+}
+function renderLeech(){
+  var body = $('lx-body'); $('lx-bar').style.width = (LX.qi/LX.total*100)+'%';
+  if(LX.qi>=LX.q.length){
+    var t = today(); $('lx-bar').style.width = '100%';
+    LX.keys.forEach(function(k){ var e = S.p[k]; if(e){ e.x = (e.x||0) + 1; e.xd = t; } });
+    logDay('lx', LX.keys.length); save();
+    body.innerHTML = '<div class="lx-done"><p class="lx-big">เสร็จแล้ว</p><p>ฝึกครบ '+LX.keys.length+' คำ คำละ 3 รอบ'+(LX.wrong ? ' (พลาดระหว่างทาง '+LX.wrong+' ครั้ง ซึ่งเป็นเรื่องปกติ)' : ' ไม่พลาดเลย')+'</p>'+
+      '<p class="lx-tip">คำเหล่านี้จะกลับมาในแผนวันนี้ตามรอบทบทวน ถ้าสะกดถูก 2 รอบติดกันจะหลุดจากรายการคำดื้อ</p>'+
+      '<ul class="mist">'+LX.keys.map(wordRow).join('')+'</ul><button class="btn" id="lx-end">กลับหน้าวันนี้</button></div>';
+    sfx('bloom'); setTimeout(function(){ var b = $('lx-end'); if(b) b.focus(); }, 60);
+    return;
+  }
+  var it = LX.q[LX.qi], w = W[IDX[it.k]], target = w[0];
+  var head = '<p class="lx-step">คำที่ '+(LX.keys.indexOf(it.k)+1)+'/'+LX.keys.length+' · รอบ '+it.rep+'/3</p><p class="lx-mean">'+esc(w[2])+' <small>'+esc(w[1])+'</small></p>';
+  var audio = '<div class="lx-audio"><button class="btn ghost small" data-lxsay="0">'+SPK+'ฟัง</button><button class="btn ghost small" data-lxsay="1">'+SPK+'ฟังช้า</button></div>';
+  if(LX.step==='look'){
+    body.innerHTML = head + '<p class="lx-how">1. <b>ดู</b> อ่านทีละก้อนสี แล้วพูดตัวสะกดออกเสียงทีละตัว</p>'+
+      '<div class="readout lx-word">'+chunkHTML(target)+'</div>'+(w[3] ? '<p class="lx-read">คำอ่าน: '+esc(w[3])+'</p>' : '')+audio+
+      '<button class="btn" id="lx-cover">จำได้แล้ว ปิดคำ</button>';
+    speak(target); setTimeout(function(){ var b = $('lx-cover'); if(b) b.focus(); }, 60);
+  } else {
+    body.innerHTML = head + '<p class="lx-how">2. <b>เขียนจากความจำ</b> แล้วกดตรวจ</p>'+
+      (it.rep===1 ? '<div class="lx-blanks" aria-hidden="true">'+blankHTML(target)+'</div>' : '<p class="lx-blank-note">'+(it.rep===2 ? 'รอบนี้ไม่มีช่องช่วยแล้ว' : 'รอบสุดท้าย')+'</p>')+audio+
+      '<input class="answer" id="lx-in" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" aria-label="พิมพ์คำจากความจำ" placeholder="type here">'+
+      '<div id="lx-res"></div><button class="btn" id="lx-check">ตรวจ</button>';
+    if(U().auto) speak(target); setTimeout(function(){ var i = $('lx-in'); if(i) i.focus(); }, 60);
+  }
+}
+function leechCheck(){
+  var inp = $('lx-in'); if(!inp || LX.step!=='write') return;
+  var typed = norm(inp.value); if(!typed){ inp.focus(); return; }
+  var it = LX.q[LX.qi], target = W[IDX[it.k]][0], ok = typed===norm(target) || typed.replace(/[ \-]/g,'')===norm(target).replace(/[ \-]/g,'');
+  LX.step = 'checked'; inp.disabled = true;
+  var bl = document.querySelector('#lx-body .lx-blanks, #lx-body .lx-blank-note'); if(bl) bl.remove();
+  if(ok){
+    sfx('ok'); speak(target);
+    $('lx-res').innerHTML = '<p class="verdict ok">ถูกต้อง</p>';
+    $('lx-check').textContent = LX.qi+1>=LX.q.length ? 'ดูสรุป' : 'คำต่อไป'; $('lx-check').id = 'lx-next';
+  } else {
+    sfx('no'); LX.wrong++; recordErr(target, typed);
+    var html = ''; align(typed, target.toLowerCase()).forEach(function(o){ html += o.t==='ok' ? esc(o.a) : o.t==='sub' ? '<span class="s">'+esc(o.a)+'</span>' : o.t==='ins' ? '<span class="x">'+esc(o.a)+'</span>' : '<span class="d">_</span>'; });
+    $('lx-res').innerHTML = '<p class="verdict bad">ยังไม่ถูก</p><p class="yours">คุณพิมพ์: '+html+'</p><div class="readout lx-word">'+chunkHTML(target)+'</div>';
+    LX.q.push({ k:it.k, rep:it.rep, again:true }); LX.total++;
+    $('lx-check').textContent = 'ดูอีกครั้งแล้วลองใหม่ทีหลัง'; $('lx-check').id = 'lx-next';
+    speak(target);
+  }
+  setTimeout(function(){ var b = $('lx-next'); if(b) b.focus(); }, 60);
+}
+function leechNext(){
+  LX.qi++;
+  var it = LX.q[LX.qi];
+  LX.step = (it && (it.again || (it.rep===1 && !LX.done[it.k]))) ? 'look' : 'write';
+  if(it && LX.step==='look') LX.done[it.k] = 1;
+  renderLeech();
+}
+document.addEventListener('click', function(ev){ if(ev.target.closest('[data-leech]')) openLeech(); });
+$('lx-close').addEventListener('click', closeLeech);
+$('lx-sheet').addEventListener('click', function(ev){
+  if(ev.target===this){ closeLeech(); return; }
+  var t = ev.target, sb = t.closest('[data-lxsay]');
+  if(sb && LX && LX.q[LX.qi]){ speak(W[IDX[LX.q[LX.qi].k]][0], sb.getAttribute('data-lxsay')==='1'); return; }
+  if(t.closest('#lx-cover')){ LX.step = 'write'; renderLeech(); return; }
+  if(t.closest('#lx-check')){ leechCheck(); return; }
+  if(t.closest('#lx-next')){ leechNext(); return; }
+  if(t.closest('#lx-end')) closeLeech();
+});
+$('lx-sheet').addEventListener('keydown', function(ev){
+  if(ev.key==='Escape'){ ev.preventDefault(); closeLeech(); return; }
+  if(ev.key==='Enter' && ev.target.id==='lx-in'){ ev.preventDefault(); leechCheck(); }
+});
+
 /* ---------- Today plan ---------- */
 function dayState(){ var t = today(); if(!S.day || S.day.d!==t) S.day = {d:t, story:0, cards:0}; return S.day; }
 function reviewKeys(){
@@ -5099,6 +5268,7 @@ function renderToday(c){
   setStep(2, ds.story, lk>=3 ? 'เรื่องสั้นที่สร้างจากคำที่คุณกำลังฝึก แตะคำเพื่อฟัง' : 'ฝึกสะกดก่อนอย่างน้อย 3 คำ แล้วจะได้เรื่องจากคำของคุณ', ds.story ? 'อ่านอีกเรื่อง' : 'อ่าน', false);
   var rk = reviewKeys().length;
   try{ renderExamStep(); }catch(e){}
+  renderLeechTease();
   setStep(3, ds.cards, rk ? ('บัตรคำ '+rk+' คำที่ยังสะกดพลาดบ่อย') : 'ยังไม่มีคำที่ต้องทบทวน', ds.cards ? 'ทบทวนอีกครั้ง' : 'ทบทวน', !rk);
 }
 $('t-go1').addEventListener('click', function(){ if(!$('d-start').disabled) beginSession(buildQueue(), 'daily'); else if(window.VN) window.VN.showView('dictation'); });
@@ -5250,7 +5420,7 @@ function importBackup(text){
 
 
 /* ---------- practice log + mistakes (feed the weekly report and the coach) ---------- */
-var APP_VER = 'v19 · 2026-10-13 · offline';
+var APP_VER = 'v20 · 2026-10-14 · offline';
 function logDay(field, n){
   var t = today(); if(!S.log || typeof S.log!=='object') S.log = {};
   var d = S.log[t] || (S.log[t] = {}); d[field] = (d[field] || 0) + (n==null ? 1 : n);
@@ -5824,16 +5994,23 @@ $('g-new').addEventListener('click', function(){
   $('g-msg').textContent = 'เก็บสวนเดิมเข้าอัลบั้มแล้ว เริ่มปลูกสวนใหม่ได้เลย';
 });
 function renderGLevels(){
-  var opts = [['learning','คำที่กำลังฝึก'],['A1','A1'],['A2','A2'],['B1','B1'],['B2','B2']];
+  var opts = GLEVELS;
   $('g-levels').innerHTML = opts.map(function(x){ var n = gPool(x[0]).length; return '<button class="chip" data-gl="'+x[0]+'" aria-pressed="'+(S.gLevel===x[0])+'"'+(n>=1?'':' disabled')+'>'+x[1]+'<small>'+n+'</small></button>'; }).join('');
 }
 function gPool(lv){
   var ok = function(i){ var w = W[i][0]; return /^[a-z]{4,10}$/.test(w); };
+  if(lv==='weak') return Object.keys(S.p).filter(function(k){ var e = S.p[k]; return e.w>0 && e.b<=2; })
+    .sort(function(a,b){ return (S.p[b].w - S.p[b].c) - (S.p[a].w - S.p[a].c); }).map(function(k){ return IDX[k]; }).filter(function(i){ return i!==undefined && ok(i); });
   if(lv==='learning') return Object.keys(S.p).map(function(k){ return IDX[k]; }).filter(function(i){ return i!==undefined && ok(i); });
   return W.map(function(w,i){ return i; }).filter(function(i){ return W[i][4]===lv && ok(i); });
 }
+/* games on a CEFR level also bring back about 1 in 3 of the player's own practice words (weak ones first) */
+var GMIX = 0.35;
+function gMixOn(){ return U().gmix!==false && ['learning','weak'].indexOf(S.gLevel)<0 && gPool('learning').length>=4; }
+function gMixPool(){ var weak = gPool('weak'), rest = shuffle(gPool('learning').filter(function(i){ return weak.indexOf(i)<0; })); return shuffle(weak.slice(0, 20)).concat(rest); }
 function gRound(){
   var pool = gPool(S.gLevel); if(!pool.length){ S.gLevel = 'A1'; pool = gPool('A1'); }
+  if(gMixOn() && Math.random()<GMIX){ var mp = gMixPool().slice(0, 12); if(mp.length) pool = mp; }
   var i; do { i = pool[Math.floor(Math.random()*pool.length)]; } while(pool.length>1 && i===G.i);
   var w = W[i][0], opts = shuffle([w].concat(misspell(w)));
   G = { i:i, tries:0, done:false };
@@ -5885,7 +6062,7 @@ $('g-levels').addEventListener('click', function(ev){ var b = ev.target.closest(
 function GS(){ var g = S.games || (S.games = {}); g.mode = g.mode || {}; g.best = g.best || {}; g.pair = g.pair || 'meaning'; return g; }
 function gMode(g){ return GS().mode[g] || 'relax'; }
 function firstMeaning(i){ return String(W[i][2]).split(' / ')[0].split(',')[0].trim(); }
-var GLEVELS = [['learning','คำที่กำลังฝึก'],['A1','A1'],['A2','A2'],['B1','B1'],['B2','B2']];
+var GLEVELS = [['weak','คำที่ยังพลาด'],['learning','คำที่กำลังฝึก'],['A1','A1'],['A2','A2'],['B1','B1'],['B2','B2']];
 var MODE_NOTE = { rain:'คำตกช้าๆ ทีละคำ ไม่มีแพ้', match:'ไม่จับเวลา', typo:'ไม่จับเวลา มีคำแปลไทยช่วย', fill:'ไม่จับเวลา ตอบผิดลองใหม่ได้' };
 var CHAL_NOTE = { rain:'พลาดได้ 3 ครั้ง คำตกเร็วขึ้น', match:'จับเวลา ยิ่งเร็วยิ่งดี', typo:'60 วินาที', fill:'60 วินาที' };
 function bestKey(g){ if(g==='match') return 'match-'+GS().pair+'-'+(GS().mPairs||6); if(g==='rain') return 'rain-'+(GS().rainPre||'chill'); if(g==='fill') return (GS().fillDiff||'mid')==='easy' ? 'fill' : 'fill-'+(GS().fillDiff||'mid'); return g; }
@@ -5896,13 +6073,17 @@ function renderBar(g){
   var el = document.querySelector('.gbar[data-game="'+g+'"]'); if(!el) return;
   var m = gMode(g);
   var html = '<div class="gbar-row"><div class="seg" data-gmode="'+g+'"><button data-v="relax" aria-pressed="'+(m==='relax')+'">ผ่อนคลาย</button><button data-v="chal" aria-pressed="'+(m==='chal')+'">ท้าทาย</button></div>'+
-    '<p class="gnote">'+(m==='chal' ? CHAL_NOTE[g]+' · '+bestText(g) : MODE_NOTE[g])+'</p></div>';
+    '<p class="gnote">'+(m==='chal' ? CHAL_NOTE[g]+' · '+bestText(g) : MODE_NOTE[g])+(g!=='typo' && gMixOn() ? ' · มีคำที่คุณกำลังฝึกปนมาด้วย' : '')+'</p></div>';
   if(g!=='typo') html += '<div class="chips gchips">'+GLEVELS.map(function(x){ var n = gPool(x[0]).length; return '<button class="chip" data-glv="'+x[0]+'" aria-pressed="'+(S.gLevel===x[0])+'"'+(n?'':' disabled')+'>'+x[1]+'<small>'+n+'</small></button>'; }).join('')+'</div>';
   el.innerHTML = html;
 }
 function pickWords(n, filter){
   var f = filter || function(){ return true; };
   var pool = gPool(S.gLevel).filter(f);
+  if(gMixOn()){
+    var mix = gMixPool().filter(f).slice(0, Math.round(n*GMIX));
+    pool = mix.concat(shuffle(pool.filter(function(i){ return mix.indexOf(i)<0; })).slice(0, Math.max(0, n - mix.length)));
+  }
   if(pool.length < n){ var extra = gPool('A1').filter(f).filter(function(i){ return pool.indexOf(i)<0; }); pool = pool.concat(shuffle(extra).slice(0, n-pool.length)); }
   return shuffle(pool.slice()).slice(0, n);
 }
