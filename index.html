@@ -1192,6 +1192,15 @@
   .ver-badge{display:inline-block;vertical-align:middle;font-family:var(--en);font-size:12px;font-weight:600;color:var(--ink2);border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin-left:6px}
   /* ===== lessons from the practice tests ===== */
   .dl .xl-mods{margin:0 0 14px}
+  .dl .xl-wtools{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+  .dl .xl-words{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+  .dl .xl-words > li{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+  .dl .xl-wh{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+  .dl .xl-wh b{font-family:var(--en);font-size:19px}
+  .dl .xl-pos{font-family:var(--th);font-size:12px;color:var(--ink2);border:1px solid var(--line);border-radius:999px;padding:1px 8px}
+  .dl .xl-wth{font-family:var(--th);font-size:15.5px;color:var(--accent);font-weight:600}
+  .dl .xl-def{font-family:var(--en);font-size:14px;color:var(--ink2);margin:6px 0 2px}
+  .dl .xl-book{font-family:var(--en);font-size:14px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;margin:0 0 8px}
   .dl .xl-stage{margin:22px 0 6px}
   .dl .xl-sh{display:flex;gap:12px;align-items:center;margin-bottom:10px;font-family:var(--th)}
   .dl .xl-sh b{display:block;font-size:19px}
@@ -6877,17 +6886,23 @@ function gamesViewChange(name){
 var XL = { D:{}, data:null, loading:false, mod:null, lesson:null, run:null, showText:false };
 /* the learning map: stages in study order; exam modules load their data file, the others are built in the page */
 var XL_STAGES = [
-  { th:'พื้นฐาน', sub:'ออกเสียงให้ถูก แล้วเข้าใจ tense' },
+  { th:'วิธีเรียน', sub:'เทคนิคการจำ การฟัง การอ่าน การเขียน และการทำข้อสอบ' },
+  { th:'พื้นฐาน', sub:'ออกเสียงให้ถูก เข้าใจ tense และไวยากรณ์ที่ใช้บ่อย' },
+  { th:'คำศัพท์', sub:'คำศัพท์ตามหัวข้อจากหนังสือ 2 เล่ม' },
   { th:'ข้อสอบ', sub:'ข้อสอบจริง 10 ชุด แยกตาม Part' }
 ];
 var XL_MODS = [
-  { id:'phonics', local:'phonics', stage:0, th:'ออกเสียง (Phonics)', sub:'ตัวอักษร สระ พยัญชนะ การเน้นเสียง', n:51, has:function(k){ return k.indexOf('ph-')===0; } },
-  { id:'tense', local:'tense', stage:0, th:'Tense ทั้ง 12 แบบ', sub:'โครงสร้าง วิธีใช้ เส้นเวลา', n:96, has:function(k){ return k.indexOf('tn-')===0; } },
-  { id:'part1', key:'xpart1', stage:1, th:'Part 1 ภาพ', sub:'ภาพและเสียงจริง', n:60, has:xlRange(1, 6) },
-  { id:'part2', key:'xpart2', stage:1, th:'Part 2 ถาม-ตอบ', sub:'เสียงจริง', n:250, has:xlRange(7, 31) },
-  { id:'part34', key:'xpart34', stage:1, th:'Part 3–4 บทสนทนา', sub:'บทสนทนาและบทพูด', n:690, has:xlRange(32, 100) },
-  { id:'grammar', key:'xgram', stage:1, th:'Part 5–6 ไวยากรณ์', sub:'ไวยากรณ์และคำศัพท์', n:460, has:xlRange(101, 146) },
-  { id:'part7', key:'xpart7', stage:1, th:'Part 7 การอ่าน', sub:'การอ่าน', n:540, has:xlRange(147, 200) }
+  { id:'tips', key:'xtips', stage:0, th:'เทคนิคการเรียน', sub:'5 บทสั้นๆ ทำก่อนเริ่มเรียน', n:25, has:function(k){ return k.indexOf('tp-')===0; } },
+  { id:'phonics', local:'phonics', stage:1, th:'ออกเสียง (Phonics)', sub:'ตัวอักษร สระ พยัญชนะ การเน้นเสียง', n:51, has:function(k){ return k.indexOf('ph-')===0; } },
+  { id:'tense', local:'tense', stage:1, th:'Tense ทั้ง 12 แบบ', sub:'โครงสร้าง วิธีใช้ เส้นเวลา', n:96, has:function(k){ return k.indexOf('tn-')===0; } },
+  { id:'basic', key:'xbasic', stage:1, th:'ไวยากรณ์พื้นฐาน', sub:'a/an/the, นับได้-นับไม่ได้, เปรียบเทียบ, If, modal, คำถาม', n:48, has:function(k){ return k.indexOf('bg-')===0; } },
+  { id:'e600', key:'x600', stage:2, th:'600 Essential Words', sub:'50 หัวข้อ 600 คำ พร้อมเสียงจริง', n:1095, has:function(k){ return k.indexOf('e6-')===0; } },
+  { id:'cyev', key:'xcyev', stage:2, th:'Check Your English Vocabulary', sub:'42 หน่วย ทำในสมุดแล้วตรวจกับเฉลย', n:42, has:function(k){ return k.indexOf('cy-')===0; } },
+  { id:'part1', key:'xpart1', stage:3, th:'Part 1 ภาพ', sub:'ภาพและเสียงจริง', n:60, has:xlRange(1, 6) },
+  { id:'part2', key:'xpart2', stage:3, th:'Part 2 ถาม-ตอบ', sub:'เสียงจริง', n:250, has:xlRange(7, 31) },
+  { id:'part34', key:'xpart34', stage:3, th:'Part 3–4 บทสนทนา', sub:'บทสนทนาและบทพูด', n:690, has:xlRange(32, 100) },
+  { id:'grammar', key:'xgram', stage:3, th:'Part 5–6 ไวยากรณ์', sub:'ไวยากรณ์และคำศัพท์', n:460, has:xlRange(101, 146) },
+  { id:'part7', key:'xpart7', stage:3, th:'Part 7 การอ่าน', sub:'การอ่าน', n:540, has:xlRange(147, 200) }
 ];
 function xlRange(a, b){ return function(k){ var m = /^\d\d-(\d+)$/.exec(k); return !!m && +m[1]>=a && +m[1]<=b; }; }
 function xlMod(){ return XL_MODS.find(function(m){ return m.id===XL.mod; }) || null; }
@@ -6931,6 +6946,7 @@ function xlPlay(f, s, e){
 }
 function xlStop(){ if(XLA){ XLA.pause(); XLA_END = 0; } }
 function xlStats(L, P){
+  if(L.mark){ var m = P[L.mark] ? 1 : 0; return { n:1, done:m, ok:m, wrong:0, mark:1 }; }
   var done = 0, ok = 0, wrong = 0;
   L.items.forEach(function(it){ var r = P[it.id]; if(!r) return; done++; if(r.l===it.a) ok++; else wrong++; });
   return { n:L.items.length, done:done, ok:ok, wrong:wrong };
@@ -6965,7 +6981,8 @@ function xlRender(){
       (L.html ? '<div class="xl-html">'+L.html+'</div>' : '')+
       (L.r || []).map(function(r){ return '<div class="panel xl-rule"><h3>'+esc(r[0])+'</h3>'+(r[1] ? '<p>'+r[1]+'</p>' : '')+(r[2] || []).map(xlEx).join('')+'</div>'; }).join('')+
       (L.tips && L.tips.length ? '<div class="panel xl-tips"><b>วิธีดูโจทย์</b><ul>'+L.tips.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')+'</ul></div>' : '')+
-      (st.n ? '<p class="label">แบบฝึกท้ายบท: '+(real ? 'ข้อสอบจริง ' : '')+st.n+' ข้อ</p>'+
+      (st.mark ? '<div class="xl-acts"><button class="btn'+(st.done ? ' ghost' : '')+'" data-xl="mark">'+(st.done ? '✓ ทำบทนี้เสร็จแล้ว (แตะเพื่อยกเลิก)' : 'ทำบทนี้เสร็จแล้ว')+'</button>'+(Ls[idx] ? '<button class="btn ghost" data-xlles="'+Ls[idx].id+'">บทถัดไป: '+esc(Ls[idx].th)+' →</button>' : '')+'</div>' :
+      st.n ? '<p class="label">แบบฝึกท้ายบท: '+(real ? 'ข้อสอบจริง ' : '')+st.n+' ข้อ</p>'+
       '<div class="xl-sum"><div><b>'+st.done+'/'+st.n+'</b><span>ทำแล้ว</span></div><div><b>'+st.ok+'</b><span>ตอบถูก</span></div><div><b>'+st.wrong+'</b><span>ยังผิดอยู่</span></div></div>'+
       '<div class="xl-acts">'+
         (st.done<st.n ? '<button class="btn" data-xl="go-new">'+(st.done ? 'ทำต่อ (เหลือ '+(st.n-st.done)+' ข้อ)' : 'เริ่มทำแบบฝึก ('+st.n+' ข้อ)')+'</button>' : '')+
@@ -6979,7 +6996,7 @@ function xlRender(){
   var cards = Ls.map(function(L, i){ var st = xlStats(L, P); tot += st.n; done += st.done; ok += st.ok;
     var pct = st.n ? Math.round(st.done/st.n*100) : 0, full = st.n && st.done===st.n;
     return '<li><button class="xl-card'+(full ? ' done' : '')+'" data-xlles="'+L.id+'"><span class="xl-no">'+(full ? '✓' : i+1)+'</span><span class="xl-cb"><b>'+esc(L.th)+'</b><small>'+esc(L.en)+'</small>'+
-      '<span class="xl-meta">'+(st.n ? st.n+' ข้อ'+(st.done ? ' · ทำแล้ว '+st.done+' · ถูก '+st.ok : '') : 'อ่านอย่างเดียว')+'</span><span class="xl-bar"><i style="width:'+pct+'%"></i></span></span></button></li>'; }).join('');
+      '<span class="xl-meta">'+(st.mark ? (st.done ? 'ทำเสร็จแล้ว' : 'อ่านแล้วทำในสมุด') : st.n ? st.n+' ข้อ'+(st.done ? ' · ทำแล้ว '+st.done+' · ถูก '+st.ok : '') : 'อ่านอย่างเดียว')+'</span><span class="xl-bar"><i style="width:'+pct+'%"></i></span></span></button></li>'; }).join('');
   root.innerHTML = '<button class="xl-back" data-xl="map">← แผนที่การเรียน</button><p class="eyebrow">'+esc(XL_STAGES[M.stage].th)+'</p><h1 class="page-title">'+esc(M.th)+'</h1>'+
     '<div class="xl-sum"><div><b>'+Ls.length+'</b><span>บท</span></div><div><b>'+done+'/'+tot+'</b><span>ข้อที่ทำแล้ว</span></div><div><b>'+(done ? Math.round(ok/done*100) : 0)+'%</b><span>ตอบถูก</span></div></div>'+
     '<ul class="xl-list">'+cards+'</ul>';
@@ -7003,7 +7020,7 @@ function xlQ(){
   if(it.au){ html += xlListen(it, ans); root.innerHTML = html; var f2 = root.querySelector(ans ? '[data-xl="next"]' : '[data-xlplay="all"]'); if(f2) try{ f2.focus({preventScroll:true}); }catch(e){} if(!ans) xlPlay(it.au.f, it.au.s, it.au.e); return; }
   if(it.p===6 && /^_____\.?$/.test(it.s.trim())) html += '<p class="xl-q">เลือกประโยคที่เติมในช่อง <b class="blank">'+it.n+'</b> ของข้อความ</p>';
   else if(it.h) html += '<p class="xl-q">'+String(it.s).replace('___', '<b class="blank">'+(ans ? esc(it.o[it.a]) : '&nbsp;')+'</b>')+'</p>';
-  else if(it.p===0) html += '<p class="xl-q xl-qth0">'+esc(it.s)+'</p>';
+  else if(it.p===0 && !it.gap) html += '<p class="xl-q xl-qth0">'+esc(it.s)+'</p>';
   else html += '<p class="xl-q">'+xlFill(it.s, ans ? it.o[it.a] : '')+'</p>';
   if(ctx) html += '<details class="xl-ctx"'+(it.p===6 && /^_____\.?$/.test(it.s.trim()) ? ' open' : '')+'><summary>ดูข้อความทั้งหมด (Part 6)</summary><div class="xl-pass">'+pass+'</div>'+(ans && ctx.th ? '<div class="xl-pth">'+esc(ctx.th)+'</div>' : '')+'</details>';
   html += '<div class="xl-opts">'+['A','B','C','D'].filter(function(k){ return it.o[k]!=null; }).map(function(k){
@@ -7111,7 +7128,7 @@ function xlEnd(){
   if(R.wrote){ try{ examReload(); }catch(e){} }
   root.innerHTML = '<button class="xl-back" data-xl="lesson">← กลับไปที่บทเรียน</button><div class="panel center"><div class="big">'+R.right+'<small> / '+(R.right + R.wrong.length)+'</small></div><p class="note">'+esc(R.L.th)+'</p></div>'+
     (R.wrong.length ? '<div class="panel"><p class="label">ข้อที่ผิดรอบนี้ (กลับมาทำได้ที่ "ทำข้อที่ผิดอีกครั้ง")</p><ul class="xl-wrong">'+R.wrong.map(function(it){
-      return '<li>'+(it.p===5 ? xlFill(it.s, it.o[it.a]) : it.p===2 ? esc(it.s)+' → '+esc(it.o[it.a]) : (it.p===3 || it.p===4 || it.p===7) ? esc(it.s)+' → '+esc(it.o[it.a]) : it.p===0 ? (it.h ? String(it.s).replace(/<[^>]+>/g, '') : esc(it.s))+' → '+esc(it.o[it.a]) : it.p===1 ? 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]) : 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]))+'<small>'+esc(it.c || it.sth || '')+'</small></li>'; }).join('')+'</ul></div>' : '')+
+      return '<li>'+(it.p===5 ? xlFill(it.s, it.o[it.a]) : it.p===2 ? esc(it.s)+' → '+esc(it.o[it.a]) : (it.p===3 || it.p===4 || it.p===7) ? esc(it.s)+' → '+esc(it.o[it.a]) : it.p===0 ? (it.h ? String(it.s).replace(/<[^>]+>/g, '') : it.gap ? xlFill(it.s, it.o[it.a]) : esc(it.s)+' → '+esc(it.o[it.a])) : it.p===1 ? 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]) : 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]))+'<small>'+esc(it.c || it.sth || '')+'</small></li>'; }).join('')+'</ul></div>' : '')+
     '<button class="btn" data-xl="lesson" style="width:100%">กลับไปที่บทเรียน</button>';
   window.scrollTo(0, 0);
 }
@@ -7119,6 +7136,8 @@ $('view-xlearn').addEventListener('click', function(ev){
   var c = ev.target.closest('[data-xlles]'); if(c){ XL.lesson = c.getAttribute('data-xlles'); xlRender(); window.scrollTo(0, 0); return; }
   var o = ev.target.closest('[data-xlk]'); if(o && !o.disabled){ xlAnswer(o.getAttribute('data-xlk')); return; }
   var pt = ev.target.closest('[data-xlps]'); if(pt && XL.run){ XL.run.pi = +pt.getAttribute('data-xlps'); var y = window.scrollY; xlQ(); window.scrollTo(0, y); return; }
+  var au = ev.target.closest('[data-xlaudio]'); if(au){ xlPlay(au.getAttribute('data-xlaudio'), 0, 0); return; }
+  var ad = ev.target.closest('[data-xladd]'); if(ad){ var n = window.DL ? window.DL.addWords(ad.getAttribute('data-xladd').split('|')) : 0; toast(n ? 'เพิ่ม '+n+' คำเข้าแผนฝึกสะกดวันนี้แล้ว' : 'คำในบทนี้อยู่ในแผนฝึกสะกดแล้ว หรือไม่มีในคลังคำ'); return; }
   var md = ev.target.closest('[data-xlmod]'); if(md){ xlSwitch(md.getAttribute('data-xlmod')); return; }
   var pb = ev.target.closest('[data-xlplay]');
   if(pb && XL.run){ xlPlayKey(XL.run.q[XL.run.i], pb.getAttribute('data-xlplay')); return; }
@@ -7126,6 +7145,7 @@ $('view-xlearn').addEventListener('click', function(ev){
   var a = b.getAttribute('data-xl');
   if(a==='list'){ XL.lesson = null; xlRender(); window.scrollTo(0, 0); }
   else if(a==='map') xlSwitch(null);
+  else if(a==='mark'){ var P = xlProg(), L = XL.data.lessons.find(function(x){ return x.id===XL.lesson; }); if(L && L.mark){ if(P[L.mark]) delete P[L.mark]; else { P[L.mark] = { f:'A', l:'A' }; sfx('ok'); } xlSet('lclab_gram', P); xlRender(); } }
   else if(a==='lesson'){ xlRender(); window.scrollTo(0, 0); }
   else if(a==='go-new') xlStart('new'); else if(a==='go-wrong') xlStart('wrong'); else if(a==='go-all') xlStart('all');
   else if(a==='next'){ xlStop(); var R = XL.run; if(R.i+1>=R.q.length) xlEnd(); else { R.i++; R.picked = null; R.pi = 0; xlQ(); window.scrollTo(0, 0); } }
