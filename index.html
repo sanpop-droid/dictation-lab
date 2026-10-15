@@ -742,8 +742,8 @@
   /* ===== stage 10: every window size ===== */
   @media (max-width:430px){
     .dl .d-wrap .r-row .r-in{padding-right:14px;font-size:24px}
-    .dl .r-row .r-btns{position:static;transform:none;margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .dl .r-row .r-btns .r-del,.dl .r-row .r-btns .r-hint{justify-content:center;padding:12px;text-align:center}
+    .dl .r-row .r-btns{position:static;transform:none;margin-top:8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .dl .r-row .r-btns .r-del,.dl .r-row .r-btns .r-hint,.dl .r-row .r-btns .r-say{justify-content:center;padding:12px;text-align:center}
     .dl .answer{font-size:26px}
   }
   @media (max-height:520px) and (min-width:761px){ .spine-mark{display:none} .spine{gap:2px;padding-top:8px} }
@@ -882,13 +882,19 @@
   .fr-empty{font-family:var(--th);font-size:14px;color:var(--ink2);text-align:center;margin:6px 0}
 
   /* ===== stage 8 ===== */
-  .dl .r-row .r-in{padding-right:150px}
+  .dl .r-row .r-in{padding-right:222px}
   .r-btns{position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;gap:6px}
   .r-btns .r-hint{position:static;transform:none}
   .r-del{appearance:none;border:0;border-radius:11px;background:var(--line);color:var(--ink);display:flex;align-items:center;gap:4px;padding:10px 11px;cursor:pointer}
   .dl .r-del{font-family:var(--th);font-weight:700;font-size:15px}
   .r-del svg{width:19px;height:19px}
-  .r-del:active,.r-hint:active{transform:scale(.95)}
+  .r-del:active,.r-hint:active,.r-say:active{transform:scale(.95)}
+  .r-say{appearance:none;border:0;border-radius:11px;background:var(--surface);background:color-mix(in srgb,var(--accent) 18%,var(--surface));color:var(--ink);display:flex;align-items:center;gap:4px;padding:10px 11px;cursor:pointer}
+  .dl .r-say{font-family:var(--th);font-weight:700;font-size:15px}
+  .r-say svg{width:19px;height:19px}
+  .dl .r-row #rn-in{padding-right:212px}
+  @media (max-width:430px){ .dl .r-row #rn-in{padding-right:14px} }
+  .drop .dh .hl{color:var(--ink);font-weight:700}
   .dl .r-in.off{border-color:var(--bad);color:var(--bad);background:var(--bad-soft)}
   .missions{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px 10px;margin:0 0 16px}
   .ms-head{display:flex;justify-content:space-between;align-items:baseline;gap:4px 10px;flex-wrap:wrap;font-family:var(--th);margin-bottom:2px}
@@ -1344,6 +1350,19 @@
   .dl .xl-card:hover{border-color:var(--accent)}
   .dl .xl-no{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;border:2px solid var(--line);color:var(--ink2)}
   .dl .xl-card.done .xl-no{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+  .dl .xl-easy{border:1.5px solid var(--accent);background:var(--surface);background:color-mix(in srgb,var(--accent) 8%,var(--surface));font-family:var(--th);line-height:1.7}
+  .dl .xl-easy p{margin:0 0 8px}
+  .dl .xl-easy-h{font-weight:700;color:var(--accent);font-size:15px}
+  .dl .xl-easy-n{font-size:13px;color:var(--ink2);margin:8px 0 0!important}
+  .dl .xl-rule1{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:8px 12px;margin:10px 0 0;font-family:var(--th);line-height:1.6}
+  .dl .xl-rule1 b{color:var(--accent);margin-right:6px}
+  .dl .xl-ans{font-family:var(--th);font-size:16px;margin:0 0 8px}
+  .dl .xl-ans small{color:var(--ink2);margin-left:4px}
+  .dl .xl-why b{margin-right:6px}
+  .dl .xl-gl{margin-top:10px;font-family:var(--th);font-size:14px}
+  .dl .xl-gl summary{cursor:pointer;color:var(--ink2)}
+  .dl .xl-gl ul{margin:6px 0 0;padding-left:18px;line-height:1.7}
+  .dl .xl-card.xl-rnd{border:1.5px dashed var(--accent);background:var(--surface);background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
   .dl .xl-cb{flex:1;min-width:0;font-family:var(--th)}
   .dl .xl-cb b{display:block;font-size:16.5px}
   .dl .xl-cb small{display:block;font-family:var(--en);font-size:13px;color:var(--ink2)}
@@ -1640,7 +1659,7 @@
       <div class="hidden" id="rn-play">
         <div class="ghud"><span id="rn-score" class="rn-score"></span><span id="rn-combo" class="rn-combo"></span><span class="gsp"></span><span id="rn-status" class="lives"></span><button class="rn-pause" id="rn-pausebtn" aria-label="หยุดพัก" title="หยุดพัก"><svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button></div>
         <div class="sky" id="rn-sky"><div class="sky-msg hidden" id="rn-msg"></div><div class="sky-ground"></div></div>
-        <div class="r-row"><input class="answer r-in" id="rn-in" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" aria-label="พิมพ์คำที่ได้ยิน" placeholder="พิมพ์ที่นี่"><div class="r-btns"><button class="r-del" id="rn-del" type="button" aria-label="ลบทั้งคำ" title="ลบทั้งคำ (Esc)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 5H9l-6 7 6 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1z"/><path d="M17 9l-5 6M12 9l5 6"/></svg>ลบ</button><button class="r-hint" id="rn-hint" type="button" title="เปิดเฉลยคำที่ใกล้พื้นที่สุด">ใบ้</button></div></div>
+        <div class="r-row"><input class="answer r-in" id="rn-in" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" aria-label="พิมพ์คำที่ได้ยิน" placeholder="พิมพ์ที่นี่"><div class="r-btns"><button class="r-say" id="rn-say" type="button" aria-label="ฟังคำที่ใกล้พื้นที่สุดอีกครั้ง" title="ฟังอีกครั้ง (กดซ้ำ = ฟังช้า)"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>ฟัง</button><button class="r-del" id="rn-del" type="button" aria-label="ลบทั้งคำ" title="ลบทั้งคำ (Esc)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 5H9l-6 7 6 7h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1z"/><path d="M17 9l-5 6M12 9l5 6"/></svg>ลบ</button><button class="r-hint" id="rn-hint" type="button" title="ใบ้คำที่ใกล้พื้นที่สุดทีละขั้น">ใบ้</button></div></div>
       </div>
       <div class="gdone hidden" id="rn-done"></div>
     </div></section>
@@ -5754,7 +5773,7 @@ $('up-check').addEventListener('click', function(){
   }).catch(function(){ note.textContent = 'ตรวจไม่สำเร็จ ลองใหม่อีกครั้ง'; btn.disabled = false; });
 });
 /* ---------- practice log + mistakes (feed the weekly report and the coach) ---------- */
-var APP_NO = 'v33', APP_DATE = '15 ต.ค. 2569';   /* keep in step with VERSION in sw.js */
+var APP_NO = 'v34', APP_DATE = '15 ต.ค. 2569';   /* keep in step with VERSION in sw.js */
 var APP_VER = APP_NO + ' · 2026-10-15 · offline';
 document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent = 'เวอร์ชัน ' + APP_NO + ' · อัปเดต ' + APP_DATE; });
 document.querySelectorAll('.app-ver-no').forEach(function(e){ e.textContent = APP_NO; });
@@ -6655,17 +6674,20 @@ function rSpawn(){
   var i = rBag(); if(i===undefined) return;
   var w = W[i][0], x = 50, tries = 0;
   do { x = 22 + Math.random()*56; tries++; } while(tries<10 && R.drops.some(function(d){ return Math.abs(d.x-x)<30 && d.y<140; }));
-  var blanks = function(str){ return str.split('').map(function(){ return '_'; }).join(' '); };
   var el = document.createElement('button'); el.type = 'button'; el.className = 'drop';
   el.style.setProperty('--h', String((R.n*67 + 200) % 360)); R.n++;
-  el.innerHTML = '<b>'+esc(firstMeaning(i))+'</b><span class="dh">'+(R.pre==='chill' ? esc(w[0])+' '+blanks(w.slice(1)) : blanks(w))+'</span>';
+  el.innerHTML = '<b>'+esc(firstMeaning(i))+'</b><span class="dh">'+rMask(w, R.pre==='chill' ? 1 : 0)+'</span>';
   el.setAttribute('aria-label', 'ฟังคำที่แปลว่า '+firstMeaning(i));
-  var d = { i:i, w:w, el:el, x:x, y:-46, revealed:false };
+  var d = { i:i, w:w, el:el, x:x, y:-46, hint:0, said2:false };
   el.style.left = x+'%'; el.style.transform = 'translate(-50%,'+d.y+'px)';
   el.addEventListener('click', function(){ speak(w); $('rn-in').focus(); });
   $('rn-sky').appendChild(el); R.drops.push(d);
   if(U().auto) speak(w);
 }
+/* letters shown on a drop: the first `show` letters, the rest as blanks (a hint never shows the whole word) */
+function rMask(w, show){ return w.split('').map(function(ch, k){ return ch===' ' || ch==='-' ? '&nbsp;'+esc(ch)+'&nbsp;' : k < show ? '<span class="hl">'+esc(ch)+'</span>' : '_'; }).join(' '); }
+function rHintSteps(w){ var half = Math.max(1, Math.min(w.length - 1, Math.ceil(w.length/2))); return R.pre==='chill' ? [1, half] : [0, 1, half]; }
+function rLowest(pred){ return R.drops.filter(pred || function(){ return true; }).sort(function(a, b){ return b.y - a.y; })[0]; }
 function rTick(){
   if(!R.on) return;
   var now = performance.now(), dt = Math.min(0.05, Math.max(0, (now - R.last)/1000)); R.last = now; R.elapsed += dt;
@@ -6676,7 +6698,8 @@ function rTick(){
   if(R.drops.length < p.max && R.nextSpawn <= 0){ rSpawn(); R.nextSpawn = p.gap; }
   var v = (ground + 46) / p.fall;
   for(var k = R.drops.length-1; k >= 0; k--){
-    var d = R.drops[k]; d.y += v*dt*(d.revealed ? 0.6 : 1); d.el.style.transform = 'translate(-50%,'+d.y.toFixed(1)+'px)';
+    var d = R.drops[k]; d.y += v*dt*(d.hint ? 0.75 : 1); d.el.style.transform = 'translate(-50%,'+d.y.toFixed(1)+'px)';
+    if(!d.said2 && d.y > ground*0.45){ d.said2 = true; if(U().auto) speak(d.w); }   /* say it once more on the way down */
     if(d.y >= ground) rMiss(d);
   }
   if(R.on) R.raf = requestAnimationFrame(rTick);
@@ -6692,7 +6715,7 @@ function rPop(d, text, cls){
 }
 function rHit(d){
   rRemove(d);
-  if(d.revealed){ R.combo = 0; rPop(d, 'เก็บแล้ว', 'soft'); }
+  if(d.hint){ R.cleared++; R.combo = 0; var hp = Math.round((10 + d.w.length) * (d.hint>=2 ? 0.25 : 0.5)); R.score += hp; rPop(d, R.pre==='chill' ? 'ถูก (ใช้ใบ้)' : '+'+hp+' (ใบ้)', 'soft'); }
   else { gEvent('rain', true); R.cleared++; R.combo++; R.top = Math.max(R.top, R.combo); var pts = (10 + d.w.length) * rMult(); R.score += pts; rPop(d, R.pre==='chill' ? 'ถูก!' : '+'+pts, 'good'); }
   d.el.classList.add('hit'); d.el.style.transform = 'translate(-50%,'+(d.y-36).toFixed(1)+'px) scale(1.1)';
   setTimeout(function(){ d.el.remove(); }, 450);
@@ -6709,12 +6732,13 @@ function rMiss(d){
 }
 function rHint(){
   if(!R.on) { $('rn-in').focus(); return; }
-  var c = R.drops.filter(function(d){ return !d.revealed; }).sort(function(a, b){ return b.y - a.y; })[0];
-  if(!c){ $('rn-in').focus(); return; }
-  c.revealed = true; c.el.classList.add('peek'); R.combo = 0;
-  c.el.innerHTML = '<b>'+esc(firstMeaning(c.i))+'</b><span class="dw">'+esc(c.w)+'</span>';
-  R.hinted.push(c.i); speak(c.w, true); rHud();
-  rClear();
+  /* step by step: first letter, then half the word; the whole word is never shown, and a hinted word scores less */
+  var c = rLowest(function(d){ return d.hint < rHintSteps(d.w).length - 1; });
+  if(!c){ var low = rLowest(); if(low) speak(low.w, true); toast('ใบ้ครบแล้ว ลองฟังอีกครั้งแล้วพิมพ์ดู'); $('rn-in').focus(); return; }
+  if(!c.hint) R.hinted.push(c.i);
+  c.hint++; c.el.classList.add('peek'); R.combo = 0;
+  c.el.querySelector('.dh').innerHTML = rMask(c.w, rHintSteps(c.w)[c.hint]);
+  speak(c.w, true); rHud(); $('rn-in').focus();
 }
 function rOver(){
   rHalt(); var pre = R.pre, P = RPRE[pre]; rClearDrops(); document.body.classList.remove('g-focus');
@@ -6738,7 +6762,12 @@ $('rn-done').addEventListener('click', function(ev){ var b = ev.target.closest('
 $('rn-pausebtn').addEventListener('click', function(){ if(R.paused) rResume(); else rPause(); });
 $('rn-hint').addEventListener('click', rHint);
 $('rn-del').addEventListener('click', rClear);
-['rn-del','rn-hint'].forEach(function(id){ $(id).addEventListener('mousedown', function(e){ e.preventDefault(); }); });
+$('rn-say').addEventListener('click', function(){
+  var d = R.on && rLowest(); if(!d){ $('rn-in').focus(); return; }
+  var again = R.sayD===d && Date.now() - (R.sayT || 0) < 4000; R.sayD = d; R.sayT = Date.now();
+  speak(d.w, again); $('rn-in').focus();
+});
+['rn-del','rn-hint','rn-say'].forEach(function(id){ $(id).addEventListener('mousedown', function(e){ e.preventDefault(); }); });
 function rWrong(el){ el.classList.add('bad'); sfx('no'); setTimeout(function(){ el.classList.remove('bad'); }, 300); }
 function rClear(){ var el = $('rn-in'); el.value = ''; el.classList.remove('off'); (R.drops || []).forEach(function(d){ d.el.classList.remove('typing'); }); el.focus(); }
 $('rn-in').addEventListener('input', function(){
@@ -7199,8 +7228,52 @@ var XL_MODS = [
   { id:'part2', key:'xpart2', stage:3, th:'Part 2 ถาม-ตอบ', sub:'เสียงจริง', n:250, has:xlRange(7, 31) },
   { id:'part34', key:'xpart34', stage:3, th:'Part 3–4 บทสนทนา', sub:'บทสนทนาและบทพูด', n:690, has:xlRange(32, 100) },
   { id:'grammar', key:'xgram', stage:3, th:'Part 5–6 ไวยากรณ์', sub:'ไวยากรณ์และคำศัพท์', n:460, has:xlRange(101, 146) },
-  { id:'part7', key:'xpart7', stage:3, th:'Part 7 การอ่าน', sub:'การอ่าน', n:540, has:xlRange(147, 200) }
+  { id:'part7', key:'xpart7', stage:3, th:'Part 7 การอ่าน', sub:'การอ่าน', n:540, has:xlRange(147, 200) },
+  { id:'rnd', rnd:true, stage:3, th:'สุ่มข้อสอบจริง', sub:'สุ่มข้อจากข้อสอบทั้ง 10 ชุด ไม่เรียงเหมือนเดิม เลือก Part ได้', n:0, has:function(){ return false; } }
 ];
+/* random set: questions drawn from the real-test modules; 'mix' takes the same number from each group */
+var XL_RND = [
+  { id:'mix', th:'ผสมทุก Part', keys:['xpart1','xpart2','xpart34','xgram','xpart7'] },
+  { id:'p1', th:'Part 1', keys:['xpart1'] }, { id:'p2', th:'Part 2', keys:['xpart2'] },
+  { id:'p34', th:'Part 3–4', keys:['xpart34'] }, { id:'p56', th:'Part 5–6', keys:['xgram'] }, { id:'p7', th:'Part 7', keys:['xpart7'] }
+];
+function xlNeed(keys, cb){
+  var X = window.__X || {}, miss = keys.filter(function(k){ return !X[k]; });
+  if(!miss.length){ cb(true); return; }
+  var left = miss.length, bad = false;
+  miss.forEach(function(k){ var sc = document.createElement('script'); sc.src = 'exam/data/' + k + '.js';
+    sc.onload = sc.onerror = function(e){ if(e.type==='error') bad = true; if(--left===0) cb(!bad && keys.every(function(x){ return (window.__X || {})[x]; })); };
+    document.head.appendChild(sc); });
+}
+function xlRndStart(){
+  var g = XL_RND.find(function(x){ return x.id===XL.rpart; }) || XL_RND[0], n = XL.rn || 10;
+  $('xl-root').innerHTML = '<p class="xl-load">กำลังสุ่มข้อสอบ…</p>';
+  xlNeed(g.keys, function(ok){
+    if(!ok){ xlFail(); return; }
+    var X = window.__X, ctx = {}, pick = [], P = xlProg(), only = XL.rwrong;
+    var pools = g.keys.map(function(k){ var d = X[k]; for(var c in (d.ctx || {})) ctx[c] = d.ctx[c];
+      var all = []; d.lessons.forEach(function(L){ L.items.forEach(function(it){ if(L.easy) it._r = L.easy.rule; }); all = all.concat(L.items); });
+      return only ? all.filter(function(it){ var r = P[it.id]; return r && r.l!==it.a; }) : all; });
+    var per = Math.ceil(n / pools.length);
+    pools.forEach(function(pl){ pick = pick.concat(xlShuffle(pl).slice(0, per)); });
+    pick = xlShuffle(pick).slice(0, n);
+    if(!pick.length){ toast(only ? 'ยังไม่มีข้อที่ผิดใน Part นี้' : 'ไม่มีข้อให้สุ่ม'); xlRender(); return; }
+    var L = { id:'rnd', en:'Random', th:'สุ่มข้อสอบจริง · '+g.th, items:pick };
+    XL.data = { lessons:[L], ctx:ctx, rnd:true };
+    XL.run = { L:L, q:pick, i:0, picked:null, right:0, wrong:[], wrote:false, ord:{} }; xlOrder(XL.run);
+    xlQ(); window.scrollTo(0, 0);
+  });
+}
+function xlRndPage(){
+  var chip = function(attr, v, cur, t){ return '<button class="chip" '+attr+'="'+v+'" aria-pressed="'+(v===cur)+'">'+t+'</button>'; };
+  XL.rpart = XL.rpart || 'mix'; XL.rn = XL.rn || 10;
+  return '<button class="xl-back" data-xl="map">← แผนที่การเรียน</button><p class="eyebrow">ข้อสอบ</p><h1 class="page-title">สุ่มข้อสอบจริง</h1>'+
+    '<p class="page-sub">สุ่มข้อจากข้อสอบทั้ง 10 ชุด ทุกครั้งได้ข้อไม่ซ้ำลำดับเดิม และสลับตัวเลือก A–D ใหม่ (ยกเว้น Part 1–2 ที่เสียงอ่านตัวเลือกตามลำดับ) จึงต้องอ่านหรือฟังจริง จำตำแหน่งคำตอบไม่ได้</p>'+
+    '<div class="panel"><p class="label">เลือก Part</p><div class="chips">'+XL_RND.map(function(g){ return chip('data-xlrp', g.id, XL.rpart, g.th); }).join('')+'</div>'+
+    '<p class="label" style="margin-top:14px">จำนวนข้อ</p><div class="chips">'+[10, 20].map(function(k){ return chip('data-xlrn', String(k), String(XL.rn), k+' ข้อ'); }).join('')+'</div>'+
+    '<p class="label" style="margin-top:14px">สุ่มจาก</p><div class="chips">'+chip('data-xlrw', '0', XL.rwrong ? '1' : '0', 'ทุกข้อ')+chip('data-xlrw', '1', XL.rwrong ? '1' : '0', 'เฉพาะข้อที่เคยตอบผิด')+'</div></div>'+
+    '<div class="xl-acts"><button class="btn" data-xl="rnd-go" style="width:100%">เริ่มสุ่ม '+XL.rn+' ข้อ</button></div>';
+}
 function xlRange(a, b){ return function(k){ var m = /^\d\d-(\d+)$/.exec(k); return !!m && +m[1]>=a && +m[1]<=b; }; }
 function xlMod(){ return XL_MODS.find(function(m){ return m.id===XL.mod; }) || null; }
 function xlKey(k){ return 'exam.' + PROF.active + '.' + k; }
@@ -7220,6 +7293,7 @@ function xlLocal(kind){
 function xlLoad(cb){
   var m = xlMod(); if(!m){ cb(); return; }
   if(m.local){ XL.data = xlLocal(m.local); cb(); return; }
+  if(m.rnd){ XL.data = { lessons:[], ctx:{}, rnd:true }; cb(); return; }
   var X = window.__X || {}; if(X[m.key]){ XL.data = X[m.key]; cb(); return; }
   if(XL.loading) return; XL.loading = true; $('xl-root').innerHTML = '<p class="xl-load">กำลังโหลดบทเรียน…</p>';
   var sc = document.createElement('script'); sc.src = 'exam/data/' + m.key + '.js';
@@ -7261,7 +7335,9 @@ function xlRender(){
     var body = XL_STAGES.map(function(st, si){
       var mods = XL_MODS.filter(function(m){ return m.stage===si; });
       return '<section class="xl-stage"><div class="xl-sh"><span class="xl-sn">'+(si+1)+'</span><div><b>'+esc(st.th)+'</b><small>'+esc(st.sub)+'</small></div></div><ul class="xl-list">'+
-        mods.map(function(m){ var d = xlModDone(m, P), pct = Math.round(d/m.n*100); tot += m.n; done += d;
+        mods.map(function(m){
+          if(m.rnd) return '<li><button class="xl-card xl-rnd" data-xlmod="'+m.id+'"><span class="xl-cb"><b>🎲 '+esc(m.th)+'</b><small>'+esc(m.sub)+'</small></span><span class="xl-go" aria-hidden="true">›</span></button></li>';
+          var d = xlModDone(m, P), pct = Math.round(d/m.n*100); tot += m.n; done += d;
           return '<li><button class="xl-card'+(d>=m.n ? ' done' : '')+'" data-xlmod="'+m.id+'"><span class="xl-cb"><b>'+esc(m.th)+'</b><small>'+esc(m.sub)+'</small>'+
             '<span class="xl-meta">'+m.n+' ข้อ'+(d ? ' · ทำแล้ว '+d : '')+'</span><span class="xl-bar"><i style="width:'+pct+'%"></i></span></span><span class="xl-go" aria-hidden="true">›</span></button></li>'; }).join('')+'</ul></section>';
     }).join('');
@@ -7270,11 +7346,14 @@ function xlRender(){
   }
   if(!XL.data){ root.innerHTML = '<p class="xl-load">กำลังโหลดบทเรียน…</p>'; return; }
   var M = xlMod(), Ls = XL.data.lessons;
+  if(M.rnd){ root.innerHTML = xlRndPage(); return; }
   if(XL.lesson){
     var L = Ls.find(function(x){ return x.id===XL.lesson; }); if(!L){ XL.lesson = null; return xlRender(); }
     var st = xlStats(L, P), idx = Ls.indexOf(L) + 1, real = M.stage===3;
     root.innerHTML = '<button class="xl-back" data-xl="list">← '+esc(M.th)+'</button>'+
       '<p class="eyebrow">'+esc(M.th)+' · บทที่ '+idx+'</p><h1 class="page-title">'+esc(L.th)+'</h1><p class="xl-en">'+esc(L.en)+'</p>'+(L.intro ? '<p class="page-sub">'+esc(L.intro)+'</p>' : '')+
+      (L.easy ? '<div class="panel xl-easy"><p class="xl-easy-h">เข้าใจง่ายใน 1 นาที</p><p>'+esc(L.easy.say)+'</p>'+xlEx(L.easy.eg)+'<p class="xl-rule1"><b>จำง่าย</b> '+esc(L.easy.rule)+'</p>'+
+        '<p class="xl-easy-n">อ่านกล่องนี้แล้วยังงงไม่เป็นไร ลองทำแบบฝึกเลย ทุกข้อมีคำอธิบายหลังตอบ'+(L.html || (L.r && L.r.length) ? ' ส่วนรายละเอียดเต็มอยู่ด้านล่าง' : '')+'</p></div>' : '')+
       (L.html ? '<div class="xl-html">'+L.html+'</div>' : '')+
       (L.r || []).map(function(r){ return '<div class="panel xl-rule"><h3>'+esc(r[0])+'</h3>'+(r[1] ? '<p>'+r[1]+'</p>' : '')+(r[2] || []).map(xlEx).join('')+'</div>'; }).join('')+
       (L.tips && L.tips.length ? '<div class="panel xl-tips"><b>วิธีดูโจทย์</b><ul>'+L.tips.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')+'</ul></div>' : '')+
@@ -7326,9 +7405,35 @@ function xlStart(kind){
   var L = XL.data.lessons.find(function(x){ return x.id===XL.lesson; }), P = xlProg();
   var items = L.items.filter(function(it){ var r = P[it.id]; return kind==='new' ? !r : kind==='wrong' ? (r && r.l!==it.a) : true; });
   if(!items.length) return;
-  XL.run = { L:L, q:items, i:0, picked:null, right:0, wrong:[], wrote:false };
+  XL.run = { L:L, q:xlShuffle(items), i:0, picked:null, right:0, wrong:[], wrote:false, ord:{} };
+  xlOrder(XL.run);
   xlQ(); window.scrollTo(0, 0);
 }
+/* every run mixes the question order, and the A–D order of every question whose options are not read out in the audio,
+   so answers cannot be remembered by position. Answers are still saved under the test's own letter. */
+function xlShuffle(a){ a = a.slice(); for(var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random()*(i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function xlOrder(R){ R.q.forEach(function(it){ if(it.au) return; var ks = ['A','B','C','D'].filter(function(k){ return it.o[k]!=null; }); R.ord[it.id] = xlShuffle(ks); }); }
+function xlKs(it){ var R = XL.run, o = R && R.ord && R.ord[it.id]; return o || ['A','B','C','D'].filter(function(k){ return it.o[k]!=null; }); }
+function xlLab(it, k){ var i = xlKs(it).indexOf(k); return i<0 ? k : 'ABCD'.charAt(i); }
+function xlFromLab(it, L){ var ks = xlKs(it), i = 'ABCD'.indexOf(L); return i>=0 && i<ks.length ? ks[i] : null; }
+function xlX(it, x){ return String(x || '').replace(/\(([A-D])\)/g, function(m, k){ return it.o[k]!=null ? '('+xlLab(it, k)+')' : m; }); }
+/* easier explanations: the answer first, then why, the lesson's one-line rule, and plain meanings of grammar words used */
+var XL_GLOSS = [["กริยาแท้", "คำกริยาหลักของประโยค ทุกประโยคต้องมีหนึ่งตัว"], ["คำกริยาวิเศษณ์", "คำบอกว่าทำอย่างไร มักลงท้าย -ly เช่น quickly"], ["คำคุณศัพท์", "คำบอกลักษณะของคนหรือสิ่งของ เช่น new, happy"], ["คำกริยา", "คำที่เป็นการกระทำ เช่น go, send"], ["คำนาม", "ชื่อของคน สัตว์ สิ่งของ เช่น book, manager"], ["คำบุพบท", "คำเล็กๆ บอกเวลา สถานที่ เช่น in, on, at, for"], ["คำสันธาน", "คำเชื่อมประโยค เช่น and, but, because"], ["สรรพนามสะท้อน", "คำที่ลงท้าย -self เช่น himself = ตัวเขาเอง"], ["สรรพนาม", "คำแทนชื่อ เช่น he, she, it, they"], ["อนุประโยค", "ประโยคย่อยในประโยคใหญ่ มีผู้ทำและกริยาของมันเอง"], ["ประธาน", "ผู้ทำในประโยค มักอยู่หน้ากริยา"], ["กรรม", "สิ่งที่ถูกกระทำ อยู่หลังกริยา"], ["พหูพจน์", "มากกว่าหนึ่ง"], ["เอกพจน์", "หนึ่งเดียว"], ["นับไม่ได้", "นับเป็นชิ้นไม่ได้ ไม่ใส่ a ไม่เติม -s เช่น water, information"], ["past participle", "กริยาช่อง 3 เช่น sent, made, finished"], ["present participle", "กริยาเติม -ing"], ["participle", "กริยารูป -ing หรือช่อง 3 ที่เอาไปขยายคำอื่น"], ["gerund", "กริยาเติม -ing ที่ใช้เหมือนคำนาม เช่น swimming = การว่ายน้ำ"], ["to-infinitive", "to + กริยารูปธรรมดา เช่น to go"], ["infinitive", "กริยารูปธรรมดา (มีหรือไม่มี to ข้างหน้า)"], ["passive", "ประโยคแบบ \"ถูกทำ\" = is/was + กริยาช่อง 3"], ["modal", "คำช่วยอย่าง can, should, must ตามด้วยกริยารูปธรรมดา"], ["relative pronoun", "who, which, that ใช้เชื่อมเพื่ออธิบายคำนามข้างหน้า"], ["noun clause", "ประโยคย่อยที่ทำหน้าที่เหมือนคำนาม เช่น what he said"], ["paraphrase", "พูดความหมายเดียวกันด้วยคำอื่น"], ["ตัวลวง", "ตัวเลือกที่ตั้งใจให้ดูเหมือนถูก แต่ผิด"], ["V-ing", "กริยาเติม -ing"], ["V3", "กริยาช่อง 3"]];
+var XL_GLOSS_SKIP = ['กิจกรรม','อุตสาหกรรม','กรรมการ','กรรมวิธี','กรรมสิทธิ์','ประธานาธิบดี','ประธานบริษัท','ประธานเจ้าหน้าที่'];
+function xlGloss(text){
+  var t = String(text || ''), out = [];
+  XL_GLOSS_SKIP.forEach(function(w){ t = t.split(w).join(' '); });
+  XL_GLOSS.forEach(function(g){ var low = /^[a-z]/i.test(g[0]); var hay = low ? t.toLowerCase() : t, key = low ? g[0].toLowerCase() : g[0];
+    if(hay.indexOf(key) >= 0){ out.push(g); t = (low ? hay : t).split(key).join(' '); } });
+  return out.slice(0, 5);
+}
+function xlRule(it){ if(it._r) return it._r; var L = XL.run && XL.run.L; return L && L.easy ? L.easy.rule : ''; }
+function xlMore(it){
+  var r = xlRule(it), g = xlGloss((it.x || '') + ' ' + (it.c || ''));
+  return (r ? '<p class="xl-rule1"><b>จำง่าย</b> '+esc(r)+'</p>' : '')+
+    (g.length ? '<details class="xl-gl"><summary>คำในคำอธิบายแปลว่าอะไร</summary><ul>'+g.map(function(x){ return '<li><b>'+esc(x[0])+'</b> = '+esc(x[1])+'</li>'; }).join('')+'</ul></details>' : '');
+}
+function xlAnsLine(it){ return '<p class="xl-ans">คำตอบ <b>'+xlLab(it, it.a)+'</b> '+esc(it.o[it.a])+(it.oth && it.oth[it.a] ? ' <small>'+esc(it.oth[it.a])+'</small>' : '')+'</p>'; }
 function xlFill(s, word){ return esc(s).replace('_____', '<b class="blank">'+(word ? esc(word) : '&nbsp;')+'</b>'); }
 function xlQ(){
   var R = XL.run, it = R.q[R.i], root = $('xl-root'), ans = R.picked;
@@ -7344,13 +7449,13 @@ function xlQ(){
   else if(it.p===0 && !it.gap) html += '<p class="xl-q xl-qth0">'+esc(it.s)+'</p>';
   else html += '<p class="xl-q">'+xlFill(it.s, ans ? it.o[it.a] : '')+'</p>';
   if(ctx) html += '<details class="xl-ctx"'+(it.p===6 && /^_____\.?$/.test(it.s.trim()) ? ' open' : '')+'><summary>ดูข้อความทั้งหมด (Part 6)</summary><div class="xl-pass">'+pass+'</div>'+(ans && ctx.th ? '<div class="xl-pth">'+esc(ctx.th)+'</div>' : '')+'</details>';
-  html += '<div class="xl-opts">'+['A','B','C','D'].filter(function(k){ return it.o[k]!=null; }).map(function(k){
+  html += '<div class="xl-opts">'+xlKs(it).map(function(k){
     var cls = ans ? (k===it.a ? ' ok' : (k===ans ? ' no' : '')) : '';
-    return '<button class="xl-opt'+cls+'" data-xlk="'+k+'"'+(ans ? ' disabled' : '')+'><span class="k">'+k+'</span><span class="t">'+esc(it.o[k])+(ans && it.oth[k] ? '<small>'+esc(it.oth[k])+'</small>' : '')+'</span></button>'; }).join('')+'</div>';
+    return '<button class="xl-opt'+cls+'" data-xlk="'+k+'"'+(ans ? ' disabled' : '')+'><span class="k">'+xlLab(it, k)+'</span><span class="t">'+esc(it.o[k])+(ans && it.oth[k] ? '<small>'+esc(it.oth[k])+'</small>' : '')+'</span></button>'; }).join('')+'</div>';
   if(ans){
     var full = it.p===5 ? it.s.replace('_____', it.o[it.a]) : '';
-    html += '<div class="panel xl-exp"><p class="verdict '+(ans===it.a ? 'ok">ถูกต้อง' : 'bad">ยังไม่ถูก คำตอบคือ '+it.a)+'</p>'+(it.c ? '<span class="cat">'+esc(it.c)+'</span>' : '')+
-      '<div>'+esc(it.x)+'</div>'+(it.sth ? '<div class="sth">แปล: '+esc(it.sth)+'</div>' : '')+
+    html += '<div class="panel xl-exp"><p class="verdict '+(ans===it.a ? 'ok">ถูกต้อง' : 'bad">ยังไม่ถูก')+'</p>'+(it.c ? '<span class="cat">'+esc(it.c)+'</span>' : '')+
+      xlAnsLine(it)+'<div class="xl-why"><b>ทำไม</b> '+esc(xlX(it, it.x))+'</div>'+xlMore(it)+(it.sth ? '<div class="sth">แปล: '+esc(it.sth)+'</div>' : '')+
       (it.v && it.v.length ? '<div class="voc">คำศัพท์: '+it.v.map(function(v){ return '<b>'+esc(v[0])+'</b> '+esc(v[1]); }).join(' · ')+'</div>' : '')+
       (full ? '<div class="xl-ex"><button class="icon-btn" data-say="'+esc(full)+'" aria-label="ฟังประโยค">'+SPK+'</button><span>ฟังประโยคเต็ม</span></div>' : '')+'</div>'+
       '<button class="btn" data-xl="next" style="width:100%">'+(R.i+1<R.q.length ? 'ข้อต่อไป' : 'ดูสรุป')+'</button>';
@@ -7368,10 +7473,10 @@ function xlListen(it, ans){
   if(it.s) h += show ? '<p class="xl-q">'+esc(it.s)+(ans && it.sth ? '<small class="xl-qth">'+esc(it.sth)+'</small>' : '')+'</p>' : '<p class="xl-q xl-hid">คำถามซ่อนอยู่ ฟังจากเสียง</p>';
   h += '<div class="xl-opts">'+ks.map(function(k){
     var cls = ans ? (k===it.a ? ' ok' : (k===ans ? ' no' : '')) : '';
-    return '<div class="xl-orow"><button class="xl-opt'+cls+'" data-xlk="'+k+'"'+(ans ? ' disabled' : '')+'><span class="k">'+k+'</span><span class="t">'+(show ? esc(it.o[k]) : '<span class="xl-hid">ตัวเลือก '+k+'</span>')+(ans && it.oth[k] ? '<small>'+esc(it.oth[k])+'</small>' : '')+'</span></button>'+
+    return '<div class="xl-orow"><button class="xl-opt'+cls+'" data-xlk="'+k+'"'+(ans ? ' disabled' : '')+'><span class="k">'+xlLab(it, k)+'</span><span class="t">'+(show ? esc(it.o[k]) : '<span class="xl-hid">ตัวเลือก '+k+'</span>')+(ans && it.oth[k] ? '<small>'+esc(it.oth[k])+'</small>' : '')+'</span></button>'+
       (ans ? '<button class="icon-btn" data-xlplay="'+k+'" aria-label="ฟังตัวเลือก '+k+'">'+SPK+'</button>' : '')+'</div>'; }).join('')+'</div>';
   if(ans){
-    h += '<div class="panel xl-exp"><p class="verdict '+(ans===it.a ? 'ok">ถูกต้อง' : 'bad">ยังไม่ถูก คำตอบคือ '+it.a)+'</p><div>'+esc(it.x)+'</div>'+
+    h += '<div class="panel xl-exp"><p class="verdict '+(ans===it.a ? 'ok">ถูกต้อง' : 'bad">ยังไม่ถูก')+'</p>'+xlAnsLine(it)+'<div class="xl-why"><b>ทำไม</b> '+esc(xlX(it, it.x))+'</div>'+xlMore(it)+''+
       (it.v && it.v.length ? '<div class="voc">คำศัพท์: '+it.v.map(function(v){ return '<b>'+esc(v[0])+'</b> '+esc(v[1]); }).join(' · ')+'</div>' : '')+'</div>'+
       '<button class="btn" data-xl="next" style="width:100%">'+(XL.run.i+1<XL.run.q.length ? 'ข้อต่อไป' : 'ดูสรุป')+'</button>';
   }
@@ -7379,16 +7484,16 @@ function xlListen(it, ans){
 }
 var XL_TYPE = { 'conversation':'บทสนทนา', 'telephone message':'ข้อความโทรศัพท์', 'recorded message':'ข้อความบันทึกเสียง', 'excerpt from a meeting':'ช่วงหนึ่งของการประชุม', 'talk':'การบรรยาย', 'broadcast':'การกระจายเสียง', 'speech':'สุนทรพจน์', 'announcement':'ประกาศ', 'advertisement':'โฆษณา', 'tour information':'ข้อมูลทัวร์', 'podcast':'พอดแคสต์', 'excerpt from a workshop':'ช่วงหนึ่งของเวิร์กช็อป' };
 function xlTalk(it, ans){
-  var c = XL.data.ctx[it.cx], ks = ['A','B','C','D'].filter(function(k){ return it.o[k]!=null; });
+  var c = XL.data.ctx[it.cx], ks = xlKs(it);
   var h = '<p class="xl-how">Part '+it.p+' · '+esc(XL_TYPE[c.type] || c.type)+' · อ่านคำถามก่อน แล้วกดฟัง</p>';
   if(c.g) h += c.g.img ? '<img class="xl-img" src="'+esc(c.g.img)+'" alt="ภาพประกอบ">' : (c.g.items && c.g.items.length ? '<ul class="xl-gitems">'+c.g.items.map(function(x){ return '<li>'+esc(x)+'</li>'; }).join('')+'</ul>' : '');
   h += '<div class="xl-play">'+xlPB('set', it.p===3 ? 'ฟังบทสนทนา' : 'ฟังบทพูด')+xlPB('qq', 'ฟังคำถาม')+'</div>';
   h += '<p class="xl-q">'+esc(it.s)+(ans && it.sth ? '<small class="xl-qth">'+esc(it.sth)+'</small>' : '')+'</p>';
   h += '<div class="xl-opts">'+ks.map(function(k){
     var cls = ans ? (k===it.a ? ' ok' : (k===ans ? ' no' : '')) : '';
-    return '<button class="xl-opt'+cls+'" data-xlk="'+k+'"'+(ans ? ' disabled' : '')+'><span class="k">'+k+'</span><span class="t">'+esc(it.o[k])+(ans && it.oth[k] ? '<small>'+esc(it.oth[k])+'</small>' : '')+'</span></button>'; }).join('')+'</div>';
+    return '<button class="xl-opt'+cls+'" data-xlk="'+k+'"'+(ans ? ' disabled' : '')+'><span class="k">'+xlLab(it, k)+'</span><span class="t">'+esc(it.o[k])+(ans && it.oth[k] ? '<small>'+esc(it.oth[k])+'</small>' : '')+'</span></button>'; }).join('')+'</div>';
   if(ans){
-    h += '<div class="panel xl-exp"><p class="verdict '+(ans===it.a ? 'ok">ถูกต้อง' : 'bad">ยังไม่ถูก คำตอบคือ '+it.a)+'</p><div>'+esc(it.x)+'</div>'+
+    h += '<div class="panel xl-exp"><p class="verdict '+(ans===it.a ? 'ok">ถูกต้อง' : 'bad">ยังไม่ถูก')+'</p>'+xlAnsLine(it)+'<div class="xl-why"><b>ทำไม</b> '+esc(xlX(it, it.x))+'</div>'+xlMore(it)+''+
       (it.ev ? '<div class="xl-evid"><b>ประโยคที่เป็นคำตอบ</b><span>"'+esc(it.ev)+'"</span>'+(it.ea ? xlPB('ev', 'ฟังประโยคนี้') : '')+'</div>' : '')+
       (it.pa ? '<div class="sth">คำที่เปลี่ยน: '+esc(it.pa)+'</div>' : '')+
       (it.v && it.v.length ? '<div class="voc">คำศัพท์: '+it.v.map(function(v){ return '<b>'+esc(v[0])+'</b> '+esc(v[1]); }).join(' · ')+'</div>' : '')+'</div>'+
@@ -7404,7 +7509,7 @@ function xlMarkEv(html, ev){
   return html;
 }
 function xlRead(it, ans){
-  var c = XL.data.ctx[it.cx], ks = ['A','B','C','D'].filter(function(k){ return it.o[k]!=null; }), pi = Math.min(XL.run.pi || 0, c.ps.length - 1), P = c.ps[pi];
+  var c = XL.data.ctx[it.cx], ks = xlKs(it), pi = Math.min(XL.run.pi || 0, c.ps.length - 1), P = c.ps[pi];
   var h = '<p class="xl-how">Part 7 · '+esc(c.type)+(c.ps.length>1 ? ' · มี '+c.ps.length+' เอกสาร' : '')+'</p>';
   if(c.ps.length>1) h += '<div class="chips xl-ptabs">'+c.ps.map(function(x, i){ return '<button class="chip" data-xlps="'+i+'" aria-pressed="'+(i===pi)+'">'+(i+1)+'. '+esc(x.l)+'</button>'; }).join('')+'</div>';
   h += '<div class="xl-ctx"><div class="xl-pass">'+(ans ? xlMarkEv(esc(P.en), it.ev) : esc(P.en))+'</div>'+
@@ -7413,10 +7518,10 @@ function xlRead(it, ans){
   h += '<p class="xl-q">'+esc(it.s)+(ans && it.sth ? '<small class="xl-qth">'+esc(it.sth)+'</small>' : '')+'</p>';
   h += '<div class="xl-opts">'+ks.map(function(k){
     var cls = ans ? (k===it.a ? ' ok' : (k===ans ? ' no' : '')) : '';
-    return '<button class="xl-opt'+cls+'" data-xlk="'+k+'"'+(ans ? ' disabled' : '')+'><span class="k">'+k+'</span><span class="t">'+esc(it.o[k])+(ans && it.oth[k] ? '<small>'+esc(it.oth[k])+'</small>' : '')+'</span></button>'; }).join('')+'</div>';
+    return '<button class="xl-opt'+cls+'" data-xlk="'+k+'"'+(ans ? ' disabled' : '')+'><span class="k">'+xlLab(it, k)+'</span><span class="t">'+esc(it.o[k])+(ans && it.oth[k] ? '<small>'+esc(it.oth[k])+'</small>' : '')+'</span></button>'; }).join('')+'</div>';
   if(ans){
     var pa = Array.isArray(it.pa) ? it.pa.map(function(x){ return Array.isArray(x) ? x.join(' → ') : String(x); }).join(' · ') : (it.pa || '');
-    h += '<div class="panel xl-exp"><p class="verdict '+(ans===it.a ? 'ok">ถูกต้อง' : 'bad">ยังไม่ถูก คำตอบคือ '+it.a)+'</p>'+(it.c ? '<span class="cat">'+esc(it.c)+'</span>' : '')+'<div>'+esc(it.x)+'</div>'+
+    h += '<div class="panel xl-exp"><p class="verdict '+(ans===it.a ? 'ok">ถูกต้อง' : 'bad">ยังไม่ถูก')+'</p>'+(it.c ? '<span class="cat">'+esc(it.c)+'</span>' : '')+xlAnsLine(it)+'<div class="xl-why"><b>ทำไม</b> '+esc(xlX(it, it.x))+'</div>'+xlMore(it)+
       (it.ev && it.ev.length ? '<div class="sth">หลักฐานในบทความ (ไฮไลต์ไว้ในเอกสาร): "'+it.ev.map(esc).join('" · "')+'"</div>' : '')+
       (pa ? '<div class="sth">คำที่เปลี่ยน: '+esc(pa)+'</div>' : '')+
       (it.v && it.v.length ? '<div class="voc">คำศัพท์: '+it.v.map(function(v){ return '<b>'+esc(v[0])+'</b> '+esc(v[1]); }).join(' · ')+'</div>' : '')+'</div>'+
@@ -7459,6 +7564,8 @@ $('view-xlearn').addEventListener('click', function(ev){
   var pt = ev.target.closest('[data-xlps]'); if(pt && XL.run){ XL.run.pi = +pt.getAttribute('data-xlps'); var y = window.scrollY; xlQ(); window.scrollTo(0, y); return; }
   var au = ev.target.closest('[data-xlaudio]'); if(au){ xlPlay(au.getAttribute('data-xlaudio'), 0, 0); return; }
   var ad = ev.target.closest('[data-xladd]'); if(ad){ var n = window.DL ? window.DL.addWords(ad.getAttribute('data-xladd').split('|')) : 0; toast(n ? 'เพิ่ม '+n+' คำเข้าแผนฝึกสะกดวันนี้แล้ว' : 'คำในบทนี้อยู่ในแผนฝึกสะกดแล้ว หรือไม่มีในคลังคำ'); return; }
+  var rp = ev.target.closest('[data-xlrp],[data-xlrn],[data-xlrw]');
+  if(rp){ if(rp.hasAttribute('data-xlrp')) XL.rpart = rp.getAttribute('data-xlrp'); else if(rp.hasAttribute('data-xlrn')) XL.rn = +rp.getAttribute('data-xlrn'); else XL.rwrong = rp.getAttribute('data-xlrw')==='1'; xlRender(); return; }
   var md = ev.target.closest('[data-xlmod]'); if(md){ xlSwitch(md.getAttribute('data-xlmod')); return; }
   var pb = ev.target.closest('[data-xlplay]');
   if(pb && XL.run){ xlPlayKey(XL.run.q[XL.run.i], pb.getAttribute('data-xlplay')); return; }
@@ -7468,6 +7575,7 @@ $('view-xlearn').addEventListener('click', function(ev){
   else if(a==='map') xlSwitch(null);
   else if(a==='mark'){ var P = xlProg(), L = XL.data.lessons.find(function(x){ return x.id===XL.lesson; }); if(L && L.mark){ if(P[L.mark]) delete P[L.mark]; else { P[L.mark] = { f:'A', l:'A' }; sfx('ok'); } xlSet('lclab_gram', P); xlRender(); } }
   else if(a==='lesson'){ xlRender(); window.scrollTo(0, 0); }
+  else if(a==='rnd-go') xlRndStart();
   else if(a==='go-new') xlStart('new'); else if(a==='go-wrong') xlStart('wrong'); else if(a==='go-all') xlStart('all');
   else if(a==='next'){ xlStop(); var R = XL.run; if(R.i+1>=R.q.length) xlEnd(); else { R.i++; R.picked = null; R.pi = 0; xlQ(); window.scrollTo(0, 0); } }
   else if(a==='quit'){ xlStop(); xlEnd(); }
@@ -7476,7 +7584,7 @@ $('view-xlearn').addEventListener('click', function(ev){
 document.addEventListener('keydown', function(ev){
   if(!XL.run || !$('view-xlearn').classList.contains('active') || /INPUT|TEXTAREA|SELECT/.test((ev.target.tagName || ''))) return;
   var k = ev.key.toUpperCase();
-  if(!XL.run.picked && /^[A-D]$/.test(k) && XL.run.q[XL.run.i].o[k]!=null){ ev.preventDefault(); xlAnswer(k); }
+  if(!XL.run.picked && /^[A-D]$/.test(k)){ var k0 = xlFromLab(XL.run.q[XL.run.i], k); if(k0){ ev.preventDefault(); xlAnswer(k0); } }
   else if(k===' '){ var it = XL.run.q[XL.run.i]; if(it.au || it.p===3 || it.p===4){ ev.preventDefault(); xlPlayKey(it, it.au ? 'all' : 'set'); } }
 });
 
