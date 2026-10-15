@@ -4624,6 +4624,8 @@
         <div class="row2"><button class="btn ghost small" id="rp-make">คัดลอกข้อมูลแจ้งปัญหา</button><button class="btn ghost small" id="ob-again">ดูหน้าต้อนรับอีกครั้ง</button></div>
         <textarea id="rp-out" class="hidden" readonly aria-label="ข้อมูลแจ้งปัญหา"></textarea>
         <p class="set-note" id="rp-ver"></p>
+        <div class="row2"><button class="btn ghost small" id="up-check">ตรวจหาอัปเดต</button></div>
+        <p class="set-note" id="up-note" aria-live="polite"></p>
       </div>
       <div class="danger">
         <button class="btn ghost small" data-reset="ui">คืนค่าการตั้งค่าเริ่มต้น</button>
@@ -5735,9 +5737,25 @@ function importBackup(text){
 }
 
 
+/* settings: check for a newer version on the site and switch to it */
+$('up-check').addEventListener('click', function(){
+  var note = $('up-note'), btn = this, cur = (APP_VER.match(/^v\d+/) || [''])[0];
+  if(location.protocol==='file:'){ note.textContent = 'เปิดจากไฟล์ในเครื่อง อัปเดตโดยดาวน์โหลดไฟล์ชุดใหม่จาก GitHub แล้ววางทับโฟลเดอร์เดิม'; return; }
+  if(!navigator.onLine){ note.textContent = 'ยังไม่ได้ต่อเน็ต ต่อเน็ตแล้วลองอีกครั้ง'; return; }
+  btn.disabled = true; note.textContent = 'กำลังตรวจ…';
+  fetch('sw.js', { cache:'no-store' }).then(function(r){ return r.text(); }).then(function(t){
+    var latest = ((t.match(/VERSION\s*=\s*'(v\d+)/) || [])[1]) || '';
+    if(!latest || latest===cur){ note.textContent = 'ใช้เวอร์ชันล่าสุดอยู่แล้ว (' + cur + ')'; btn.disabled = false; return; }
+    note.textContent = 'พบ ' + latest + ' กำลังอัปเดต…'; save();
+    var go = function(){ location.reload(); };
+    if(navigator.serviceWorker && navigator.serviceWorker.getRegistration){
+      navigator.serviceWorker.getRegistration().then(function(reg){ if(!reg){ go(); return; } reg.update().then(function(){ setTimeout(go, 800); }, go); }, go);
+    } else go();
+  }).catch(function(){ note.textContent = 'ตรวจไม่สำเร็จ ลองใหม่อีกครั้ง'; btn.disabled = false; });
+});
 /* ---------- practice log + mistakes (feed the weekly report and the coach) ---------- */
-var APP_NO = 'v20', APP_DATE = '14 ต.ค. 2569';
-var APP_VER = APP_NO + ' · 2026-10-14 · offline';
+var APP_NO = 'v33', APP_DATE = '15 ต.ค. 2569';   /* keep in step with VERSION in sw.js */
+var APP_VER = APP_NO + ' · 2026-10-15 · offline';
 document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent = 'เวอร์ชัน ' + APP_NO + ' · อัปเดต ' + APP_DATE; });
 document.querySelectorAll('.app-ver-no').forEach(function(e){ e.textContent = APP_NO; });
 function logDay(field, n){
