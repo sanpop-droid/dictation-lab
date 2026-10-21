@@ -1187,6 +1187,12 @@
   .spine-foot{display:flex;flex-direction:column;gap:8px}
   @media (max-width:760px){ .spine{justify-content:space-between} .spine-btn{flex:1 1 0;min-width:0} .spine-foot{flex-direction:row;gap:6px} }
   .dl .plan{list-style:none;padding:0;margin:0 0 14px;display:grid;gap:10px}
+  .dl .t-next{width:100%;margin:6px 0 14px;font-size:17px;padding:15px 18px}
+  .dl .plan-more{margin:6px 0 8px}
+  .dl .plan-extra .num{opacity:.75}
+  .dl .src-topics{flex-basis:100%;width:100%;margin-top:4px}
+  .dl .src-topics summary{cursor:pointer;font-family:var(--th);font-size:14px;color:var(--ink2);padding:6px 2px}
+  .dl .src-topics .chips{margin-top:6px}
   .dl .step{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
   .dl .step .num{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:17px;border:2px solid var(--ink);color:var(--ink)}
   .dl .step.done .num{background:var(--ok);border-color:var(--ok);color:var(--surface)}
@@ -1796,7 +1802,7 @@
       <p class="eyebrow" id="t-date">วันนี้</p>
       <div class="voice-warn hidden"></div>
       <h1 class="page-title">แผนฝึกวันนี้</h1>
-      <p class="page-sub">ทำตามลำดับ 1 → 2 → 3 ใช้เวลาราว 20 นาที <span class="d-sync" id="d-sync"></span></p>
+      <p class="page-sub">กดปุ่มเดียว แอปพาทำตามลำดับ: ซ่อมคำที่พลาด → ทบทวนตามนัด → เรียนคำใหม่ ใช้เวลาราว 20 นาที <span class="d-sync" id="d-sync"></span></p>
     <div class="stats">
       <div class="stat"><b id="d-sDue">0</b><span id="d-sDueLbl">ทบทวนวันนี้</span></div>
       <div class="stat"><b id="d-sNew">0</b><span>คำใหม่วันนี้</span></div>
@@ -1809,11 +1815,17 @@
     <div class="panel cu-note hidden" id="t-catch" role="status"></div>
 
 
+      <button class="btn t-next" id="t-next">เริ่มฝึกวันนี้</button>
       <ol class="plan">
-        <li class="step" id="t-step1"><span class="num">1</span><div class="sbody"><b>ฟังแล้วสะกด</b><span id="t-s1"></span></div><button class="btn small" id="t-go1">เริ่ม</button></li>
-        <li class="step" id="t-step2"><span class="num">2</span><div class="sbody"><b>อ่านเรื่องสั้น</b><span id="t-s2"></span></div><button class="btn small" id="t-go2">อ่าน</button></li>
-        <li class="step" id="t-step3"><span class="num">3</span><div class="sbody"><b>ทบทวนความหมาย</b><span id="t-s3"></span></div><button class="btn small" id="t-go3">ทบทวน</button></li>
-        <li class="step exam-step" id="t-step4"><span class="num">4</span><div class="sbody"><b>ทำข้อสอบ 1 Part</b><span id="t-s4"></span></div><button class="btn small" id="t-go4">ทำข้อสอบ</button></li>
+        <li class="step" id="t-stepF"><span class="num">1</span><div class="sbody"><b>ซ่อมคำที่ต้องซ่อม</b><span id="t-sF"></span></div><button class="btn small" id="t-goF">ซ่อม</button></li>
+        <li class="step" id="t-step1"><span class="num">2</span><div class="sbody"><b>ทบทวนตามนัด + คำใหม่</b><span id="t-s1"></span></div><button class="btn small" id="t-go1">เริ่ม</button></li>
+        <li class="step" id="t-stepM"><span class="num">3</span><div class="sbody"><b>เรียนคำใหม่ตามหัวข้อ</b><span id="t-sM"></span></div><button class="btn small" id="t-goM">เรียน</button></li>
+      </ol>
+      <p class="label plan-more">ทำเพิ่มถ้ามีเวลา</p>
+      <ol class="plan plan-extra">
+        <li class="step" id="t-step2"><span class="num">+</span><div class="sbody"><b>อ่านเรื่องสั้น</b><span id="t-s2"></span></div><button class="btn small" id="t-go2">อ่าน</button></li>
+        <li class="step" id="t-step3"><span class="num">+</span><div class="sbody"><b>ทบทวนความหมาย</b><span id="t-s3"></span></div><button class="btn small" id="t-go3">ทบทวน</button></li>
+        <li class="step exam-step" id="t-step4"><span class="num">+</span><div class="sbody"><b>ทำข้อสอบ 1 Part</b><span id="t-s4"></span></div><button class="btn small" id="t-go4">ทำข้อสอบ</button></li>
       </ol>
     <div class="panel lx-tease hidden" id="t-leech"></div>
     <div class="panel co-tease hidden" id="t-coach"></div>
@@ -4708,6 +4720,7 @@
   </div>
 </div>
 
+<script src="exam/data/wtopic.js"></script>
 <script>
 (function(){
 
@@ -5284,6 +5297,34 @@ function key(i){ return W[i][0].toLowerCase(); }
 function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
 var SPK = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
 var IDX = {}; W.forEach(function(w,i){ IDX[w[0].toLowerCase()] = i; });
+/* ---------- คำที่ต้องซ่อม: one list fed by every activity ----------
+   S.fix = { word: { n: misses, ok: right answers on later days, d: day of the last miss, hd: day of the last counted right answer, s: where it was missed } }
+   A miss anywhere (spelling, games, learning map, test vocabulary) puts the word here and books it in the review plan for tomorrow.
+   The word leaves the list after right answers on 2 different days, not counting the day it was missed.
+   Older records have no S.fix: it is filled once from words that are still being missed (w > 0 and box <= 2). */
+function FX(){
+  if(!S.fix || typeof S.fix!=='object' || Array.isArray(S.fix)){
+    S.fix = {}; var t0 = today();
+    Object.keys(S.p || {}).forEach(function(k){ var e = S.p[k]; if(IDX[k]!==undefined && e && (e.w||0)>0 && (e.b||0)<=2) S.fix[k] = { n:e.w, ok:0, d:Math.min(e.d||t0, t0 - 1), hd:0, s:'old' }; });
+  }
+  return S.fix;
+}
+function fixMiss(w, src){
+  var k = String(w || '').toLowerCase().trim(); if(IDX[k]===undefined) return;
+  var f = FX(), t = today(), e = f[k] || (f[k] = { n:0, ok:0, d:t, hd:0 });
+  e.n++; e.ok = 0; e.d = t; e.s = src || '';
+  if(src!=='spell'){ var p = S.p[k]; if(!p) S.p[k] = { b:1, d:t + 1, w:1, c:0 }; else { p.w = (p.w||0) + 1; if(p.d > t + 1){ p.b = Math.min(p.b||1, 1); p.d = t + 1; } } }
+  save();
+}
+function fixHit(w){
+  var k = String(w || '').toLowerCase().trim(), f = FX(), e = f[k]; if(!e) return;
+  var t = today(); if(e.hd===t || e.d===t) return;
+  e.ok++; e.hd = t; if(e.ok>=2) delete f[k];
+  save();
+}
+function fixKeys(){ var f = FX(); return Object.keys(f).filter(function(k){ return IDX[k]!==undefined; }).sort(function(a, b){ return (f[b].d - f[a].d) || (f[b].n - f[a].n); }); }
+var WTOP = (function(){ var o = {}, T = window.WTOPIC; if(!T) return { t:[], m:o }; String(T.m).split('\n').forEach(function(l){ var q = l.split('\t'); if(q.length===2) o[q[0]] = +q[1]; }); return { t:T.t, m:o }; })();
+function topicOf(i){ var n = WTOP.m[key(i)]; return n==null ? null : WTOP.t[n]; }
 
 /* ---------- home ---------- */
 /* catch-up: many words waiting, or many wrong lately -> fewer new words until it settles */
@@ -5377,10 +5418,11 @@ function beginSession(queue, m){
 }
 $('d-start').addEventListener('click', function(){ beginSession(buildQueue(), 'daily'); });
 /* ---------- free play ---------- */
-var FREE_SRC = [['learning','คำที่กำลังฝึก'],['mistakes','คำที่ผิดบ่อย'],['A1','A1'],['A2','A2'],['B1','B1'],['B2','B2'],['exam','คำศัพท์ข้อสอบ'],['ess600','600 Essential'],['all','สุ่มทุกระดับ']];
+var FREE_SRC = [['learning','คำที่กำลังฝึก'],['mistakes','คำที่ต้องซ่อม'],['A1','A1'],['A2','A2'],['B1','B1'],['B2','B2'],['exam','คำศัพท์ข้อสอบ'],['ess600','600 Essential'],['all','สุ่มทุกระดับ']];
 function freePool(src){
   if(src==='learning') return Object.keys(S.p).map(function(k){ return IDX[k]; }).filter(function(i){ return i!==undefined; });
-  if(src==='mistakes') return Object.keys(S.p).filter(function(k){ return S.p[k].w>0; }).sort(function(a,b){ return S.p[b].w-S.p[a].w; }).map(function(k){ return IDX[k]; }).filter(function(i){ return i!==undefined; });
+  if(src==='mistakes') return fixKeys().map(function(k){ return IDX[k]; });
+  if(/^t:/.test(src)){ var tn = WTOP.t.findIndex(function(x){ return x[0]===src.slice(2); }); return W.map(function(w,i){ return i; }).filter(function(i){ return WTOP.m[key(i)]===tn; }); }
   var TK = (window.VN && window.VN.EXAMW) || {};
   if(src==='exam') return W.map(function(w,i){ return i; }).filter(function(i){ return !!TK[key(i)]; });
   if(src==='ess600') return W.map(function(w,i){ return i; }).filter(function(i){ var t = TK[key(i)]; return !!(t && t[3]); });
@@ -5389,7 +5431,8 @@ function freePool(src){
 function renderFree(){
   if(!S.free) S.free = {src:'A1', len:10};
   $('d-fSrc').innerHTML = FREE_SRC.map(function(x){ var n = freePool(x[0]).length;
-    return '<button class="chip" data-src="'+x[0]+'" aria-pressed="'+(S.free.src===x[0])+'"'+(n?'':' disabled')+'>'+x[1]+'<small>'+n+'</small></button>'; }).join('');
+    return '<button class="chip" data-src="'+x[0]+'" aria-pressed="'+(S.free.src===x[0])+'"'+(n?'':' disabled')+'>'+x[1]+'<small>'+n+'</small></button>'; }).join('')+
+    (WTOP.t.length ? '<details class="src-topics"'+(/^t:/.test(S.free.src) ? ' open' : '')+'><summary>เลือกตามหัวข้อ (28)</summary><div class="chips">'+WTOP.t.map(function(x){ var v = 't:'+x[0], n = freePool(v).length; return '<button class="chip" data-src="'+v+'" aria-pressed="'+(S.free.src===v)+'"'+(n?'':' disabled')+'>'+x[2]+' '+esc(x[1])+'<small>'+n+'</small></button>'; }).join('')+'</div></details>' : '');
   $('d-fLen').innerHTML = [10,20,30].map(function(n){ return '<button class="chip" data-len="'+n+'" aria-pressed="'+(S.free.len===n)+'">'+n+' คำ</button>'; }).join('');
   $('d-fStart').disabled = !freePool(S.free.src).length;
 }
@@ -5435,7 +5478,7 @@ function check(){
   var ok = typed===target || typed.replace(/[ \-]/g,'')===target.replace(/[ \-]/g,'');
   lastTyped = typed;
   phase = 'result';
-  if(!cur.retry && firstTry[k]===undefined){ firstTry[k] = ok; logDay('n'); if(ok) logDay('ok'); else recordErr(w[0], typed); if(mode==='free') freeGrade(k, ok); else grade(k, ok, hintLv>0); results.push({k:k, ok:ok}); }
+  if(!cur.retry && firstTry[k]===undefined){ firstTry[k] = ok; logDay('n'); if(ok) logDay('ok'); else recordErr(w[0], typed); if(mode==='free' || mode==='fix') freeGrade(k, ok); else grade(k, ok, hintLv>0); results.push({k:k, ok:ok}); if(ok && !hintLv) fixHit(k); else if(!ok) fixMiss(k, 'spell'); }
   if(!ok && !retried[k]){ retried[k] = 1; Q.push({i:cur.i, isNew:cur.isNew, retry:true}); }
   renderResult(typed, w, ok);
 }
@@ -5601,7 +5644,7 @@ function leechCheck(){
   LX.step = 'checked'; inp.disabled = true;
   var bl = document.querySelector('#lx-body .lx-blanks, #lx-body .lx-blank-note'); if(bl) bl.remove();
   if(ok){
-    sfx('ok'); speak(target);
+    sfx('ok'); speak(target); fixHit(target);
     $('lx-res').innerHTML = '<p class="verdict ok">ถูกต้อง</p>';
     $('lx-check').textContent = LX.qi+1>=LX.q.length ? 'ดูสรุป' : 'คำต่อไป'; $('lx-check').id = 'lx-next';
   } else {
@@ -5653,6 +5696,11 @@ function renderToday(c){
   $('t-date').textContent = d.toLocaleDateString('th-TH', {weekday:'long', day:'numeric', month:'long'});
   var left = c.due + c.newLeft;
   setStep(1, left===0, left ? ('ทบทวน '+Math.min(c.due,U().maxReview)+' คำ + คำใหม่ '+c.newLeft+' คำ') : 'เสร็จแล้วสำหรับวันนี้', left ? 'เริ่ม' : 'ดูอีกครั้ง', false);
+  var fk = fixKeys().length;
+  setStep('F', ds.fix || !fk, fk ? (ds.fix ? 'ซ่อมแล้ววันนี้ · ยังเหลือ '+fk+' คำ' : 'ซ่อม '+Math.min(10, fk)+' คำ จาก '+fk+' คำที่พลาดในเกม แบบฝึก และการสะกด') : 'ไม่มีคำที่ต้องซ่อม เยี่ยมมาก', fk ? (ds.fix ? 'ซ่อมอีก' : 'ซ่อม') : 'เรียบร้อย', !fk);
+  setStep('M', ds.map, ds.map ? 'ทำแล้ววันนี้ · ทำบทต่อไปได้' : 'แผนผังคำหัวข้อถัดไปจากคลังคำ แล้วทำแบบฝึกเติมกิ่ง', ds.map ? 'ทำต่อ' : 'เรียน', false);
+  var nx = (fk && !ds.fix) ? ['F', 'เริ่ม: ซ่อมคำที่พลาด ('+Math.min(10, fk)+' คำ)'] : left ? ['1', 'เริ่ม: ทบทวนตามนัด + คำใหม่'] : !ds.map ? ['M', 'เริ่ม: เรียนคำใหม่ตามหัวข้อ'] : ['P', 'ครบแผนวันนี้แล้ว · ไปเล่นเกม'];
+  var tn = $('t-next'); tn.textContent = nx[1]; tn.setAttribute('data-step', nx[0]);
   var lk = Object.keys(S.p).length;
   setStep(2, ds.story, lk>=3 ? 'เรื่องสั้นที่สร้างจากคำที่คุณกำลังฝึก แตะคำเพื่อฟัง' : 'ฝึกสะกดก่อนอย่างน้อย 3 คำ แล้วจะได้เรื่องจากคำของคุณ', ds.story ? 'อ่านอีกเรื่อง' : 'อ่าน', false);
   var rk = reviewKeys().length;
@@ -5660,6 +5708,23 @@ function renderToday(c){
   renderLeechTease();
   setStep(3, ds.cards, rk ? ('บัตรคำ '+rk+' คำที่ยังสะกดพลาดบ่อย') : 'ยังไม่มีคำที่ต้องทบทวน', ds.cards ? 'ทบทวนอีกครั้ง' : 'ทบทวน', !rk);
 }
+function fixStart(){ var q = fixKeys().slice(0, 10).map(function(k){ return { i:IDX[k], isNew:false }; }); if(!q.length) return; dayState().fix = 1; save(); beginSession(q, 'fix'); }
+function bankNext(){
+  xlNeed(['xbank'], function(ok){
+    if(!ok){ toast('โหลดแผนผังคลังคำไม่สำเร็จ'); return; }
+    xlStop(); XL.mod = 'bank'; XL.run = null; XL.data = xlBankExpand(window.__X.xbank);
+    var P = xlProg(), lv = S.levels && S.levels.length ? S.levels : ['A1'], bands = [];
+    if(lv.indexOf('A1')>-1 || lv.indexOf('A2')>-1) bands.push('A'); if(lv.indexOf('B1')>-1 || lv.indexOf('B2')>-1) bands.push('B'); if(lv.indexOf('EXAM')>-1) bands.push('E'); if(!bands.length) bands = ['A'];
+    var Ls = XL.data.lessons, open = function(L){ return xlStats(L, P).done < L.items.length; }, pick = null;
+    bands.some(function(bd){ pick = Ls.find(function(L){ return L.id.split('-')[2].charAt(0)===bd && open(L); }) || null; return !!pick; });
+    XL.lesson = (pick || Ls.find(open) || Ls[0]).id;
+    if(window.VN) window.VN.showView('xlearn'); xlRender(); window.scrollTo(0, 0);
+  });
+}
+$('t-goF').addEventListener('click', fixStart);
+$('t-goM').addEventListener('click', bankNext);
+$('t-next').addEventListener('click', function(){ var st = this.getAttribute('data-step');
+  if(st==='F') fixStart(); else if(st==='1') $('t-go1').click(); else if(st==='M') bankNext(); else if(window.VN) window.VN.showView('play'); });
 $('t-go1').addEventListener('click', function(){ if(!$('d-start').disabled) beginSession(buildQueue(), 'daily'); else if(window.VN) window.VN.showView('dictation'); });
 $('t-go2').addEventListener('click', function(){ if(!window.VN) return; dayState().story = 1; save(); window.VN.storyFromLearning(); });
 $('t-go3').addEventListener('click', function(){
@@ -5825,7 +5890,7 @@ $('up-check').addEventListener('click', function(){
   }).catch(function(){ note.textContent = 'ตรวจไม่สำเร็จ ลองใหม่อีกครั้ง'; btn.disabled = false; });
 });
 /* ---------- practice log + mistakes (feed the weekly report and the coach) ---------- */
-var APP_NO = 'v36', APP_DATE = '22 ต.ค. 2569';   /* keep in step with VERSION in sw.js */
+var APP_NO = 'v37', APP_DATE = '22 ต.ค. 2569';   /* keep in step with VERSION in sw.js */
 var APP_VER = APP_NO + ' · 2026-10-22 · offline';
 document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent = 'เวอร์ชัน ' + APP_NO + ' · อัปเดต ' + APP_DATE; });
 document.querySelectorAll('.app-ver-no').forEach(function(e){ e.textContent = APP_NO; });
@@ -6274,7 +6339,7 @@ function srsTouch(k, ok){
 function srsDue(k){ if(IDX[k]===undefined) return false; var t = today(), e = S.p[k] || (S.p[k] = { b:0, d:t, w:0, c:0 }); e.d = Math.min(e.d, t); e.b = Math.min(e.b, 1); return true; }
 function examMsg(d){
   if(d.dl==='ready'){ EXQ.ready = true; examTheme(); examFlush(); return; }
-  if(d.dl==='vgrade'){ if(srsTouch(String(d.w || '').toLowerCase(), !!d.ok)){ save(); } return; }
+  if(d.dl==='vgrade'){ var vk = String(d.w || '').toLowerCase(); if(srsTouch(vk, !!d.ok)){ save(); if(d.ok) fixHit(vk); else fixMiss(vk, 'exam'); } return; }
   if(d.dl==='vdue'){ var n = 0; (d.words || []).forEach(function(w){ if(srsDue(String(w).toLowerCase())) n++; }); if(n){ save(); } return; }
   if(d.dl==='vimport'){ var m = d.map || {}, n2 = 0; Object.keys(m).forEach(function(w){ var k = w.toLowerCase(), x = m[w]; if(IDX[k]!==undefined && !S.p[k]){ S.p[k] = { b:Math.min(6, x.b||0), d:x.d||today(), w:x.no||0, c:x.ok||0 }; n2++; } }); if(n2) save(); return; }
 }
@@ -6403,15 +6468,25 @@ $('g-new').addEventListener('click', function(){
 });
 function renderGLevels(){
   var opts = GLEVELS;
-  $('g-levels').innerHTML = opts.map(function(x){ var n = gPool(x[0]).length; return '<button class="chip" data-gl="'+x[0]+'" aria-pressed="'+(S.gLevel===x[0])+'"'+(n>=1?'':' disabled')+'>'+x[1]+'<small>'+n+'</small></button>'; }).join('');
+  $('g-levels').innerHTML = srcChips('data-gl', S.gLevel, function(v){ return gPool(v).length; });
 }
-function gPool(lv){
-  var ok = function(i){ var w = W[i][0]; return /^[a-z]{4,10}$/.test(w); };
-  if(lv==='weak') return Object.keys(S.p).filter(function(k){ var e = S.p[k]; return e.w>0 && e.b<=2; })
-    .sort(function(a,b){ return (S.p[b].w - S.p[b].c) - (S.p[a].w - S.p[a].c); }).map(function(k){ return IDX[k]; }).filter(function(i){ return i!==undefined && ok(i); });
-  if(lv==='learning') return Object.keys(S.p).map(function(k){ return IDX[k]; }).filter(function(i){ return i!==undefined && ok(i); });
+/* phr: the game can show multi-word entries (rain, match); otherwise single words of 3–14 letters */
+function gOk(i, phr){ var w = W[i][0]; return phr ? (w.length<=20 && /^[a-z][a-z' -]*[a-z]$/.test(w)) : /^[a-z]{3,14}$/.test(w); }
+function gPool(lv, phr){
+  var ok = function(i){ return i!==undefined && gOk(i, phr); };
+  if(lv==='weak') return fixKeys().map(function(k){ return IDX[k]; }).filter(ok);
+  if(lv==='learning') return Object.keys(S.p).map(function(k){ return IDX[k]; }).filter(ok);
+  if(/^t:/.test(lv)){ var tn = WTOP.t.findIndex(function(x){ return x[0]===lv.slice(2); }); return W.map(function(w,i){ return i; }).filter(function(i){ return WTOP.m[key(i)]===tn && ok(i); }); }
   return W.map(function(w,i){ return i; }).filter(function(i){ return W[i][4]===lv && ok(i); });
 }
+/* the same word-source chips everywhere: fix list, practice words, levels, test words, then the 28 topics in a fold */
+function srcChips(attr, cur, count){
+  var chip = function(v, t){ var n = count(v); return '<button class="chip" '+attr+'="'+v+'" aria-pressed="'+(cur===v)+'"'+(n ? '' : ' disabled')+'>'+t+'<small>'+n+'</small></button>'; };
+  var tp = /^t:/.test(cur) ? WTOP.t.find(function(x){ return 't:'+x[0]===cur; }) : null;
+  return GLEVELS.map(function(x){ return chip(x[0], x[1]); }).join('')+
+    (WTOP.t.length ? '<details class="src-topics"'+(tp ? ' open' : '')+'><summary>'+(tp ? 'หัวข้อ: '+esc(tp[2]+' '+tp[1]) : 'เลือกตามหัวข้อ (28)')+'</summary><div class="chips">'+WTOP.t.map(function(x){ return chip('t:'+x[0], x[2]+' '+x[1]); }).join('')+'</div></details>' : '');
+}
+function srcName(v){ var g = GLEVELS.find(function(x){ return x[0]===v; }); if(g) return g[1]; var t = WTOP.t.find(function(x){ return 't:'+x[0]===v; }); return t ? t[1] : v; }
 /* games on a CEFR level also bring back about 1 in 3 of the player's own practice words (weak ones first) */
 var GMIX = 0.35;
 function gMixOn(){ return U().gmix!==false && ['learning','weak'].indexOf(S.gLevel)<0 && gPool('learning').length>=4; }
@@ -6445,7 +6520,7 @@ $('g-bubbles').addEventListener('click', function(ev){
   if(b.getAttribute('data-o')===w){
     G.done = true; b.classList.add('right'); burstAt($('g-bubbles'), b);
     var g = S.garden, first = G.tries===0, gold = false;
-    gEvent('garden', first, !first);
+    gEvent('garden', first, !first, w);
     if(first){ GST++; gold = GST>=5; g.f++; g.list.push(['f', g.f, gold ? 8 : pickSpecies()]); if(gold) GST = 0; }
     else { g.s++; g.list.push(['s', 0]); }
     if(g.list.length>120) g.list = g.list.slice(-120);
@@ -6456,7 +6531,7 @@ $('g-bubbles').addEventListener('click', function(ev){
     $('g-bubbles').querySelectorAll('.bubble:not(.right)').forEach(function(x){ x.classList.add('gone'); x.disabled = true; });
     $('g-next').classList.remove('hidden'); $('g-next').focus();
   } else {
-    if(G.tries===0){ GST = 0; gEvent('garden', false); gStreakUI(); }
+    if(G.tries===0){ GST = 0; gEvent('garden', false, false, w); gStreakUI(); }
     G.tries++; b.classList.add('pop'); b.disabled = true; sfx('no');
     $('g-msg').textContent = 'ฟองนี้สะกดว่า ' + b.getAttribute('data-o') + ' ลองฟังอีกครั้งแล้วเลือกใหม่';
     speak(w, true);
@@ -6470,7 +6545,7 @@ $('g-levels').addEventListener('click', function(ev){ var b = ev.target.closest(
 function GS(){ var g = S.games || (S.games = {}); g.mode = g.mode || {}; g.best = g.best || {}; g.pair = g.pair || 'meaning'; return g; }
 function gMode(g){ return GS().mode[g] || 'relax'; }
 function firstMeaning(i){ return String(W[i][2]).split(' / ')[0].split(',')[0].trim(); }
-var GLEVELS = [['weak','คำที่ยังพลาด'],['learning','คำที่กำลังฝึก'],['A1','A1'],['A2','A2'],['B1','B1'],['B2','B2']];
+var GLEVELS = [['weak','คำที่ต้องซ่อม'],['learning','คำที่กำลังฝึก'],['A1','A1'],['A2','A2'],['B1','B1'],['B2','B2'],['EXAM','คำศัพท์ข้อสอบ']];
 var MODE_NOTE = { rain:'คำตกช้าๆ ทีละคำ ไม่มีแพ้', match:'ไม่จับเวลา', typo:'ไม่จับเวลา มีคำแปลไทยช่วย', fill:'ไม่จับเวลา ตอบผิดลองใหม่ได้' };
 var CHAL_NOTE = { rain:'พลาดได้ 3 ครั้ง คำตกเร็วขึ้น', match:'จับเวลา ยิ่งเร็วยิ่งดี', typo:'60 วินาที', fill:'60 วินาที' };
 function bestKey(g){ if(g==='match') return 'match-'+GS().pair+'-'+(GS().mPairs||6); if(g==='rain') return 'rain-'+(GS().rainPre||'chill'); if(g==='fill') return (GS().fillDiff||'mid')==='easy' ? 'fill' : 'fill-'+(GS().fillDiff||'mid'); return g; }
@@ -6482,12 +6557,12 @@ function renderBar(g){
   var m = gMode(g);
   var html = '<div class="gbar-row"><div class="seg" data-gmode="'+g+'"><button data-v="relax" aria-pressed="'+(m==='relax')+'">ผ่อนคลาย</button><button data-v="chal" aria-pressed="'+(m==='chal')+'">ท้าทาย</button></div>'+
     '<p class="gnote">'+(m==='chal' ? CHAL_NOTE[g]+' · '+bestText(g) : MODE_NOTE[g])+(g!=='typo' && gMixOn() ? ' · มีคำที่คุณกำลังฝึกปนมาด้วย' : '')+'</p></div>';
-  if(g!=='typo') html += '<div class="chips gchips">'+GLEVELS.map(function(x){ var n = gPool(x[0]).length; return '<button class="chip" data-glv="'+x[0]+'" aria-pressed="'+(S.gLevel===x[0])+'"'+(n?'':' disabled')+'>'+x[1]+'<small>'+n+'</small></button>'; }).join('')+'</div>';
+  if(g!=='typo') html += '<div class="chips gchips">'+srcChips('data-glv', S.gLevel, function(v){ return gPool(v, g==='match').length; })+'</div>';
   el.innerHTML = html;
 }
-function pickWords(n, filter){
+function pickWords(n, filter, phr){
   var f = filter || function(){ return true; };
-  var pool = gPool(S.gLevel).filter(f);
+  var pool = gPool(S.gLevel, phr).filter(f);
   if(gMixOn()){
     var mix = gMixPool().filter(f).slice(0, Math.round(n*GMIX));
     pool = mix.concat(shuffle(pool.filter(function(i){ return mix.indexOf(i)<0; })).slice(0, Math.max(0, n - mix.length)));
@@ -6630,7 +6705,8 @@ var MISSIONS = [ { k:'games', n:'เล่นให้ครบ 3 เกม', go
 function MS(){ var t = today(); if(!S.mission || S.mission.d!==t) S.mission = { d:t, games:{}, ok:0, streak:0, run:{}, claimed:false }; return S.mission; }
 function msVal(m, k){ return k==='games' ? Object.keys(m.games).length : k==='ok' ? m.ok : m.streak; }
 function msDone(m){ return MISSIONS.every(function(x){ return msVal(m, x.k) >= x.goal; }); }
-function gEvent(game, ok, again){   /* again: a right answer after a miss on the same item (already counted as wrong) */
+function gEvent(game, ok, again, w){   /* again: a right answer after a miss on the same item (already counted as wrong); w: the word, for คำที่ต้องซ่อม */
+  if(w && !again){ if(ok) fixHit(w); else fixMiss(w, game); }
   var m = MS(), before = MISSIONS.map(function(x){ return msVal(m, x.k) >= x.goal; }), allBefore = msDone(m);
   m.games[game] = 1; logDay('g'); if(ok) logDay('gok');
   if(ok){ m.ok++; m.run[game] = (m.run[game] || 0) + 1; m.streak = Math.max(m.streak, m.run[game]); } else m.run[game] = 0;
@@ -6676,7 +6752,7 @@ function rSetup(){
   var b = GS().best;
   $('rn-modes').innerHTML = Object.keys(RPRE).map(function(k){ var p = RPRE[k], best = b['rain-'+k];
     return '<button class="rmode" data-pm="'+k+'">'+p.ic+'<b>'+p.n+'</b><span>'+p.d+'</span><em>'+(best!=null ? 'สถิติ '+best+p.u : 'แตะเพื่อเริ่ม')+'</em></button>'; }).join('');
-  $('rn-lv').innerHTML = GLEVELS.map(function(x){ var n = gPool(x[0]).length; return '<button class="chip" data-rlv="'+x[0]+'" aria-pressed="'+(S.gLevel===x[0])+'"'+(n ? '' : ' disabled')+'>'+x[1]+'<small>'+n+'</small></button>'; }).join('');
+  $('rn-lv').innerHTML = srcChips('data-rlv', S.gLevel, function(v){ return gPool(v, true).length; });
 }
 function rClearDrops(){ (R.drops || []).forEach(function(d){ d.el.remove(); }); R.drops = []; $('rn-sky').querySelectorAll('.drop,.rpop,.spark').forEach(function(e){ e.remove(); }); }
 function rHalt(){ R.on = false; if(R.raf) cancelAnimationFrame(R.raf); R.raf = 0; if(R.cdT){ clearTimeout(R.cdT); R.cdT = 0; } }
@@ -6721,7 +6797,7 @@ function rParams(){
   if(R.pre==='sprint') return { fall:Math.max(5.5, 9 - t/20), gap:Math.max(1.3, 2.4 - t/40), max: t>25 ? 3 : 2 };
   return { fall:Math.max(5, 11 - t/10), gap:Math.max(1.4, 4 - t/22), max: t>45 ? 3 : 2 };
 }
-function rBag(){ if(!R.bag.length) R.bag = pickWords(60); return R.bag.pop(); }
+function rBag(){ if(!R.bag.length) R.bag = pickWords(60, null, true); return R.bag.pop(); }
 function rSpawn(){
   var i = rBag(); if(i===undefined) return;
   var w = W[i][0], x = 50, tries = 0;
@@ -6768,14 +6844,14 @@ function rPop(d, text, cls){
 function rHit(d){
   rRemove(d);
   if(d.hint){ R.cleared++; R.combo = 0; var hp = Math.round((10 + d.w.length) * (d.hint>=2 ? 0.25 : 0.5)); R.score += hp; rPop(d, R.pre==='chill' ? 'ถูก (ใช้ใบ้)' : '+'+hp+' (ใบ้)', 'soft'); }
-  else { gEvent('rain', true); R.cleared++; R.combo++; R.top = Math.max(R.top, R.combo); var pts = (10 + d.w.length) * rMult(); R.score += pts; rPop(d, R.pre==='chill' ? 'ถูก!' : '+'+pts, 'good'); }
+  else { gEvent('rain', true, false, d.w); R.cleared++; R.combo++; R.top = Math.max(R.top, R.combo); var pts = (10 + d.w.length) * rMult(); R.score += pts; rPop(d, R.pre==='chill' ? 'ถูก!' : '+'+pts, 'good'); }
   d.el.classList.add('hit'); d.el.style.transform = 'translate(-50%,'+(d.y-36).toFixed(1)+'px) scale(1.1)';
   setTimeout(function(){ d.el.remove(); }, 450);
   sfx(R.combo>0 && R.combo%5===0 ? 'bloom' : 'ok'); rHud();
   if(R.pre==='chill') R.nextSpawn = 0.7;
 }
 function rMiss(d){
-  rRemove(d); R.combo = 0; d.el.classList.add('miss'); d.el.textContent = d.w; gEvent('rain', false);
+  rRemove(d); R.combo = 0; d.el.classList.add('miss'); d.el.textContent = d.w; gEvent('rain', false, false, d.w);
   setTimeout(function(){ d.el.remove(); }, 1800);
   R.missed.push(d.i); sfx('no');
   if(R.pre==='survive'){ R.lives--; rHud(); if(R.lives<=0){ rOver(); return; } }
@@ -6841,7 +6917,7 @@ var M = {};
 function mReset(){
   if(M.timer) clearInterval(M.timer); if(M.pv) clearTimeout(M.pv);
   var chal = gMode('match')==='chal', n = GS().mPairs || 6, pm = GS().pair, seen = {};
-  var ids = pickWords(n*3).filter(function(i){ var m = firstMeaning(i); if(seen[m]) return false; seen[m] = 1; return true; }).slice(0, n);
+  var ids = pickWords(n*3, null, true).filter(function(i){ var m = firstMeaning(i); if(seen[m]) return false; seen[m] = 1; return true; }).slice(0, n);
   var cards = [];
   ids.forEach(function(i, p){ cards.push({ p:p, i:i, kind: pm==='sound' ? 's' : 'w' }); cards.push({ p:p, i:i, kind: pm==='sound' ? 'w' : 'm' }); });
   M = { inited:true, cards:shuffle(cards), open:[], lock:false, moves:0, found:0, pairs:ids.length, t0:0, timer:0, started:false, done:false, chal:chal, ids:ids, secs:0 };
@@ -6899,7 +6975,7 @@ $('mt-grid').addEventListener('click', function(ev){
     var els = M.open.map(function(x){ return $('mt-grid').querySelector('[data-k="'+x+'"]'); });
     if(a.p===z.p){
       els.forEach(function(e){ e.classList.remove('up'); e.classList.add('got'); });
-      M.found++; M.open = []; sfx('ok'); gEvent('match', true);
+      M.found++; M.open = []; sfx('ok'); gEvent('match', true, false, W[a.i][0]);
       if(M.found===M.pairs) mDone();
     } else {
       M.lock = true; gEvent('match', false);
@@ -7013,7 +7089,7 @@ function tSolved(ok){
   b.textContent = r.c.pre + r.c.core + r.c.post; b.classList.remove('found'); b.classList.add(ok ? 'fixed' : 'revealed');
   $('ty-fix').classList.add('hidden');
   if(ok){ sfx('ok'); T.fixed++; if(T.chal) T.score += 2; }
-  gEvent('typo', ok); $('ty-hint').disabled = true;
+  gEvent('typo', ok, false, r.c.core); $('ty-hint').disabled = true;
   T.words.push(r.c.core.toLowerCase());
   $('ty-msg').innerHTML = ok ? 'ถูกต้อง <b>'+esc(r.c.core)+'</b>' : 'คำที่ถูกคือ <b>'+esc(r.c.core)+'</b>';
   tHud(T.cd ? T.cd.left : 60);
@@ -7155,13 +7231,14 @@ function fPick(b){
     setTimeout(function(){ if(F.cur===c && !c.over) fOpts(); }, 380);
     return;
   }
-  b.classList.add('no'); b.disabled = true; c.slotFirst = false; c.allFirst = false; sfx('no'); gEvent('fill', false);
+  b.classList.add('no'); b.disabled = true; c.allFirst = false; sfx('no'); gEvent('fill', false, !c.slotFirst, W[c.i][0]); c.slotFirst = false;
   if(F.chal){ var right = $('fl-opts').querySelector('.fopt[data-o="'+t.ans+'"]'); if(right) right.classList.add('yes'); fReveal(false); }
   else { speak(W[c.i][0], true); $('fl-exp').textContent = 'ยังไม่ใช่ ฟังช้าๆ อีกครั้งแล้วลองใหม่'; }
 }
 function fReveal(ok){
   var c = F.cur, w = W[c.i][0]; c.over = true; c.ok = ok; fDraw();
   if(ok) F.done++;
+  if(ok && c.allFirst) fixHit(w);
   F.words.push(key(c.i));
   var seen = {};
   var expl = c.ts.map(function(t){ if(seen[t.ans]) return ''; seen[t.ans] = 1; var e = EXPL[t.key], lesson = lessonFor(t.key, t.k);
@@ -7639,6 +7716,7 @@ function xlAnswer(k){
   R.picked = k; var ok = k===it.a;
   if(ok) R.right++; else R.wrong.push(it);
   sfx(ok ? 'ok' : 'no'); logDay('xl'); if(ok) logDay('xlok');
+  var xw = xlWordOf(R.L, it); if(xw){ if(ok) fixHit(xw); else fixMiss(xw, 'map'); }
   var P = xlProg(), first = !P[it.id];
   P[it.id] = { f:first ? k : P[it.id].f, l:k }; xlSet('lclab_gram', P);
   if(first && it.t){   /* also fill that test's answer sheet if the question is still blank there */
@@ -7647,8 +7725,15 @@ function xlAnswer(k){
   }
   xlQ();
 }
+/* the word a learning-map question is about (word maps, 600 Essential), or null for grammar and test questions */
+function xlWordOf(L, it){
+  if(L && L.mm && it.mm!=null){ var b = L.mm.b[it.mm]; return b ? (L.mm.k==='pv' ? L.mm.root+' '+b.w : b.w) : null; }
+  if(/^e6-/.test(it.id||'')) return it.o[it.a];
+  return null;
+}
 function xlEnd(){
   var R = XL.run, root = $('xl-root'); XL.run = null;
+  if(XL.mod==='bank' || XL.mod==='mind'){ dayState().map = 1; save(); }
   if(R.wrote){ try{ examReload(); }catch(e){} }
   root.innerHTML = '<button class="xl-back" data-xl="lesson">← กลับไปที่บทเรียน</button><div class="panel center"><div class="big">'+R.right+'<small> / '+(R.right + R.wrong.length)+'</small></div><p class="note">'+esc(R.L.th)+'</p></div>'+
     (R.wrong.length ? '<div class="panel"><p class="label">ข้อที่ผิดรอบนี้ (กลับมาทำได้ที่ "ทำข้อที่ผิดอีกครั้ง")</p><ul class="xl-wrong">'+R.wrong.map(function(it){

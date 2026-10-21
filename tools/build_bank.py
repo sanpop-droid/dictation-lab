@@ -104,6 +104,13 @@ def main():
     js = '(window.__X=window.__X||{})["xbank"]=' + json.dumps({'v': 1, 'bank': 1, 'lessons': lessons}, ensure_ascii=False, separators=(',', ':')) + ';\n'
     open(os.path.join(D, 'xbank.js'), 'w', encoding='utf-8').write(js)
     print(len(lessons), 'maps', n, 'words', len(js.encode()), 'bytes')
+    # word -> topic for the app's word pickers (games, free practice): exam/data/wtopic.js
+    tids = list(B.TOPICS.keys())
+    wt = '\n'.join('%s\t%d' % (x['w'].lower(), tids.index(gtopic[lab[x['w'].lower()]])) for x in W)
+    js2 = 'window.WTOPIC=' + json.dumps({'t': [[t, B.TOPICS[t][0], B.TOPICS[t][1]] for t in tids], 'm': wt}, ensure_ascii=False, separators=(',', ':')) + ';\n'
+    open(os.path.join(D, 'wtopic.js'), 'w', encoding='utf-8').write(js2)
+    print('wtopic', len(js2.encode()), 'bytes')
+
 
 if __name__ == '__main__':
     main()
