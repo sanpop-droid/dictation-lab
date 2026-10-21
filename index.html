@@ -1187,6 +1187,58 @@
   .spine-foot{display:flex;flex-direction:column;gap:8px}
   @media (max-width:760px){ .spine{justify-content:space-between} .spine-btn{flex:1 1 0;min-width:0} .spine-foot{flex-direction:row;gap:6px} }
   .dl .plan{list-style:none;padding:0;margin:0 0 14px;display:grid;gap:10px}
+
+  .dl .fixtag{display:inline-block;font-family:var(--th);font-size:12px;font-weight:700;line-height:1;padding:4px 8px;border-radius:999px;margin-left:8px;vertical-align:middle;background:var(--bad-soft);color:var(--bad)}
+  .drop.fixw{box-shadow:0 0 0 2.5px var(--bad),0 6px 14px -8px rgba(0,0,0,.45)}
+  .dl .wkg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 14px;font-family:var(--th)}
+  .dl .wkg:empty{display:none}
+  .dl .wkg-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+  .dl .wkg-head span{font-size:13px;color:var(--ink2)}
+  .dl .wkg-row{display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-size:14px;margin-top:6px}
+  .dl .wkg-row b{font-variant-numeric:tabular-nums}
+  .dl .wkg-row i{grid-column:1/-1;height:6px;border-radius:999px;background:var(--line);position:relative;overflow:hidden}
+  .dl .wkg-row i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--p);background:var(--accent);border-radius:999px}
+  .dl .wkg-row.done i::after{background:var(--ok)}
+  .dl .ls-card,.dl .bs-arena{font-family:var(--th)}
+  .dl .ls-start,.dl .bs-intro{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px 16px;text-align:center}
+  .dl .ls-big{font-size:46px;margin:0}
+  .dl .ls-msg{color:var(--ink2)}
+  .dl .ls-time{height:8px;border-radius:999px;background:var(--line);overflow:hidden;margin:0 0 12px}
+  .dl .ls-time i{display:block;height:100%;width:100%;background:var(--accent);transition:width .1s linear}
+  .dl .ls-q{display:flex;flex-direction:column;align-items:center;gap:6px;margin:6px 0 14px}
+  .dl .ls-play{width:88px;height:88px;border-radius:50%;border:0;background:var(--accent);color:var(--accent-ink);cursor:pointer;box-shadow:0 10px 22px -12px rgba(0,0,0,.5)}
+  .dl .ls-play svg{width:40px;height:40px}
+  .dl .ls-hint{margin:0;color:var(--ink2);font-size:14px}
+  .dl .ls-opts,.dl .bs-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .dl .ls-opt{appearance:none;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:16px 10px;font-family:var(--th);font-size:17px;font-weight:600;cursor:pointer;min-height:64px}
+  .dl .ls-opt.yes,.dl .bs-opt.yes{border-color:var(--ok);background:var(--ok-soft)}
+  .dl .ls-opt.no,.dl .bs-opt.no{border-color:var(--bad);background:var(--bad-soft)}
+  .dl .ls-res{min-height:44px;margin:12px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px}
+  .dl .ls-res .ok{color:var(--ok)} .dl .ls-res .bad{color:var(--bad)}
+  .dl .ls-w{font-family:var(--en);font-weight:700}
+  .dl .ls-missed{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+  .dl .bs-face{font-size:72px;line-height:1;margin:0;display:inline-block}
+  .dl .bs-face.sm{font-size:40px}
+  .dl .bs-face.hit{animation:bshit .45s}
+  @keyframes bshit{0%,100%{transform:none}25%{transform:translateX(-8px) rotate(-8deg)}50%{transform:translateX(8px) rotate(8deg)}75%{transform:translateX(-4px)}}
+  .dl .bs-top{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+  .dl .bs-hp{flex:1;height:16px;border-radius:999px;background:var(--line);position:relative;overflow:hidden}
+  .dl .bs-hp i{position:absolute;inset:0 auto 0 0;background:var(--bad);border-radius:999px;transition:width .35s}
+  .dl .bs-hp span{position:absolute;inset:0;display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--ink)}
+  .dl .bs-hearts s{text-decoration:none;opacity:.5}
+  .dl .bs-card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin:0 0 12px;text-align:center}
+  .dl .bs-ask{margin:0;color:var(--ink2);font-size:14px}
+  .dl .bs-mean{margin:4px 44px 0;font-size:21px;font-weight:700}
+  .dl .bs-say{position:absolute;right:12px;top:12px}
+  @media (max-width:430px){ .dl .ls-opt{font-size:15.5px;padding:12px 8px} .dl .bs-opt{font-size:19px} }
+
+  .bw-topics{margin:4px 0 10px}
+  .bw-acts{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:4px 0 12px;font-family:var(--th)}
+  .bw-acts span{color:var(--ink2);font-size:14px;margin-right:4px}
+  .bw-tags{display:inline-flex;flex-wrap:wrap;gap:4px;margin-left:8px;vertical-align:middle}
+  .bw-tag{font-size:11.5px;line-height:1;padding:4px 7px;border-radius:999px;background:var(--line);color:var(--ink2);white-space:nowrap}
+  .bw-tag.fix{background:var(--bad-soft);color:var(--bad);font-weight:700}
+  .bw-tag.learn{background:color-mix(in srgb,var(--accent) 16%,var(--surface));color:var(--accent);font-weight:700}
   .dl .t-next{width:100%;margin:6px 0 14px;font-size:17px;padding:15px 18px}
   .dl .plan-more{margin:6px 0 8px}
   .dl .plan-extra .num{opacity:.75}
@@ -1678,6 +1730,7 @@
       <p class="eyebrow">เล่น · ผ่อนคลาย</p>
       <h1 class="page-title">สวนคำศัพท์</h1>
       <p class="page-sub">ฟังคำ แล้วแตะฟองที่สะกดถูก ถูกตั้งแต่ครั้งแรกได้ดอกไม้ ถูกในครั้งถัดไปได้ต้นอ่อน ถูกติดกัน 5 คำได้ดอกไม้ทองคำ ไม่มีเวลาจำกัด และไม่มีแพ้</p>
+      <div class="wkg"></div>
       <div class="missions" id="ms-box"></div>
       <div class="garden-box">
         <div class="garden" id="g-garden" aria-label="สวนของคุณ"></div>
@@ -1780,6 +1833,20 @@
     </div></section>
 
     <!-- ============ PLAY: FRIENDS ============ -->
+    <section class="view dl" id="view-boss"><div class="d-wrap">
+      <p class="eyebrow">เล่น · บอส</p>
+      <h1 class="page-title">บอสคำที่ต้องซ่อม</h1>
+      <p class="page-sub">บอสมีพลังเท่ากับจำนวนคำที่คุณเคยพลาด ตอบถูกเพื่อโจมตี ตอบผิดเสียหัวใจ 1 ดวง ชนะได้ 20 🪙 และนับเป็นการซ่อมคำ</p>
+      <div class="wkg"></div>
+      <div class="bs-arena" id="bs-arena"></div>
+    </div></section>
+    <section class="view dl" id="view-listen"><div class="d-wrap">
+      <p class="eyebrow">เล่น · ฟังทันใจ</p>
+      <h1 class="page-title">ฟังแล้วเลือกความหมาย</h1>
+      <p class="page-sub">ฟังคำ แล้วแตะความหมายที่ถูก ชุดละ 10 คำ โหมดท้าทายจับเวลา 10 วินาทีต่อคำ ยิ่งตอบเร็วยิ่งได้คะแนนมาก</p>
+      <div class="gbar" data-game="listen"></div>
+      <div class="ls-card" id="ls-card"></div>
+    </div></section>
     <section class="view dl" id="view-friends"><div class="d-wrap">
       <p class="eyebrow" id="fr-eye">เล่น · เพื่อน</p>
       <h1 class="page-title" id="fr-title">สวนของเพื่อน</h1>
@@ -1932,7 +1999,7 @@
       <p class="label">คำที่ต้องกลับมาพรุ่งนี้</p>
       <ul class="mist" id="d-sumWrong"></ul>
     </div>
-    <button class="btn lx-sum hidden" id="d-sumLeech" data-leech>ฝึกคำดื้อ</button>
+    <button class="btn lx-sum hidden" id="d-sumLeech" data-leech>ฝึกคำที่พลาดซ้ำ</button>
     <button class="btn" id="d-again">สะกดอีกรอบ (ชุดเดิม สุ่มใหม่)</button>
     <button class="btn ghost" id="d-home2" style="margin-top:10px">กลับหน้าแรก</button>
   </section>
@@ -2281,9 +2348,9 @@
 
     <!-- ============ BROWSE ============ -->
     <section class="view" id="view-browse">
-      <p class="eyebrow">พจนานุกรมส่วนตัว</p>
-      <h1 class="page-title">ค้นหาคำศัพท์</h1>
-      <p class="page-sub">พิมพ์คำภาษาอังกฤษหรือความหมายภาษาไทยเพื่อค้นหา กดดาวเพื่อบันทึกว่าจำคำนั้นได้แล้ว</p>
+      <p class="eyebrow">คลังคำ</p>
+      <h1 class="page-title">คลังคำทั้งหมด</h1>
+      <p class="page-sub">ทุกคำในแอป ค้นด้วยภาษาอังกฤษหรือไทย กรองตามระดับ ชนิดคำ สถานะ และหัวข้อ แล้วกดฝึกสะกดหรือเล่นเกมกับชุดที่กรองไว้ได้ทันที กดดาวเมื่อรู้ความหมายแล้ว</p>
 
       <div class="browse-tools">
         <label class="search-box">
@@ -2293,6 +2360,9 @@
       </div>
       <div class="pos-chips" id="levelChips"></div>
       <div class="pos-chips" id="posChips"></div>
+      <div class="pos-chips" id="stChips"></div>
+      <details class="src-topics bw-topics" id="bwTopics"><summary>เลือกตามหัวข้อ (28)</summary><div class="pos-chips" id="tpChips"></div></details>
+      <div class="bw-acts" id="bwActs"></div>
 
       <div class="word-list" id="wordList"></div>
       <div class="no-results" id="noResults" style="display:none;">ไม่พบคำที่ค้นหา ลองคำอื่นดูนะ</div>
@@ -2456,8 +2526,8 @@
   // ---------- nav: 4 tabs, each with its own sub-pages ----------
   var views = document.querySelectorAll('.view');
   var navBtns = document.querySelectorAll('.spine-btn');
-  var TAB_OF = { exam:'exam', friends:'play', play:'play', rain:'play', match:'play', typo:'play', fill:'play', today:'today', dictation:'practice', sentence:'practice', coach:'practice', home:'practice', flashcards:'practice', quiz:'practice', story:'practice', phonics:'learn', tense:'learn', xlearn:'learn', browse:'words' };
-  var SUBS = { play:[['play','สวนคำศัพท์'],['rain','คำตก'],['match','จับคู่'],['typo','จับคำผิด'],['fill','เติมตัวอักษร'],['friends', window.DL_STANDALONE ? 'ผู้เล่นทุกคน' : 'เพื่อน']], practice:[['dictation','สะกด'],['sentence','เขียนประโยค'],['coach','จุดอ่อน'],['home','บัตรคำ'],['quiz','แบบทดสอบ'],['story','อ่านเรื่อง']], learn:null };
+  var TAB_OF = { exam:'learn', friends:'play', boss:'play', listen:'play', play:'play', rain:'play', match:'play', typo:'play', fill:'play', today:'today', dictation:'practice', sentence:'practice', coach:'practice', home:'practice', flashcards:'practice', quiz:'practice', story:'practice', phonics:'learn', tense:'learn', xlearn:'learn', browse:'words' };
+  var SUBS = { play:[['play','สวนคำศัพท์'],['rain','คำตก'],['match','จับคู่'],['typo','จับคำผิด'],['fill','เติมตัวอักษร'],['listen','ฟังทันใจ'],['boss','บอส'],['friends', window.DL_STANDALONE ? 'ผู้เล่นทุกคน' : 'เพื่อน']], practice:[['dictation','สะกด'],['sentence','เขียนประโยค'],['coach','จุดอ่อน'],['home','บัตรคำ'],['quiz','แบบทดสอบ'],['story','อ่านเรื่อง']], learn:[['xlearn','แผนที่การเรียน'],['exam','ข้อสอบเต็มชุด']] };
   var lastInTab = { play:'play', today:'today', practice:'dictation', learn:'xlearn', words:'browse', exam:'exam' };
   var subnavEl = document.getElementById('subnav');
   function renderSubnav(tab, name){
@@ -2612,7 +2682,7 @@
     } else {
       var deck = decksByLevel[which.level][which.idx];
       ids = deck.ids.slice();
-      fcTitle.textContent = 'ระดับ ' + deck.level + ' · ชุดที่ ' + String(deck.index+1).padStart(2,'0') + ' · ' + ids.length + ' คำ';
+      fcTitle.textContent = (deck.level==='EXAM' ? 'คำศัพท์ข้อสอบ' : 'ระดับ ' + deck.level) + ' · ชุดที่ ' + String(deck.index+1).padStart(2,'0') + ' · ' + ids.length + ' คำ';
     }
     fcDeckIds = ids;
     fcPos = 0;
@@ -2714,7 +2784,7 @@
     var ln = learningIds().length;
     if (ln) quizDeckChips.appendChild(makeChip('คำที่กำลังฝึกสะกด (' + ln + ')', quizScope === 'learning', function(){ quizScope = 'learning'; renderQuizSetup(); }));
     LEVELS.forEach(function(L){
-      var chip = makeChip('ระดับ ' + L.key + ' (' + (idsByLevel[L.key]||[]).length + ')', quizScope === L.key, function(){ quizScope = L.key; renderQuizSetup(); });
+      var chip = makeChip((L.key==='EXAM' ? 'คำศัพท์ข้อสอบ' : 'ระดับ ' + L.key) + ' (' + (idsByLevel[L.key]||[]).length + ')', quizScope === L.key, function(){ quizScope = L.key; renderQuizSetup(); });
       quizDeckChips.appendChild(chip);
     });
   }
@@ -3142,7 +3212,7 @@
     if (ln >= 3) storyScopeChipsEl.insertBefore(makeChip('คำที่กำลังฝึกสะกด (' + ln + ')', storyScope === 'learning', function(){ storyScope = 'learning'; renderStoryScopeChips(); }), storyScopeChipsEl.firstChild);
     storyScopeChipsEl.appendChild(allChip);
     LEVELS.forEach(function(L){
-      var chip = makeChip('ระดับ ' + L.key, storyScope === L.key, function(){ storyScope = L.key; renderStoryScopeChips(); });
+      var chip = makeChip(L.key==='EXAM' ? 'คำศัพท์ข้อสอบ' : 'ระดับ ' + L.key, storyScope === L.key, function(){ storyScope = L.key; renderStoryScopeChips(); });
       storyScopeChipsEl.appendChild(chip);
     });
   }
@@ -4353,7 +4423,7 @@
   LEVELS.forEach(function(L){
     var chip = document.createElement('button');
     chip.className = 'chip';
-    chip.textContent = L.key;
+    chip.textContent = L.key === 'EXAM' ? 'คำศัพท์ข้อสอบ' : L.key;
     chip.dataset.key = L.key;
     chip.addEventListener('click', function(){
       activeLevel = L.key; browseShown = BROWSE_STEP;
@@ -4386,11 +4456,36 @@
 
   function normalize(s){ return (s||'').toLowerCase(); }
 
+  /* status (คำที่ต้องซ่อม / กำลังฝึก / ยังไม่ได้ฝึก) and topic come from the main app */
+  var activeStat = 'all', activeTopic = '';
+  var ST_OPTS = [['all','ทุกสถานะ'],['fix','คำที่ต้องซ่อม'],['learn','กำลังฝึก'],['new','ยังไม่ได้ฝึก']];
+  function wStat(w){ return window.DL && window.DL.wstat ? window.DL.wstat(w) : ''; }
+  function wTopic(w){ return window.DL && window.DL.wtopic ? window.DL.wtopic(w) : null; }
+  function renderBwFilters(){
+    var st = document.getElementById('stChips'), tp = document.getElementById('tpChips');
+    if (st) st.innerHTML = ST_OPTS.map(function(x){ return '<button class="chip' + (activeStat === x[0] ? ' active' : '') + '" data-st="' + x[0] + '">' + x[1] + '</button>'; }).join('');
+    var T = (window.WTOPIC && window.WTOPIC.t) || [];
+    if (tp) tp.innerHTML = '<button class="chip' + (!activeTopic ? ' active' : '') + '" data-tp="">ทุกหัวข้อ</button>' + T.map(function(x){ return '<button class="chip' + (activeTopic === x[0] ? ' active' : '') + '" data-tp="' + x[0] + '">' + x[2] + ' ' + escapeHTML(x[1]) + '</button>'; }).join('');
+    var sm = document.querySelector('#bwTopics summary'), cur = T.find(function(x){ return x[0] === activeTopic; });
+    if (sm) sm.textContent = cur ? 'หัวข้อ: ' + cur[2] + ' ' + cur[1] : 'เลือกตามหัวข้อ (28)';
+  }
+  function bwSrc(){ if (activeStat === 'fix') return 'weak'; if (activeStat === 'learn') return 'learning'; if (activeTopic) return 't:' + activeTopic; if (activeLevel !== 'all') return activeLevel; return null; }
+  document.getElementById('stChips').addEventListener('click', function(e){ var b = e.target.closest('[data-st]'); if (!b) return; activeStat = b.dataset.st; browseShown = BROWSE_STEP; renderBwFilters(); renderBrowse(); });
+  document.getElementById('tpChips').addEventListener('click', function(e){ var b = e.target.closest('[data-tp]'); if (!b) return; activeTopic = b.dataset.tp; browseShown = BROWSE_STEP; renderBwFilters(); renderBrowse(); });
+  document.getElementById('bwActs').addEventListener('click', function(e){
+    var res = filteredWords(), words = [], seen = {};
+    res.forEach(function(x){ var k = normalize(x.w); if (!seen[k]){ seen[k] = 1; words.push(x.w); } });
+    if (e.target.closest('[data-bw="drill"]') && window.DL) window.DL.drillWords(words);
+    if (e.target.closest('[data-bw="play"]') && window.DL) window.DL.playSrc(bwSrc(), words);
+  });
   function filteredWords(){
     var group = POS_GROUPS.find(function(g){ return g.key === activePos; });
+    var T = (window.WTOPIC && window.WTOPIC.t) || [];
     return VOCAB.filter(function(item){
       if (!group.test(item.p||'')) return false;
       if (activeLevel !== 'all' && item.lvl !== activeLevel) return false;
+      if (activeStat !== 'all'){ var st = wStat(item.w); if (activeStat === 'new' ? st !== '' : st !== activeStat) return false; }
+      if (activeTopic){ var tp = wTopic(item.w); if (!tp || tp[0] !== activeTopic) return false; }
       if (!searchTerm) return true;
       return normalize(item.w).indexOf(searchTerm) !== -1 ||
              (item.m||'').indexOf(searchTerm) !== -1 ||
@@ -4402,6 +4497,10 @@
   var noResultsEl = document.getElementById('noResults');
   var loadMoreWrap = document.getElementById('loadMoreWrap');
 
+  function bwBadges(w){
+    var st = wStat(w), tp = wTopic(w);
+    return '<span class="bw-tags">' + (st === 'fix' ? '<span class="bw-tag fix">ต้องซ่อม</span>' : st === 'learn' ? '<span class="bw-tag learn">กำลังฝึก</span>' : '') + (tp ? '<span class="bw-tag">' + tp[2] + ' ' + escapeHTML(tp[1]) + '</span>' : '') + '</span>';
+  }
   function starSVG(known){
     return known
       ? '<svg viewBox="0 0 24 24"><path d="M12 3.5l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17.3l-5.4 3.1 1-6.1-4.4-4.3 6.1-.9L12 3.5z"/></svg>'
@@ -4410,6 +4509,10 @@
 
   function renderBrowse(){
     var results = filteredWords();
+    renderBwFilters();
+    var acts = document.getElementById('bwActs');
+    var uniq = {}; results.forEach(function(x){ uniq[normalize(String(x.w).replace(/\d+$/, '').trim())] = 1; }); var nU = Object.keys(uniq).length;
+    if (acts) acts.innerHTML = results.length ? '<span>' + nU.toLocaleString() + ' คำ</span><button class="btn small" data-bw="drill">ฝึกสะกดชุดนี้ (' + Math.min(20, nU) + ' คำ)</button><button class="btn ghost small" data-bw="play">เล่นฟังทันใจกับชุดนี้</button>' : '';
     wordListEl.innerHTML = '';
     if (!results.length){
       noResultsEl.style.display = 'block';
@@ -4425,7 +4528,7 @@
       var known = isKnown(item.id);
       row.innerHTML =
         '<div class="w">' + '<button class="say-btn" data-say="' + escapeHTML(item.w) + '" aria-label="ฟังเสียง"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/></svg></button>' + escapeHTML(item.w) + '<span class="pos-tag">' + escapeHTML(item.p||'') + ' · ' + escapeHTML(item.lvl||'') + '</span>' + (window.DL ? window.DL.pill(item.w) : '') + '</div>' +
-        '<div class="m thai">' + escapeHTML(item.m) + '</div>' +
+        '<div class="m thai">' + escapeHTML(item.m) + bwBadges(item.w) + '</div>' +
         '<div class="r thai">' + escapeHTML(item.r) + '</div>' +
         '<div class="star-wrap"><button class="star-btn' + (known ? ' known' : '') + '" aria-label="รู้ความหมายแล้ว" title="รู้ความหมายแล้ว">' + starSVG(known) + '</button></div>';
       var starBtn = row.querySelector('.star-btn');
@@ -4646,7 +4749,7 @@
 </div>
 <div class="sheet-wrap dl hidden" id="lx-sheet" role="dialog" aria-modal="true" aria-labelledby="lx-title">
   <div class="sheet lx">
-    <div class="sheet-head"><h2 id="lx-title">ฝึกคำดื้อ</h2><button class="icon-btn" id="lx-close" aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="sheet-head"><h2 id="lx-title">ฝึกคำที่พลาดซ้ำ</h2><button class="icon-btn" id="lx-close" aria-label="ปิด"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <div class="lx-prog"><i id="lx-bar"></i></div>
     <div id="lx-body"></div>
   </div>
@@ -5319,9 +5422,13 @@ function fixMiss(w, src){
 function fixHit(w){
   var k = String(w || '').toLowerCase().trim(), f = FX(), e = f[k]; if(!e) return;
   var t = today(); if(e.hd===t || e.d===t) return;
-  e.ok++; e.hd = t; if(e.ok>=2) delete f[k];
+  e.ok++; e.hd = t; if(e.ok>=2){ delete f[k]; wkAdd('fixed'); }
   save();
 }
+/* this week's counters (Monday to Sunday) for the goal card on the play pages */
+function wkId(){ return Math.floor((today() + 3) / 7); }
+function WK(){ var w = wkId(); if(!S.wk || S.wk.w!==w) S.wk = { w:w, fixed:0, boss:0 }; return S.wk; }
+function wkAdd(k){ var x = WK(); x[k] = (x[k] || 0) + 1; }
 function fixKeys(){ var f = FX(); return Object.keys(f).filter(function(k){ return IDX[k]!==undefined; }).sort(function(a, b){ return (f[b].d - f[a].d) || (f[b].n - f[a].n); }); }
 var WTOP = (function(){ var o = {}, T = window.WTOPIC; if(!T) return { t:[], m:o }; String(T.m).split('\n').forEach(function(l){ var q = l.split('\t'); if(q.length===2) o[q[0]] = +q[1]; }); return { t:T.t, m:o }; })();
 function topicOf(i){ var n = WTOP.m[key(i)]; return n==null ? null : WTOP.t[n]; }
@@ -5370,7 +5477,7 @@ function renderHome(){
   var mist = Object.keys(S.p).filter(function(k){ return S.p[k].w>0; }).sort(function(a,b){ return S.p[b].w - S.p[a].w; }).slice(0,10);
   $('d-mistPanel').classList.toggle('hidden', !mist.length);
   $('d-mist').innerHTML = mist.map(wordRow).join('');
-  $('d-settingsLine').textContent = 'ระดับ ' + S.levels.join(', ') + ' · คำใหม่ ' + S.newPer + ' คำ/วัน';
+  $('d-settingsLine').textContent = 'ระดับ ' + S.levels.map(function(l){ return l==='EXAM' ? 'คำศัพท์ข้อสอบ' : l; }).join(', ') + ' · คำใหม่ ' + S.newPer + ' คำ/วัน';
   renderToday(c);
   renderFree();
   $('d-startNote').textContent = (c.due + c.newLeft) ? ('แผนวันนี้เหลือ ' + (Math.min(c.due,U().maxReview) + c.newLeft) + ' คำ') : 'แผนวันนี้เสร็จแล้ว';
@@ -5565,7 +5672,7 @@ function finish(){
   $('d-sumWrongPanel').querySelector('.label').textContent = 'คำที่จะกลับมาให้ทบทวนพรุ่งนี้';
   $('d-home2').textContent = mode==='free' ? 'เลือกชุดคำใหม่' : 'กลับหน้าวันนี้';
   $('d-again').classList.toggle('hidden', mode!=='free');
-  var nl = leechKeys().length; $('d-sumLeech').classList.toggle('hidden', !nl); $('d-sumLeech').textContent = 'ฝึกคำดื้อ '+nl+' คำ (ราว 5 นาที)';
+  var nl = leechKeys().length; $('d-sumLeech').classList.toggle('hidden', !nl); $('d-sumLeech').textContent = 'ฝึกคำที่พลาดซ้ำ '+nl+' คำ (ราว 5 นาที)';
   show('summary');
 }
 $('d-home2').addEventListener('click', function(){ renderHome(); show('home'); if(mode!=='free' && window.VN) window.VN.showView('today'); });
@@ -5594,12 +5701,12 @@ function renderLeechTease(){
   var el = $('t-leech'); if(!el) return;
   var ks = leechKeys(), n = Math.min(ks.length, LX_MAX);
   el.classList.toggle('hidden', !n); if(!n) return;
-  el.innerHTML = '<div class="lx-t"><b>คำดื้อ '+ks.length+' คำ</b><span>สะกดผิดมาแล้ว 3 ครั้งขึ้นไป ฝึกแบบดู-ปิด-เขียน-ตรวจ วันละ '+n+' คำ ราว 5 นาที</span>'+
+  el.innerHTML = '<div class="lx-t"><b>คำที่พลาดซ้ำ '+ks.length+' คำ</b><span>สะกดผิดมาแล้ว 3 ครั้งขึ้นไป ฝึกแบบดู-ปิด-เขียน-ตรวจ วันละ '+n+' คำ ราว 5 นาที</span>'+
     '<span class="lx-ws">'+ks.slice(0, n).map(function(k){ return esc(W[IDX[k]][0]); }).join(' · ')+'</span></div><button class="btn small" data-leech>ฝึกเลย</button>';
 }
 var LX = null;
 function openLeech(){
-  var ks = leechKeys().slice(0, LX_MAX); if(!ks.length){ toast('ตอนนี้ไม่มีคำดื้อ'); return; }
+  var ks = leechKeys().slice(0, LX_MAX); if(!ks.length){ toast('ตอนนี้ไม่มีคำที่พลาดซ้ำ'); return; }
   var q = []; for(var r=1;r<=3;r++) ks.forEach(function(k){ q.push({ k:k, rep:r }); });
   LX = { keys:ks, q:q, qi:0, step:'look', done:{}, total:q.length, wrong:0, focus:document.activeElement };
   LX.done[ks[0]] = 1; $('lx-sheet').classList.remove('hidden'); renderLeech();
@@ -5890,7 +5997,7 @@ $('up-check').addEventListener('click', function(){
   }).catch(function(){ note.textContent = 'ตรวจไม่สำเร็จ ลองใหม่อีกครั้ง'; btn.disabled = false; });
 });
 /* ---------- practice log + mistakes (feed the weekly report and the coach) ---------- */
-var APP_NO = 'v37', APP_DATE = '22 ต.ค. 2569';   /* keep in step with VERSION in sw.js */
+var APP_NO = 'v38', APP_DATE = '22 ต.ค. 2569';   /* keep in step with VERSION in sw.js */
 var APP_VER = APP_NO + ' · 2026-10-22 · offline';
 document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent = 'เวอร์ชัน ' + APP_NO + ' · อัปเดต ' + APP_DATE; });
 document.querySelectorAll('.app-ver-no').forEach(function(e){ e.textContent = APP_NO; });
@@ -6489,15 +6596,17 @@ function srcChips(attr, cur, count){
 function srcName(v){ var g = GLEVELS.find(function(x){ return x[0]===v; }); if(g) return g[1]; var t = WTOP.t.find(function(x){ return 't:'+x[0]===v; }); return t ? t[1] : v; }
 /* games on a CEFR level also bring back about 1 in 3 of the player's own practice words (weak ones first) */
 var GMIX = 0.35;
-function gMixOn(){ return U().gmix!==false && ['learning','weak'].indexOf(S.gLevel)<0 && gPool('learning').length>=4; }
-function gMixPool(){ var weak = gPool('weak'), rest = shuffle(gPool('learning').filter(function(i){ return weak.indexOf(i)<0; })); return shuffle(weak.slice(0, 20)).concat(rest); }
+function gMixOn(){ return U().gmix!==false && ['learning','weak'].indexOf(S.gLevel)<0 && (gPool('weak').length>=1 || gPool('learning').length>=4); }
+function gMixPool(){ var weak = gPool('weak'), rest = shuffle(gPool('learning').filter(function(i){ return weak.indexOf(i)<0; })); return shuffle(weak.slice(0, 30)).concat(rest); }
+function isFix(w){ return !!FX()[String(w || '').toLowerCase()]; }
+function fixTag(w){ return isFix(w) ? '<span class="fixtag">คำซ่อม</span>' : ''; }
 function gRound(){
   var pool = gPool(S.gLevel); if(!pool.length){ S.gLevel = 'A1'; pool = gPool('A1'); }
   if(gMixOn() && Math.random()<GMIX){ var mp = gMixPool().slice(0, 12); if(mp.length) pool = mp; }
   var i; do { i = pool[Math.floor(Math.random()*pool.length)]; } while(pool.length>1 && i===G.i);
   var w = W[i][0], opts = shuffle([w].concat(misspell(w)));
   G = { i:i, tries:0, done:false };
-  $('g-meaning').innerHTML = esc(W[i][2]) + '<small>' + esc(W[i][1]) + '</small>';
+  $('g-meaning').innerHTML = esc(W[i][2]) + fixTag(w) + '<small>' + esc(W[i][1]) + '</small>';
   $('g-bubbles').innerHTML = opts.map(function(o, n){ return '<button class="bubble" style="--d:'+(n*0.7)+'s" data-o="'+esc(o)+'">'+esc(o)+'</button>'; }).join('');
   $('g-msg').textContent = ''; $('g-next').classList.add('hidden');
   if(U().auto) speak(w);
@@ -6546,8 +6655,8 @@ function GS(){ var g = S.games || (S.games = {}); g.mode = g.mode || {}; g.best 
 function gMode(g){ return GS().mode[g] || 'relax'; }
 function firstMeaning(i){ return String(W[i][2]).split(' / ')[0].split(',')[0].trim(); }
 var GLEVELS = [['weak','คำที่ต้องซ่อม'],['learning','คำที่กำลังฝึก'],['A1','A1'],['A2','A2'],['B1','B1'],['B2','B2'],['EXAM','คำศัพท์ข้อสอบ']];
-var MODE_NOTE = { rain:'คำตกช้าๆ ทีละคำ ไม่มีแพ้', match:'ไม่จับเวลา', typo:'ไม่จับเวลา มีคำแปลไทยช่วย', fill:'ไม่จับเวลา ตอบผิดลองใหม่ได้' };
-var CHAL_NOTE = { rain:'พลาดได้ 3 ครั้ง คำตกเร็วขึ้น', match:'จับเวลา ยิ่งเร็วยิ่งดี', typo:'60 วินาที', fill:'60 วินาที' };
+var MODE_NOTE = { rain:'คำตกช้าๆ ทีละคำ ไม่มีแพ้', match:'ไม่จับเวลา', typo:'ไม่จับเวลา มีคำแปลไทยช่วย', fill:'ไม่จับเวลา ตอบผิดลองใหม่ได้', listen:'ไม่จับเวลา ฟังซ้ำได้' };
+var CHAL_NOTE = { rain:'พลาดได้ 3 ครั้ง คำตกเร็วขึ้น', match:'จับเวลา ยิ่งเร็วยิ่งดี', typo:'60 วินาที', fill:'60 วินาที', listen:'10 วินาทีต่อคำ ตอบเร็วได้คะแนนมาก' };
 function bestKey(g){ if(g==='match') return 'match-'+GS().pair+'-'+(GS().mPairs||6); if(g==='rain') return 'rain-'+(GS().rainPre||'chill'); if(g==='fill') return (GS().fillDiff||'mid')==='easy' ? 'fill' : 'fill-'+(GS().fillDiff||'mid'); return g; }
 function setBest(g, v){ var k = bestKey(g), b = GS().best[k], better = (b==null) || (g==='match' ? v<b : v>b); if(better){ GS().best[k] = v; save(); } return better; }
 function fmtTime(sec){ sec = Math.max(0, Math.round(sec)); var m = Math.floor(sec/60), r = sec%60; return m+':'+(r<10?'0':'')+r; }
@@ -6557,7 +6666,7 @@ function renderBar(g){
   var m = gMode(g);
   var html = '<div class="gbar-row"><div class="seg" data-gmode="'+g+'"><button data-v="relax" aria-pressed="'+(m==='relax')+'">ผ่อนคลาย</button><button data-v="chal" aria-pressed="'+(m==='chal')+'">ท้าทาย</button></div>'+
     '<p class="gnote">'+(m==='chal' ? CHAL_NOTE[g]+' · '+bestText(g) : MODE_NOTE[g])+(g!=='typo' && gMixOn() ? ' · มีคำที่คุณกำลังฝึกปนมาด้วย' : '')+'</p></div>';
-  if(g!=='typo') html += '<div class="chips gchips">'+srcChips('data-glv', S.gLevel, function(v){ return gPool(v, g==='match').length; })+'</div>';
+  if(g!=='typo') html += '<div class="chips gchips">'+srcChips('data-glv', S.gLevel, function(v){ return gPool(v, g==='match' || g==='listen').length; })+'</div>';
   el.innerHTML = html;
 }
 function pickWords(n, filter, phr){
@@ -6584,7 +6693,7 @@ function doneList(keys){ var seen = {}; keys = keys.filter(function(k){ if(seen[
 /* ---------- game layer shared by all five games: combo + effects, levels + stars, coins + reward shop ----------
    Fed by gEvent(). Stored per player in S.gx = { coins, lv:{game:level}, st:{game:{level:stars}}, cur:{game:[1,0,...]}, bought:n };
    new players and old records without S.gx start at level 1 with 0 coins. */
-var GX_N = 10, GX_GAMES = { play:'garden', rain:'rain', match:'match', typo:'typo', fill:'fill' };
+var GX_N = 10, GX_GAMES = { play:'garden', rain:'rain', match:'match', typo:'typo', fill:'fill', listen:'listen' };
 var GX_NAME = { garden:'สวนคำศัพท์', rain:'คำตก', match:'จับคู่', typo:'จับคำผิด', fill:'เติมตัวอักษร' };
 function GXS(){ var x = S.gx || (S.gx = {}); x.coins = x.coins || 0; x.lv = x.lv || {}; x.st = x.st || {}; x.cur = x.cur || {}; return x; }
 function gxLevel(g){ return GXS().lv[g] || 1; }
@@ -6618,7 +6727,7 @@ function gxLevelDone(game){
     '<button class="btn" data-gxclose>'+(pass ? 'เล่นด่าน '+next : 'ลองด่าน '+lv+' อีกครั้ง')+'</button>');
   try{ renderGLevels(); }catch(e){} try{ var g2 = gxGameOf(); if(g2 && g2!=='garden') renderBar(g2); }catch(e){}
 }
-function gxPoolName(p){ return p==='weak' ? 'ที่ยังพลาด (ด่านทบทวน)' : 'ระดับ ' + p; }
+function gxPoolName(p){ return p==='weak' ? 'ที่ต้องซ่อม (ด่านทบทวน)' : 'ระดับ ' + p; }
 function gxGameOf(){ var v = document.querySelector('.view.active'); return v ? GX_GAMES[v.id.replace('view-', '')] : null; }
 function gxBars(){
   document.querySelectorAll('.gx-bar').forEach(function(el){
@@ -6714,7 +6823,7 @@ function gEvent(game, ok, again, w){   /* again: a right answer after a miss on 
   MISSIONS.forEach(function(x, k){ if(!before[k] && msVal(m, x.k) >= x.goal) msgs.push('ภารกิจสำเร็จ: '+x.n); });
   if(!allBefore && msDone(m) && !m.claimed) msgs.push('ครบทุกภารกิจ ไปรับเมล็ดพันธุ์รุ้งที่หน้าสวนได้เลย');
   msgs.forEach(function(t, k){ setTimeout(function(){ toast(t); }, k*2200); });
-  if(!(again && !ok)) try{ gxEvent(game, ok, ok ? m.run[game] : 0); }catch(e){}
+  if(!(again && !ok) && game!=='boss') try{ gxEvent(game, ok, ok ? m.run[game] : 0); }catch(e){}
   save(); renderMissions();
 }
 function renderMissions(){
@@ -6804,7 +6913,7 @@ function rSpawn(){
   do { x = 22 + Math.random()*56; tries++; } while(tries<10 && R.drops.some(function(d){ return Math.abs(d.x-x)<30 && d.y<140; }));
   var el = document.createElement('button'); el.type = 'button'; el.className = 'drop';
   el.style.setProperty('--h', String((R.n*67 + 200) % 360)); R.n++;
-  el.innerHTML = '<b>'+esc(firstMeaning(i))+'</b><span class="dh">'+rMask(w, R.pre==='chill' ? 1 : 0)+'</span>';
+  el.innerHTML = '<b>'+esc(firstMeaning(i))+'</b><span class="dh">'+rMask(w, R.pre==='chill' ? 1 : 0)+'</span>'; if(isFix(w)) el.classList.add('fixw');
   el.setAttribute('aria-label', 'ฟังคำที่แปลว่า '+firstMeaning(i));
   var d = { i:i, w:w, el:el, x:x, y:-46, hint:0, said2:false };
   el.style.left = x+'%'; el.style.transform = 'translate(-50%,'+d.y+'px)';
@@ -7295,7 +7404,119 @@ document.addEventListener('keydown', function(e){
 });
 
 /* ---------- shared game controls ---------- */
+
+/* ---------- weekly goal card (play pages) ---------- */
+var WK_GOAL = { ok:150, fixed:10, boss:2 };
+function renderWkGoal(){
+  var x = WK(), d0 = wkId()*7 - 3, ok = 0;
+  for(var d = d0; d <= today(); d++){ var l = S.log && S.log[d]; if(l) ok += (l.gok || 0); }
+  var row = function(n, goal, t){ var pct = Math.min(100, Math.round(n / goal * 100)); return '<div class="wkg-row'+(n>=goal ? ' done' : '')+'"><span>'+t+'</span><b>'+Math.min(n, goal)+'/'+goal+'</b><i style="--p:'+pct+'%"></i></div>'; };
+  var html = '<div class="wkg-head"><b>เป้าหมายสัปดาห์นี้</b><span>🪙 '+GXS().coins+' · ต้องซ่อม '+fixKeys().length+' คำ</span></div>'+
+    row(ok, WK_GOAL.ok, 'ตอบถูกในเกม')+row(x.fixed || 0, WK_GOAL.fixed, 'ซ่อมคำสำเร็จ')+row(x.boss || 0, WK_GOAL.boss, 'ชนะบอส');
+  document.querySelectorAll('.wkg').forEach(function(el){ el.innerHTML = html; });
+}
+
+/* ---------- ฟังทันใจ: hear a word, pick its meaning ---------- */
+var LS = {};
+function lsMeans(i){ return firstMeaning(i); }
+function lsReset(){
+  var seen = {}, q = pickWords(40, null, true).filter(function(i){ var m = lsMeans(i); if(!m || seen[m]) return false; seen[m] = 1; return true; }).slice(0, 10);
+  LS = { inited:true, chal:gMode('listen')==='chal', q:q, i:0, score:0, right:0, combo:0, miss:[], timer:0, done:false, started:false };
+  var c = $('ls-card');
+  if(q.length < 4){ c.innerHTML = '<p class="ls-msg">คำในแหล่งนี้มีไม่พอ เลือกแหล่งคำอื่นด้านบน</p>'; return; }
+  c.innerHTML = '<div class="ls-start"><p class="ls-big">🎧</p><p>'+q.length+' คำ · '+esc(srcName(S.gLevel))+'</p><button class="btn" id="ls-go">เริ่มเล่น</button></div>';
+}
+function lsStop(){ clearInterval(LS.timer); LS.timer = 0; }
+function lsQ(){
+  lsStop();
+  var i = LS.q[LS.i], w = W[i][0], right = lsMeans(i), pool = gPool(S.gLevel, true), opts = [right], tries = 0;
+  while(opts.length < 4 && tries < 200){ tries++; var j = pool[Math.floor(Math.random()*pool.length)] || Math.floor(Math.random()*W.length), m = lsMeans(j); if(m && opts.indexOf(m)<0) opts.push(m); }
+  opts = shuffle(opts); LS.cur = { i:i, w:w, right:right, t0:performance.now(), over:false };
+  $('ls-card').innerHTML = '<div class="ghud"><span>ข้อ '+(LS.i+1)+'/'+LS.q.length+'</span><span>'+LS.score+' คะแนน'+(LS.combo>=3 ? ' · ต่อเนื่อง '+LS.combo : '')+'</span></div>'+
+    (LS.chal ? '<div class="ls-time"><i id="ls-tbar"></i></div>' : '')+
+    '<div class="ls-q"><button class="ls-play" id="ls-play" aria-label="ฟังอีกครั้ง">'+'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'+'</button>'+fixTag(w)+'<p class="ls-hint">ฟังแล้วแตะความหมาย</p></div>'+
+    '<div class="ls-opts">'+opts.map(function(o){ return '<button class="ls-opt" data-o="'+esc(o)+'">'+esc(o)+'</button>'; }).join('')+'</div><p class="ls-res" id="ls-res"></p>';
+  speak(w);
+  if(LS.chal){ LS.timer = setInterval(function(){ var left = 10 - (performance.now() - LS.cur.t0)/1000, b = $('ls-tbar'); if(b) b.style.width = Math.max(0, left*10)+'%'; if(left<=0) lsPick(null); }, 100); }
+}
+function lsPick(btn){
+  var c = LS.cur; if(!c || c.over) return; c.over = true; lsStop();
+  var ok = !!btn && btn.getAttribute('data-o')===c.right, sec = (performance.now() - c.t0)/1000;
+  $('ls-card').querySelectorAll('.ls-opt').forEach(function(b){ b.disabled = true; if(b.getAttribute('data-o')===c.right) b.classList.add('yes'); });
+  if(btn && !ok) btn.classList.add('no');
+  if(ok){ LS.right++; LS.combo++; var pts = LS.chal ? 10 + Math.max(0, Math.ceil(10 - sec)) * 2 : 10; LS.score += pts; sfx(LS.combo % 5===0 ? 'bloom' : 'ok'); }
+  else { LS.combo = 0; LS.miss.push(c.i); sfx('no'); }
+  gEvent('listen', ok, false, c.w);
+  $('ls-res').innerHTML = (ok ? '<b class="ok">ถูก!</b> ' : (btn ? '<b class="bad">ยังไม่ใช่</b> ' : '<b class="bad">หมดเวลา</b> '))+'<span class="ls-w">'+esc(c.w)+'</span> = '+esc(c.right)+
+    ' <button class="btn small" id="ls-next">'+(LS.i+1<LS.q.length ? 'ข้อต่อไป' : 'ดูผล')+'</button>';
+  var nb = $('ls-next'); if(nb) try{ nb.focus({preventScroll:true}); }catch(e){}
+}
+function lsNext(){ LS.i++; if(LS.i < LS.q.length) lsQ(); else lsEnd(); }
+function lsEnd(){
+  lsStop(); LS.done = true; var rec = LS.chal && LS.score>0 && setBest('listen', LS.score);
+  $('ls-card').innerHTML = '<div class="gdone"><p class="ls-big">'+(LS.right>=8 ? '🏆' : LS.right>=5 ? '👏' : '💪')+'</p><p><b>ถูก '+LS.right+'/'+LS.q.length+'</b>'+(LS.chal ? ' · '+LS.score+' คะแนน'+(rec ? ' · สถิติใหม่!' : '') : '')+'</p>'+
+    (LS.miss.length ? '<p class="label">คำที่พลาด (เข้ารายการคำที่ต้องซ่อมแล้ว)</p><p class="ls-missed">'+LS.miss.map(function(i){ return '<button class="chip" data-say="'+esc(W[i][0])+'">'+esc(W[i][0])+' · '+esc(lsMeans(i))+'</button>'; }).join('')+'</p>' : '')+
+    '<button class="btn" id="ls-again">เล่นอีกชุด</button></div>';
+  renderWkGoal();
+}
+$('ls-card').addEventListener('click', function(ev){
+  if(ev.target.closest('#ls-go')){ LS.started = true; lsQ(); return; }
+  if(ev.target.closest('#ls-play')){ if(LS.cur) speak(LS.cur.w, !!LS.cur.again); if(LS.cur) LS.cur.again = !LS.cur.again; return; }
+  var o = ev.target.closest('.ls-opt'); if(o && !o.disabled){ lsPick(o); return; }
+  if(ev.target.closest('#ls-next')){ lsNext(); return; }
+  if(ev.target.closest('#ls-again')){ lsReset(); }
+});
+
+/* ---------- บอสคำที่ต้องซ่อม ---------- */
+var BS = {};
+var BOSSES = ['👾','🐉','🦖','👹','🤖','🦑'];
+function bsReset(useLearning){
+  var ks = fixKeys().filter(function(k){ return IDX[k]!==undefined; });
+  if(useLearning && ks.length < 5){ var more = Object.keys(S.p).filter(function(k){ return IDX[k]!==undefined && ks.indexOf(k)<0; }).sort(function(a, b){ return (S.p[b].w - S.p[b].c) - (S.p[a].w - S.p[a].c); }); ks = ks.concat(more).slice(0, 8); }
+  ks = shuffle(ks.slice(0, 10));
+  BS = { inited:true, q:ks.map(function(k){ return IDX[k]; }), hp:ks.length, max:ks.length, hearts:3, face:BOSSES[(wkId() + (S.wk && S.wk.boss || 0)) % BOSSES.length], over:false, practice:!!useLearning };
+  var a = $('bs-arena');
+  if(!ks.length){ a.innerHTML = '<div class="gdone"><p class="ls-big">🌈</p><p><b>ไม่มีคำที่ต้องซ่อมเลย บอสหนีไปแล้ว!</b></p><p class="note">ตอบผิดในเกมหรือแบบฝึกเมื่อไร บอสจะกลับมา</p>'+(Object.keys(S.p).length ? '<button class="btn" id="bs-learn">สู้กับคำที่กำลังฝึกแทน</button>' : '')+'</div>'; renderWkGoal(); return; }
+  a.innerHTML = '<div class="bs-intro"><p class="bs-face">'+BS.face+'</p><p>บอสมีพลัง <b>'+BS.max+'</b> · คุณมี ❤️❤️❤️</p><button class="btn" id="bs-go">เริ่มสู้</button></div>';
+  renderWkGoal();
+}
+function bsHud(){ return '<div class="bs-top"><span class="bs-face sm">'+BS.face+'</span><div class="bs-hp"><i style="width:'+(BS.hp/BS.max*100)+'%"></i><span>'+BS.hp+'/'+BS.max+'</span></div><span class="bs-hearts">'+'❤️'.repeat(BS.hearts)+'<s>'+'🤍'.repeat(3 - BS.hearts)+'</s></span></div>'; }
+function bsQ(){
+  var i = BS.q[0], w = W[i][0], single = /^[a-z]{3,14}$/.test(w), opts, ask;
+  if(single){ opts = shuffle([w].concat(misspell(w).slice(0, 3))); ask = '<p class="bs-ask">เลือกคำที่สะกดถูก</p><p class="bs-mean">'+esc(firstMeaning(i))+'</p>'; }
+  else { var pool = gPool('learning', true).concat(gPool(W[i][4], true)), o = [w], t = 0; while(o.length<4 && t<200){ t++; var j = pool[Math.floor(Math.random()*pool.length)]; if(j!==undefined && o.indexOf(W[j][0])<0) o.push(W[j][0]); } opts = shuffle(o); ask = '<p class="bs-ask">คำไหนแปลว่า</p><p class="bs-mean">'+esc(firstMeaning(i))+'</p>'; }
+  BS.cur = { i:i, w:w, over:false };
+  $('bs-arena').innerHTML = bsHud()+'<div class="bs-card">'+ask+'<button class="icon-btn bs-say" data-say="'+esc(w)+'" aria-label="ฟังคำ"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>'+
+    '<div class="bs-opts">'+opts.map(function(o){ return '<button class="fopt bs-opt" data-o="'+esc(o)+'">'+esc(o)+'</button>'; }).join('')+'</div><p class="ls-res" id="bs-res"></p>';
+  speak(w);
+}
+function bsPick(b){
+  var c = BS.cur; if(!c || c.over) return; c.over = true;
+  var ok = b.getAttribute('data-o')===c.w;
+  $('bs-arena').querySelectorAll('.bs-opt').forEach(function(x){ x.disabled = true; if(x.getAttribute('data-o')===c.w) x.classList.add('yes'); });
+  gEvent('boss', ok, false, c.w);
+  if(ok){ BS.hp--; BS.q.shift(); sfx('ok'); var f = $('bs-arena').querySelector('.bs-top .bs-face'); if(f){ f.classList.add('hit'); } }
+  else { b.classList.add('no'); BS.hearts--; BS.q.push(BS.q.shift()); sfx('no'); }
+  var hp = $('bs-arena').querySelector('.bs-hp i'); if(hp) hp.style.width = (BS.hp/BS.max*100)+'%';
+  var end = BS.hp<=0 || BS.hearts<=0;
+  $('bs-res').innerHTML = (ok ? '<b class="ok">โจมตีสำเร็จ! -1</b> ' : '<b class="bad">โดนสวนกลับ! เสียหัวใจ</b> ')+'<span class="ls-w">'+esc(c.w)+'</span> <button class="btn small" id="bs-next">'+(end ? 'ดูผล' : 'ต่อไป')+'</button>';
+}
+function bsEnd(){
+  var win = BS.hp<=0; BS.over = true;
+  if(win){ var x = GXS(); x.coins += 20; if(!BS.practice) wkAdd('boss'); save(); gxConfetti(60); sfx('bloom'); }
+  $('bs-arena').innerHTML = '<div class="gdone"><p class="bs-face">'+(win ? '🏆' : BS.face)+'</p><p><b>'+(win ? 'ชนะบอสแล้ว! +20 🪙' : 'บอสชนะรอบนี้')+'</b></p><p class="note">'+(win ? 'ตอบคำเหล่านี้ให้ถูกอีกใน 2 วันที่ต่างกัน คำจะหลุดจากรายการคำที่ต้องซ่อม' : 'คำที่ยังผิดจะกลับมาให้ซ่อมในแผนวันนี้ ลองสู้ใหม่ได้เลย')+'</p><button class="btn" id="bs-again">'+(win ? 'สู้บอสตัวต่อไป' : 'สู้ใหม่')+'</button></div>';
+  renderWkGoal();
+}
+$('bs-arena').addEventListener('click', function(ev){
+  if(ev.target.closest('#bs-go')){ bsQ(); return; }
+  if(ev.target.closest('#bs-learn')){ bsReset(true); return; }
+  var o = ev.target.closest('.bs-opt'); if(o && !o.disabled){ bsPick(o); return; }
+  if(ev.target.closest('#bs-next')){ if(BS.hp<=0 || BS.hearts<=0) bsEnd(); else bsQ(); return; }
+  if(ev.target.closest('#bs-again')){ bsReset(BS.practice); }
+});
 var GAMES = {
+  listen:{ reset:lsReset, ready:function(){ return !!LS.inited; }, leave:function(){ lsStop(); if(LS.started && !LS.done) LS.inited = false; } },
+  boss:  { reset:function(){ bsReset(false); }, ready:function(){ return !!BS.inited && !BS.over; }, leave:function(){} },
   rain:  { reset:rReset, ready:function(){ return !!R.inited; }, leave:function(){ if(R.on || R.cdT) rPause(); } },
   match: { reset:mReset, ready:function(){ return !!M.inited; }, leave:function(){ if(M.chal && M.started && !M.done){ clearInterval(M.timer); M.inited = false; } } },
   typo:  { reset:tReset, ready:function(){ return !!T.inited; }, leave:function(){ if(T.chal && T.running){ T.cd && T.cd.stop(); T.running = false; T.inited = false; } } },
@@ -7325,6 +7546,7 @@ function gamesViewChange(name){
   if(name!=='rain') document.body.classList.remove('g-focus');
   if(GAMES[name]){ renderBar(name); if(!GAMES[name].ready()) GAMES[name].reset(); }
   if(name==='rain') rSetup();
+  if(name==='play' || name==='boss' || name==='listen') try{ renderWkGoal(); }catch(e){}
   if(name==='friends'){ friendsSub(); renderFriends(); }
   if(name==='sentence'){ if(!SN.list.length || $('sn-play').classList.contains('hidden')){ renderSnHome(); if($('sn-sum').classList.contains('hidden')) snShow('home'); } }
   else if(SN.list.length && !$('sn-play').classList.contains('hidden')){ clearTimeout(SN_PT); }
@@ -7775,6 +7997,11 @@ document.addEventListener('keydown', function(ev){
 if(window.VN){ window.VN.openPhonics = function(id){ window.VN.showView('xlearn'); xlOpen('phonics', id); }; }
 
 window.DL = {
+  wstat: function(w){ var k = String(w || '').replace(/\d+$/, '').trim().toLowerCase(); return FX()[k] ? 'fix' : S.p[k] ? 'learn' : ''; },
+  wtopic: function(w){ var k = String(w || '').replace(/\d+$/, '').trim().toLowerCase(), n = WTOP.m[k]; return n==null ? null : WTOP.t[n]; },
+  drillWords: function(words){ var q = shuffle((words || []).map(function(w){ return IDX[String(w).replace(/\d+$/, '').trim().toLowerCase()]; }).filter(function(i){ return i!==undefined; })).slice(0, 20);
+    if(!q.length){ toast('ไม่มีคำให้ฝึก'); return; } beginSession(q.map(function(i){ return { i:i, isNew:false }; }), 'free'); },
+  playSrc: function(src){ if(src){ S.gLevel = src; save(); } if(window.VN) window.VN.showView('listen'); try{ renderBar('listen'); lsReset(); }catch(e){} },
   viewChange: function(n){ gamesViewChange(n); if(n==='xlearn') xlEnter(); else xlStop(); },
   examGo: examGo,
   classify: classify,
@@ -7808,7 +8035,7 @@ bootStep(function(){ if(window.VN){ var vp = window.VN.getProgress(); if(!S.ext)
 bootStep(updateSummary); bootStep(applyShowR); bootStep(applyUI); bootStep(renderHome); bootStep(renderProfileUI);
 setSync('บันทึกในเครื่องนี้');
 bootStep(function(){ if(window.DL_STANDALONE && navigator.storage && navigator.storage.persist){ navigator.storage.persist().catch(function(){}); } });
-bootStep(function(){ document.querySelectorAll('.exam-tab').forEach(function(b){ b.classList.remove('hidden'); }); });
+/* the full practice tests now live under เรียน (sub-page "ข้อสอบเต็มชุด"), so the old exam tab stays hidden */
 bootStep(askWho);
 bootStep(maybeOnboard);
 bootStep(function(){ if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; } });
