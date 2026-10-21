@@ -1362,6 +1362,53 @@
   .dl .xl-gl{margin-top:10px;font-family:var(--th);font-size:14px}
   .dl .xl-gl summary{cursor:pointer;color:var(--ink2)}
   .dl .xl-gl ul{margin:6px 0 0;padding-left:18px;line-height:1.7}
+  .dl .mm{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:0;margin:12px 0 18px;font-family:var(--th)}
+  .dl .mm-root{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-width:104px;max-width:150px;padding:14px 12px;border-radius:50%;aspect-ratio:1;background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 18px -10px rgba(0,0,0,.5);cursor:pointer;position:relative;z-index:1}
+  .dl .mm-root b{font-family:var(--en);font-size:22px;line-height:1.1}
+  .dl .mm-root small{font-size:12.5px;opacity:.9;margin-top:2px}
+  .dl .mm-root .mm-em{font-size:26px;line-height:1}
+  .dl .mm-brs{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;padding-left:22px;margin-left:-2px;border-left:3px solid var(--accent);border-left:3px solid color-mix(in srgb,var(--accent) 45%,transparent);border-radius:14px 0 0 14px;position:relative}
+  .dl .mm-b{display:flex;align-items:center;gap:8px;position:relative;background:var(--surface);border:1.5px solid var(--line);border-color:hsl(var(--h) 55% 55%);border-color:color-mix(in srgb,hsl(var(--h) 60% 50%) 55%,var(--line));border-radius:14px;padding:8px 10px;min-height:52px;cursor:pointer}
+  .dl .mm-b::before{content:"";position:absolute;left:-24px;top:50%;width:22px;border-top:2px solid var(--line);border-top:2px solid color-mix(in srgb,hsl(var(--h) 60% 50%) 60%,transparent)}
+  .dl .mm-brs .mm-b:nth-child(2n)::before,.dl .mm-gb .mm-b::before{display:none}
+  .dl .mm-b.hid{border-style:dashed;border-color:var(--accent);background:var(--surface);background:color-mix(in srgb,var(--accent) 8%,var(--surface));cursor:default}
+  .dl .mm-em{font-size:24px;line-height:1;flex:none}
+  .dl .mm-t{display:flex;flex-direction:column;min-width:0}
+  .dl .mm-t b{font-family:var(--en);font-size:17px;color:var(--ink);overflow-wrap:break-word}
+  .dl .mm-t b i{font-style:normal;color:var(--ink2);font-weight:600}
+  .dl .mm-t b u{text-decoration:none;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent);border-radius:4px;padding:0 1px}
+  .dl .mm-t small{font-size:13px;color:var(--ink2);line-height:1.35}
+  .dl .mm-t .blank{min-width:70px;display:inline-block;text-align:center;border-bottom:2px solid var(--accent);color:var(--accent)}
+  .dl .mm-g{grid-column:1/-1;display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:center;position:relative}
+  .dl .mm-g::before{content:"";position:absolute;left:-24px;top:50%;width:22px;border-top:2px solid color-mix(in srgb,var(--accent) 45%,transparent)}
+  .dl .mm-gl{font-weight:700;font-size:14px;text-align:center;padding:6px 8px;border-radius:999px;background:var(--line);background:color-mix(in srgb,var(--accent) 14%,var(--surface));color:var(--ink)}
+  .dl .mm-gb{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .dl .mm-topic{grid-template-columns:1fr;justify-items:center}
+  .dl .mm-topic .mm-root{margin-bottom:-6px}
+  .dl .mm-topic .mm-brs{width:100%;box-sizing:border-box;grid-template-columns:1fr;padding:20px 0 0 24px;margin-left:8px;border-radius:0 0 0 14px}
+  .dl .mm-how{font-family:var(--th);font-size:14px;color:var(--ink2);margin:6px 0 0}
+  .dl .mm-sheet{overflow-x:auto;margin:8px 0 14px}
+  .dl .mm-tbl{border-collapse:collapse;width:100%;font-family:var(--th);font-size:14px;line-height:1.5}
+  .dl .mm-tbl th,.dl .mm-tbl td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+  .dl .mm-tbl th{background:var(--line);background:color-mix(in srgb,var(--accent) 12%,var(--surface))}
+  .dl .mm-tbl td[lang=en]{font-family:var(--en)}
+  .dl .mm-note{font-family:var(--th);font-size:14.5px;line-height:1.7}
+  .dl .mm-qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 14px;font-family:var(--th)}
+  .dl .mm-qgrid span{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13.5px;color:var(--ink2);display:flex;flex-direction:column}
+  .dl .mm-qgrid b{font-family:var(--en);font-size:16px;color:var(--ink)}
+  @media (max-width:640px){
+    .dl .mm{grid-template-columns:1fr;justify-items:center}
+    .dl .mm-root{min-width:0;width:112px;margin-bottom:-6px}
+    .dl .mm-brs{width:100%;grid-template-columns:1fr;padding:18px 0 0 18px;margin-left:8px;border-radius:0 0 0 14px;box-sizing:border-box}
+    .dl .mm-b::before{left:-20px;width:18px}
+    .dl .mm-brs .mm-b:nth-child(2n)::before{display:block}
+    .dl .mm-g{grid-template-columns:1fr;gap:6px}
+    .dl .mm-g::before{left:-20px;width:18px;top:16px}
+    .dl .mm-gl{justify-self:start}
+    .dl .mm-gb{grid-template-columns:1fr}
+    .dl .mm-gb .mm-b::before{display:none}
+    .dl .mm-qgrid{grid-template-columns:1fr 1fr}
+  }
   .dl .xl-card.xl-rnd{border:1.5px dashed var(--accent);background:var(--surface);background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
   .dl .xl-cb{flex:1;min-width:0;font-family:var(--th)}
   .dl .xl-cb b{display:block;font-size:16.5px}
@@ -5773,8 +5820,8 @@ $('up-check').addEventListener('click', function(){
   }).catch(function(){ note.textContent = 'ตรวจไม่สำเร็จ ลองใหม่อีกครั้ง'; btn.disabled = false; });
 });
 /* ---------- practice log + mistakes (feed the weekly report and the coach) ---------- */
-var APP_NO = 'v34', APP_DATE = '15 ต.ค. 2569';   /* keep in step with VERSION in sw.js */
-var APP_VER = APP_NO + ' · 2026-10-15 · offline';
+var APP_NO = 'v35', APP_DATE = '21 ต.ค. 2569';   /* keep in step with VERSION in sw.js */
+var APP_VER = APP_NO + ' · 2026-10-21 · offline';
 document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent = 'เวอร์ชัน ' + APP_NO + ' · อัปเดต ' + APP_DATE; });
 document.querySelectorAll('.app-ver-no').forEach(function(e){ e.textContent = APP_NO; });
 function logDay(field, n){
@@ -7222,6 +7269,7 @@ var XL_MODS = [
   { id:'phonics', local:'phonics', stage:1, th:'ออกเสียง (Phonics)', sub:'ตัวอักษร สระ พยัญชนะ การเน้นเสียง', n:61, has:function(k){ return k.indexOf('ph-')===0; } },
   { id:'tense', local:'tense', stage:1, th:'Tense ทั้ง 12 แบบ', sub:'โครงสร้าง วิธีใช้ เส้นเวลา', n:106, has:function(k){ return k.indexOf('tn-')===0; } },
   { id:'basic', key:'xbasic', stage:1, th:'ไวยากรณ์พื้นฐาน', sub:'28 บทใน 5 หมวด: โครงสร้างประโยค คำนาม คำกริยา คำขยาย ประโยคซับซ้อน', n:280, has:function(k){ return k.indexOf('bg-')===0; } },
+  { id:'mind', key:'xmind', stage:2, th:'แผนผังคำ (Mind map)', sub:'phrasal verb, คำเสียงท้ายเหมือนกัน, คำประสม, คำตามหัวข้อ และสรุปไวยากรณ์ 1 หน้า', n:245, has:function(k){ return k.indexOf('mm-')===0; } },
   { id:'e600', key:'x600', stage:2, th:'600 Essential Words', sub:'50 หัวข้อ 600 คำ พร้อมเสียงจริง', n:1095, has:function(k){ return k.indexOf('e6-')===0; } },
   { id:'cyev', key:'xcyev', stage:2, th:'Check Your English Vocabulary', sub:'42 หน่วย ทำในสมุดแล้วตรวจกับเฉลย', n:42, has:function(k){ return k.indexOf('cy-')===0; } },
   { id:'part1', key:'xpart1', stage:3, th:'Part 1 ภาพ', sub:'ภาพและเสียงจริง', n:60, has:xlRange(1, 6) },
@@ -7354,6 +7402,7 @@ function xlRender(){
       '<p class="eyebrow">'+esc(M.th)+' · บทที่ '+idx+'</p><h1 class="page-title">'+esc(L.th)+'</h1><p class="xl-en">'+esc(L.en)+'</p>'+(L.intro ? '<p class="page-sub">'+esc(L.intro)+'</p>' : '')+
       (L.easy ? '<div class="panel xl-easy"><p class="xl-easy-h">เข้าใจง่ายใน 1 นาที</p><p>'+esc(L.easy.say)+'</p>'+xlEx(L.easy.eg)+'<p class="xl-rule1"><b>จำง่าย</b> '+esc(L.easy.rule)+'</p>'+
         '<p class="xl-easy-n">อ่านกล่องนี้แล้วยังงงไม่เป็นไร ลองทำแบบฝึกเลย ทุกข้อมีคำอธิบายหลังตอบ'+(L.html || (L.r && L.r.length) ? ' ส่วนรายละเอียดเต็มอยู่ด้านล่าง' : '')+'</p></div>' : '')+
+      (L.mm ? '<div class="xl-html">'+xlMMPage(L)+'</div>' : '')+
       (L.html ? '<div class="xl-html">'+L.html+'</div>' : '')+
       (L.r || []).map(function(r){ return '<div class="panel xl-rule"><h3>'+esc(r[0])+'</h3>'+(r[1] ? '<p>'+r[1]+'</p>' : '')+(r[2] || []).map(xlEx).join('')+'</div>'; }).join('')+
       (L.tips && L.tips.length ? '<div class="panel xl-tips"><b>วิธีดูโจทย์</b><ul>'+L.tips.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')+'</ul></div>' : '')+
@@ -7434,6 +7483,32 @@ function xlMore(it){
     (g.length ? '<details class="xl-gl"><summary>คำในคำอธิบายแปลว่าอะไร</summary><ul>'+g.map(function(x){ return '<li><b>'+esc(x[0])+'</b> = '+esc(x[1])+'</li>'; }).join('')+'</ul></details>' : '');
 }
 function xlAnsLine(it){ return '<p class="xl-ans">คำตอบ <b>'+xlLab(it, it.a)+'</b> '+esc(it.o[it.a])+(it.oth && it.oth[it.a] ? ' <small>'+esc(it.oth[it.a])+'</small>' : '')+'</p>'; }
+/* mind maps (data: exam/data/xmind.js): the root in the middle, branches around it; a question hides one branch */
+function xlMMWord(mm, b){
+  var w = String(b.w), lw = w.toLowerCase();
+  if(mm.k==='fam'){ var suf = mm.root.replace(/^-/, ''); if(lw.slice(-suf.length)===suf) return esc(w.slice(0, -suf.length))+'<u>'+esc(w.slice(-suf.length))+'</u>'; }
+  if(mm.k==='cmp'){ var i = lw.indexOf(mm.root); if(i>=0) return esc(w.slice(0, i))+'<u>'+esc(w.slice(i, i + mm.root.length))+'</u>'+esc(w.slice(i + mm.root.length)); }
+  return esc(w);
+}
+function xlMMSay(mm, b){ return mm.k==='pv' ? mm.root+' '+b.w : b.w; }
+function xlMM(L, hide, fill){
+  var mm = L.mm, node = function(b, i){
+    var hid = i===hide, word = '<b>'+(mm.k==='pv' ? '<i>'+esc(mm.root)+'</i> ' : '')+(hid ? '<span class="blank">'+(fill ? esc(fill) : '?')+'</span>' : xlMMWord(mm, b))+'</b>';
+    var say = hid && !fill ? '' : ' data-say="'+esc(xlMMSay(mm, b))+'"';
+    return '<div class="mm-b'+(hid ? ' hid' : '')+'" style="--h:'+((i*47 + 190) % 360)+'"'+say+(say ? ' role="button" tabindex="0"' : '')+'><span class="mm-em" aria-hidden="true">'+esc(b.e)+'</span><span class="mm-t">'+word+'<small>'+esc(b.t)+'</small></span></div>';
+  };
+  var brs = '';
+  if(mm.k==='topic'){ var gs = []; mm.b.forEach(function(b, i){ var g = gs.find(function(x){ return x.n===b.g; }); if(!g) gs.push(g = { n:b.g, h:'' }); g.h += node(b, i); });
+    brs = gs.map(function(g){ return '<div class="mm-g"><span class="mm-gl">'+esc(g.n)+'</span><div class="mm-gb">'+g.h+'</div></div>'; }).join(''); }
+  else brs = mm.b.map(node).join('');
+  return '<div class="mm mm-'+mm.k+'"><div class="mm-root" data-say="'+esc(mm.k==='fam' ? mm.b[0].w : mm.root)+'"><span class="mm-em" aria-hidden="true">'+esc(mm.em)+'</span><b>'+esc(mm.root)+'</b><small>'+esc(mm.rt)+'</small></div><div class="mm-brs">'+brs+'</div></div>';
+}
+function xlMMPage(L){
+  var mm = L.mm, h = '<p class="mm-how">แตะคำในแผนผังเพื่อฟังเสียง แล้วลองปิดตานึกกิ่งทั้งหมดก่อนทำแบบฝึก</p>' + xlMM(L, -1, '');
+  if(mm.k==='pv') h += '<h3 class="bv-h">ตัวอย่างประโยค</h3>' + mm.b.map(function(b){ return xlEx([String(b.x).replace(new RegExp('\\b('+mm.root+'\\w*|took|got|gave|came|went|put|turned|looked)\\s+'+b.w.replace(/ /g, '\\s+'), 'i'), function(m){ return '<b>'+m+'</b>'; }), b.xt]); }).join('');
+  else h += '<div class="xl-wtools"><button class="btn ghost small" data-xladd="'+esc(mm.b.map(function(b){ return b.w; }).join('|'))+'">+ เพิ่มคำในแผนผังนี้เข้าฝึกสะกด</button></div>';
+  return h;
+}
 function xlFill(s, word){ return esc(s).replace('_____', '<b class="blank">'+(word ? esc(word) : '&nbsp;')+'</b>'); }
 function xlQ(){
   var R = XL.run, it = R.q[R.i], root = $('xl-root'), ans = R.picked;
@@ -7444,7 +7519,8 @@ function xlQ(){
   if(it.p===7){ html += xlRead(it, ans); root.innerHTML = html; var f7 = root.querySelector(ans ? '[data-xl="next"]' : '.xl-opt'); if(f7) try{ f7.focus({preventScroll:true}); }catch(e){} return; }
   if(it.p===3 || it.p===4){ html += xlTalk(it, ans); root.innerHTML = html; var f3 = root.querySelector(ans ? '[data-xl="next"]' : '[data-xlplay="set"]'); if(f3) try{ f3.focus({preventScroll:true}); }catch(e){} return; }
   if(it.au){ html += xlListen(it, ans); root.innerHTML = html; var f2 = root.querySelector(ans ? '[data-xl="next"]' : '[data-xlplay="all"]'); if(f2) try{ f2.focus({preventScroll:true}); }catch(e){} if(!ans) xlPlay(it.au.f, it.au.s, it.au.e); return; }
-  if(it.p===6 && /^_____\.?$/.test(it.s.trim())) html += '<p class="xl-q">เลือกประโยคที่เติมในช่อง <b class="blank">'+it.n+'</b> ของข้อความ</p>';
+  if(it.mm!=null && R.L.mm) html += '<p class="xl-q xl-qth0">'+esc(it.s)+'</p>'+xlMM(R.L, it.mm, ans ? it.o[it.a] : '');
+  else if(it.p===6 && /^_____\.?$/.test(it.s.trim())) html += '<p class="xl-q">เลือกประโยคที่เติมในช่อง <b class="blank">'+it.n+'</b> ของข้อความ</p>';
   else if(it.h) html += '<p class="xl-q">'+String(it.s).replace('___', '<b class="blank">'+(ans ? esc(it.o[it.a]) : '&nbsp;')+'</b>')+'</p>';
   else if(it.p===0 && !it.gap) html += '<p class="xl-q xl-qth0">'+esc(it.s)+'</p>';
   else html += '<p class="xl-q">'+xlFill(it.s, ans ? it.o[it.a] : '')+'</p>';
@@ -7554,7 +7630,7 @@ function xlEnd(){
   if(R.wrote){ try{ examReload(); }catch(e){} }
   root.innerHTML = '<button class="xl-back" data-xl="lesson">← กลับไปที่บทเรียน</button><div class="panel center"><div class="big">'+R.right+'<small> / '+(R.right + R.wrong.length)+'</small></div><p class="note">'+esc(R.L.th)+'</p></div>'+
     (R.wrong.length ? '<div class="panel"><p class="label">ข้อที่ผิดรอบนี้ (กลับมาทำได้ที่ "ทำข้อที่ผิดอีกครั้ง")</p><ul class="xl-wrong">'+R.wrong.map(function(it){
-      return '<li>'+(it.p===5 ? xlFill(it.s, it.o[it.a]) : it.p===2 ? esc(it.s)+' → '+esc(it.o[it.a]) : (it.p===3 || it.p===4 || it.p===7) ? esc(it.s)+' → '+esc(it.o[it.a]) : it.p===0 ? (it.h ? String(it.s).replace(/<[^>]+>/g, '') : it.gap ? xlFill(it.s, it.o[it.a]) : esc(it.s)+' → '+esc(it.o[it.a])) : it.p===1 ? 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]) : 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]))+'<small>'+esc(it.c || it.sth || '')+'</small></li>'; }).join('')+'</ul></div>' : '')+
+      return '<li>'+(it.sum ? esc(it.sum) : it.p===5 ? xlFill(it.s, it.o[it.a]) : it.p===2 ? esc(it.s)+' → '+esc(it.o[it.a]) : (it.p===3 || it.p===4 || it.p===7) ? esc(it.s)+' → '+esc(it.o[it.a]) : it.p===0 ? (it.h ? String(it.s).replace(/<[^>]+>/g, '') : it.gap ? xlFill(it.s, it.o[it.a]) : esc(it.s)+' → '+esc(it.o[it.a])) : it.p===1 ? 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]) : 'Test '+it.t+' ข้อ '+it.n+': '+esc(it.o[it.a]))+'<small>'+esc(it.c || it.sth || '')+'</small></li>'; }).join('')+'</ul></div>' : '')+
     '<button class="btn" data-xl="lesson" style="width:100%">กลับไปที่บทเรียน</button>';
   window.scrollTo(0, 0);
 }
