@@ -28,4 +28,4 @@
 
 ## สำหรับแก้ไขบทเรียน
 
-ข้อมูลบทเรียนสร้างจากไฟล์ข้อสอบด้วยสคริปต์ในโฟลเดอร์ `tools/` (`python3 tools/build_part1.py`, `build_part2.py`, `build_part34.py`, `build_grammar.py`, `build_part7.py`) ได้ไฟล์ `exam/data/x*.js` หลังสร้างใหม่ให้รัน `python3 tools/add_easy.py` เพื่อใส่กล่อง "เข้าใจง่ายใน 1 นาที" (เนื้อหาอยู่ใน `tools/easy.py`) แผนผังคำสร้างด้วย `python3 tools/build_mind.py` (ได้ `exam/data/xmind.js`)
+ข้อมูลบทเรียนสร้างจากไฟล์ข้อสอบด้วยสคริปต์ในโฟลเดอร์ `tools/` (`python3 tools/build_part1.py`, `build_part2.py`, `build_part34.py`, `build_grammar.py`, `build_part7.py`) ได้ไฟล์ `exam/data/x*.js` หลังสร้างใหม่ให้รัน `python3 tools/add_easy.py` เพื่อใส่กล่อง "เข้าใจง่ายใน 1 นาที" (เนื้อหาอยู่ใน `tools/easy.py`) แผนผังคำสร้างด้วย `python3 tools/build_mind.py` (ได้ `exam/data/xmind.js`) แผนผังคลังคำสร้างด้วย `python3 tools/build_bank.py` (หมวดของแต่ละคำอยู่ใน `tools/bank_topics.py`)

@@ -1386,6 +1386,11 @@
   .dl .mm-topic{grid-template-columns:1fr;justify-items:center}
   .dl .mm-topic .mm-root{margin-bottom:-6px}
   .dl .mm-topic .mm-brs{width:100%;box-sizing:border-box;grid-template-columns:1fr;padding:20px 0 0 24px;margin-left:8px;border-radius:0 0 0 14px}
+  .dl .mm-gb .mm-b::before{display:none!important}
+  .dl .mm-bank .mm-root b{font-family:var(--th);font-size:15px;line-height:1.25}
+  .dl .mm-bank .mm-b{min-height:0;padding:7px 10px}
+  .dl .mm-bank .mm-t b{font-size:15.5px}
+  @media (max-width:640px){ .dl .mm-bank .mm-gb{grid-template-columns:1fr 1fr} .dl .mm-bank .mm-t small{font-size:12.5px} }
   .dl .mm-how{font-family:var(--th);font-size:14px;color:var(--ink2);margin:6px 0 0}
   .dl .mm-sheet{overflow-x:auto;margin:8px 0 14px}
   .dl .mm-tbl{border-collapse:collapse;width:100%;font-family:var(--th);font-size:14px;line-height:1.5}
@@ -5820,8 +5825,8 @@ $('up-check').addEventListener('click', function(){
   }).catch(function(){ note.textContent = 'ตรวจไม่สำเร็จ ลองใหม่อีกครั้ง'; btn.disabled = false; });
 });
 /* ---------- practice log + mistakes (feed the weekly report and the coach) ---------- */
-var APP_NO = 'v35', APP_DATE = '21 ต.ค. 2569';   /* keep in step with VERSION in sw.js */
-var APP_VER = APP_NO + ' · 2026-10-21 · offline';
+var APP_NO = 'v36', APP_DATE = '22 ต.ค. 2569';   /* keep in step with VERSION in sw.js */
+var APP_VER = APP_NO + ' · 2026-10-22 · offline';
 document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent = 'เวอร์ชัน ' + APP_NO + ' · อัปเดต ' + APP_DATE; });
 document.querySelectorAll('.app-ver-no').forEach(function(e){ e.textContent = APP_NO; });
 function logDay(field, n){
@@ -7270,6 +7275,7 @@ var XL_MODS = [
   { id:'tense', local:'tense', stage:1, th:'Tense ทั้ง 12 แบบ', sub:'โครงสร้าง วิธีใช้ เส้นเวลา', n:106, has:function(k){ return k.indexOf('tn-')===0; } },
   { id:'basic', key:'xbasic', stage:1, th:'ไวยากรณ์พื้นฐาน', sub:'28 บทใน 5 หมวด: โครงสร้างประโยค คำนาม คำกริยา คำขยาย ประโยคซับซ้อน', n:280, has:function(k){ return k.indexOf('bg-')===0; } },
   { id:'mind', key:'xmind', stage:2, th:'แผนผังคำ (Mind map)', sub:'phrasal verb, คำเสียงท้ายเหมือนกัน, คำประสม, คำตามหัวข้อ และสรุปไวยากรณ์ 1 หน้า', n:245, has:function(k){ return k.indexOf('mm-')===0; } },
+  { id:'bank', key:'xbank', stage:2, th:'แผนผังคลังคำ', sub:'ทุกคำในคลัง 5,477 คำ จัดเป็นแผนผังตามหัวข้อและระดับ A1–A2, B1–B2, คำศัพท์ข้อสอบ', n:5477, has:function(k){ return k.indexOf('mb-')===0; } },
   { id:'e600', key:'x600', stage:2, th:'600 Essential Words', sub:'50 หัวข้อ 600 คำ พร้อมเสียงจริง', n:1095, has:function(k){ return k.indexOf('e6-')===0; } },
   { id:'cyev', key:'xcyev', stage:2, th:'Check Your English Vocabulary', sub:'42 หน่วย ทำในสมุดแล้วตรวจกับเฉลย', n:42, has:function(k){ return k.indexOf('cy-')===0; } },
   { id:'part1', key:'xpart1', stage:3, th:'Part 1 ภาพ', sub:'ภาพและเสียงจริง', n:60, has:xlRange(1, 6) },
@@ -7342,12 +7348,27 @@ function xlLoad(cb){
   var m = xlMod(); if(!m){ cb(); return; }
   if(m.local){ XL.data = xlLocal(m.local); cb(); return; }
   if(m.rnd){ XL.data = { lessons:[], ctx:{}, rnd:true }; cb(); return; }
-  var X = window.__X || {}; if(X[m.key]){ XL.data = X[m.key]; cb(); return; }
+  var X = window.__X || {}; if(X[m.key]){ XL.data = xlBankExpand(X[m.key]); cb(); return; }
   if(XL.loading) return; XL.loading = true; $('xl-root').innerHTML = '<p class="xl-load">กำลังโหลดบทเรียน…</p>';
   var sc = document.createElement('script'); sc.src = 'exam/data/' + m.key + '.js';
-  sc.onload = function(){ XL.loading = false; XL.data = (window.__X || {})[m.key] || null; if(XL.data) cb(); else xlFail(); };
+  sc.onload = function(){ XL.loading = false; XL.data = xlBankExpand((window.__X || {})[m.key] || null); if(XL.data) cb(); else xlFail(); };
   sc.onerror = function(){ XL.loading = false; xlFail(); };
   document.head.appendChild(sc);
+}
+/* the word-bank maps are stored compactly (exam/data/xbank.js); expand them once into normal lessons */
+function xlBankExpand(d){
+  if(!d || !d.bank || d._x) return d;
+  d.lessons.forEach(function(L){
+    var c = L.mm, b = c.b.map(function(x){ return { w:x[0], t:x[1], e:'', g:c.gs[x[2]] }; });
+    L.mm = { k:'topic', bank:1, root:c.root, rt:c.rt, em:c.em, b:b };
+    L.en = c.rt; L.intro = ''; L.html = ''; L.r = []; L.tips = [];
+    L.easy = { say:'แผนผังนี้รวมคำในคลังหัวข้อ "'+c.root+'" ระดับ '+c.rt+' จำนวน '+b.length+' คำ แบ่งเป็นกิ่งย่อยตามความหมาย อ่านทีละกิ่ง แตะคำเพื่อฟังเสียง แล้วลองนึกคำในกิ่งก่อนทำแบบฝึก',
+      eg:['<b>'+esc(b[0].w)+'</b> · <b>'+esc(b[b.length-1].w)+'</b>', b[0].t+' · '+b[b.length-1].t], rule:'นึกหัวข้อ → กิ่งย่อย → คำ จำเป็นกลุ่มดีกว่าจำทีละคำ' };
+    L.items = L.q.map(function(q, i){ var y = b[i], o = {}; q[1].split('|').forEach(function(w, j){ o['ABCD'.charAt(j)] = w; });
+      return { id:q[0], p:0, mm:i, s:'กิ่งที่หายไปคือคำไหน: "'+y.t+'" (กิ่ง '+y.g+')', o:o, oth:{}, a:'ABCD'.charAt(q[2]),
+        x:y.w+' แปลว่า '+y.t+' อยู่ในกิ่ง "'+y.g+'" ของแผนผัง '+c.root, v:[], sum:y.w+' = '+y.t }; });
+  });
+  d._x = 1; return d;
 }
 function xlFail(){ $('xl-root').innerHTML = '<p class="xl-load">โหลดบทเรียนไม่สำเร็จ ตรวจว่ามีโฟลเดอร์ exam/data อยู่ข้างไฟล์ index.html แล้วลองเปิดใหม่</p>'; }
 function xlEnter(){ if(XL.run) return; if(!XL.mod || XL.data){ xlRender(); return; } xlLoad(xlRender); }
@@ -7495,13 +7516,14 @@ function xlMM(L, hide, fill){
   var mm = L.mm, node = function(b, i){
     var hid = i===hide, word = '<b>'+(mm.k==='pv' ? '<i>'+esc(mm.root)+'</i> ' : '')+(hid ? '<span class="blank">'+(fill ? esc(fill) : '?')+'</span>' : xlMMWord(mm, b))+'</b>';
     var say = hid && !fill ? '' : ' data-say="'+esc(xlMMSay(mm, b))+'"';
-    return '<div class="mm-b'+(hid ? ' hid' : '')+'" style="--h:'+((i*47 + 190) % 360)+'"'+say+(say ? ' role="button" tabindex="0"' : '')+'><span class="mm-em" aria-hidden="true">'+esc(b.e)+'</span><span class="mm-t">'+word+'<small>'+esc(b.t)+'</small></span></div>';
+    return '<div class="mm-b'+(hid ? ' hid' : '')+'" style="--h:'+((i*47 + 190) % 360)+'"'+say+(say ? ' role="button" tabindex="0"' : '')+'>'+(b.e ? '<span class="mm-em" aria-hidden="true">'+esc(b.e)+'</span>' : '')+'<span class="mm-t">'+word+'<small>'+esc(b.t)+'</small></span></div>';
   };
   var brs = '';
-  if(mm.k==='topic'){ var gs = []; mm.b.forEach(function(b, i){ var g = gs.find(function(x){ return x.n===b.g; }); if(!g) gs.push(g = { n:b.g, h:'' }); g.h += node(b, i); });
+  if(mm.k==='topic'){ var gs = [], only = mm.bank && hide>=0 ? mm.b[hide].g : null;
+    mm.b.forEach(function(b, i){ if(only!=null && b.g!==only) return; var g = gs.find(function(x){ return x.n===b.g; }); if(!g) gs.push(g = { n:b.g, h:'' }); g.h += node(b, i); });
     brs = gs.map(function(g){ return '<div class="mm-g"><span class="mm-gl">'+esc(g.n)+'</span><div class="mm-gb">'+g.h+'</div></div>'; }).join(''); }
   else brs = mm.b.map(node).join('');
-  return '<div class="mm mm-'+mm.k+'"><div class="mm-root" data-say="'+esc(mm.k==='fam' ? mm.b[0].w : mm.root)+'"><span class="mm-em" aria-hidden="true">'+esc(mm.em)+'</span><b>'+esc(mm.root)+'</b><small>'+esc(mm.rt)+'</small></div><div class="mm-brs">'+brs+'</div></div>';
+  return '<div class="mm mm-'+mm.k+(mm.bank ? ' mm-bank' : '')+'"><div class="mm-root"'+(mm.bank ? '' : ' data-say="'+esc(mm.k==='fam' ? mm.b[0].w : mm.root)+'"')+'><span class="mm-em" aria-hidden="true">'+esc(mm.em)+'</span><b>'+esc(mm.root)+'</b><small>'+esc(mm.rt)+'</small></div><div class="mm-brs">'+brs+'</div></div>';
 }
 function xlMMPage(L){
   var mm = L.mm, h = '<p class="mm-how">แตะคำในแผนผังเพื่อฟังเสียง แล้วลองปิดตานึกกิ่งทั้งหมดก่อนทำแบบฝึก</p>' + xlMM(L, -1, '');

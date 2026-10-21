@@ -1,5 +1,5 @@
 /* Dictation Lab service worker: works offline after the first visit */
-const VERSION = 'v35-202610212300';
+const VERSION = 'v36-202610220030';
 const CORE = 'dlab-core-' + VERSION, FONTS = 'dlab-fonts', EXAM = 'dlab-exam';
 const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-32.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CORE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
