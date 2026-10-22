@@ -734,4 +734,5 @@ wea: heat
 dev: flash
 fly: flight|airport|boarding pass|passport|ticket|airline|aircraft
 mkt: rating
+qual: true
 ''')
