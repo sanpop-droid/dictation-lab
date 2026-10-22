@@ -4535,7 +4535,7 @@
       if (activeTopic){ var tp = wTopic(item.w); if (!tp || tp[0] !== activeTopic) return false; }
       if (!searchTerm) return true;
       var af = wmAffix(searchTerm);
-      if (af){ if (!WMX) return false; var e = WMX[wmKey(item.w)]; return !!e && e.seg.some(function(p){ return p[1] === af.k && p[0] === af.t; }); }
+      if (af){ if (!WMX) return false; var e = WMX[wmKey(item.w)]; var A = (window.WMORPH || {}).a || {}; return !!e && e.seg.some(function(p){ var a = A[p[1] + ':' + p[2]]; return p[1] === af.k && (p[0] === af.t || (a && a[0].replace(/-/g, '') === af.t)); }); }
       return normalize(item.w).indexOf(searchTerm) !== -1 ||
              (item.m||'').indexOf(searchTerm) !== -1 ||
              (item.r||'').indexOf(searchTerm) !== -1;
