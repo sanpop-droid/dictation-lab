@@ -552,11 +552,23 @@
     padding:13px 6px; border-bottom:1px solid var(--paper-line);
     min-width:0;
   }
+  .word-row .star-wrap{grid-row:1; grid-column:4;}
+  .word-row .wm{grid-column:1/-1; display:flex; flex-wrap:wrap; gap:6px 12px; align-items:center; margin-top:-4px; min-width:0}
   @media (max-width:680px){
-    .word-row{grid-template-columns:1fr auto; grid-template-areas:"w star" "m m" "r r"; row-gap:5px; padding:14px 6px;}
-    .word-row .w{grid-area:w;} .word-row .star-wrap{grid-area:star;}
-    .word-row .m{grid-area:m;} .word-row .r{grid-area:r;}
+    .word-row{grid-template-columns:1fr auto; grid-template-areas:"w star" "m m" "r r" "wm wm"; row-gap:5px; padding:14px 6px;}
+    .word-row .w{grid-area:w;} .word-row .star-wrap{grid-area:star; grid-row:auto; grid-column:auto;}
+    .word-row .m{grid-area:m;} .word-row .r{grid-area:r;} .word-row .wm{grid-area:wm; grid-column:auto; margin-top:2px}
   }
+  .wm .wp b{font-size:13.5px} .wm .wp small{font-size:10.5px}
+  .wm-meta{display:flex; flex-wrap:wrap; gap:4px 10px; font-family:var(--font-thai); font-size:12.5px; color:var(--ink-soft)}
+  .wm-pos{color:var(--ink-soft)} .wm-org::before{content:"· "} .wm-pos:empty+.wm-org::before{content:""}
+  .wm-basic{font-family:var(--font-thai); font-size:12.5px; color:var(--ink-faint); border:1px dashed var(--paper-line); border-radius:999px; padding:2px 10px}
+  .wm-fam{flex-basis:100%; display:flex; flex-wrap:wrap; gap:4px; align-items:center; font-family:var(--font-thai); font-size:12.5px; color:var(--ink-soft)}
+  .wm-fam span{margin-right:2px}
+  .wm-fw{font-family:var(--font-display); font-size:13px; border:1px solid var(--paper-line); background:var(--paper-raised); color:var(--ink); border-radius:999px; padding:2px 9px; cursor:pointer; min-height:28px}
+  .wm-fw:hover{border-color:var(--accent)}
+  .card-wm{font-family:var(--font-thai); font-size:14px; line-height:1.6; margin-top:10px; color:var(--paper-raised); opacity:.9; max-width:100%; overflow-wrap:break-word}
+  .card-wm:empty{display:none}
   .word-row .w{font-family:var(--font-display); font-weight:600; font-size:17px; min-width:0; overflow-wrap:break-word;}
   .word-row .pos-tag{
     display:inline-block; font-size:10.5px; color:var(--teal); text-transform:uppercase;
@@ -1332,6 +1344,31 @@
   .bv-box > b{font-family:var(--en);font-size:22px}
   .bv-box p{margin:4px 0 0;font-size:13.5px;line-height:1.55}
   .bv-box p span{display:inline-block;font-family:var(--th);font-size:11.5px;color:var(--ink2);border:1px solid var(--line);border-radius:999px;padding:0 7px;margin-right:6px}
+  /* word parts (prefix / root / suffix) — lessons, word bank, flashcards */
+  .wp{display:inline-flex;flex-direction:column;align-items:center;border-radius:9px;padding:4px 9px 3px;border:1.5px solid var(--line);background:var(--bg);min-width:34px}
+  .wp b{font-family:var(--en);font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap}
+  .wp small{font-family:var(--th);font-size:11px;color:var(--ink2);line-height:1.25;text-align:center}
+  .wp-p{border-color:var(--con);background:color-mix(in srgb,var(--con) 13%,var(--bg))} .wp-p small{color:var(--con)}
+  .wp-r{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--bg))} .wp-r small{color:var(--ok)}
+  .wp-s{border-color:var(--vow);background:color-mix(in srgb,var(--vow) 15%,var(--bg))} .wp-s small{color:var(--ink2)}
+  .wp-b{border-style:dashed;border-color:var(--ink3)}
+  .wp-x{border-color:transparent;background:transparent}
+  .wp-plus{font-style:normal;color:var(--ink3);font-weight:700;padding:0 2px;align-self:center}
+  .bv-parts .wp-row{display:grid;grid-template-columns:minmax(110px,max-content) auto 1fr;gap:6px 10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line)}
+  .bv-parts .wp-row:last-of-type{border-bottom:0}
+  .wp-w{font-family:var(--en);font-size:17px;color:var(--ink)}
+  .wp-eq{color:var(--ink3)}
+  .wp-chips{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+  .wp-th{grid-column:1/-1;font-family:var(--th);font-size:13.5px;color:var(--ink2)}
+  .wp-th::before{content:"= ";color:var(--ink3)}
+  @media (max-width:520px){ .bv-parts .wp-row{grid-template-columns:1fr} .wp-eq{display:none} }
+  .bv-doc .wd{border:1px solid var(--line);border-radius:10px;background:var(--bg);overflow:hidden}
+  .bv-doc .wd-h{font-family:var(--en);font-weight:700;font-size:14.5px;padding:9px 12px;background:color-mix(in srgb,var(--accent) 12%,var(--surface));border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+  .bv-doc .wd-r{display:grid;grid-template-columns:118px 1fr;gap:10px;padding:8px 12px;border-bottom:1px dashed var(--line)}
+  .bv-doc .wd-r:last-child{border-bottom:0}
+  .bv-doc .wd-l{font-family:var(--th);font-size:12px;font-weight:700;color:var(--accent);padding-top:2px;overflow-wrap:anywhere}
+  .bv-doc .wd-t{font-family:var(--en);font-size:14px;line-height:1.55;color:var(--ink);overflow-wrap:anywhere}
+  @media (max-width:520px){ .bv-doc .wd-r{grid-template-columns:1fr;gap:2px} }
   .bv-steps ol{margin:0;padding-left:22px;font-family:var(--th);font-size:14.5px;line-height:1.7}
   .bv-steps li{margin-bottom:6px}
   .bv-h{font-family:var(--th);font-size:16px;margin:20px 0 10px;color:var(--ink)}
@@ -1448,6 +1485,8 @@
   .dl .mm-bank .mm-root b{font-family:var(--th);font-size:15px;line-height:1.25}
   .dl .mm-bank .mm-b{min-height:0;padding:7px 10px}
   .dl .mm-bank .mm-t b{font-size:15.5px}
+  .dl .mm-t .mm-p{font-style:normal;font-family:var(--en);font-size:12.5px;color:var(--accent);line-height:1.3;overflow-wrap:anywhere}
+  .dl .mm-b.hid .mm-p{font-family:var(--th)}
   @media (max-width:640px){ .dl .mm-bank .mm-gb{grid-template-columns:1fr 1fr} .dl .mm-bank .mm-t small{font-size:12.5px} }
   .dl .mm-how{font-family:var(--th);font-size:14px;color:var(--ink2);margin:6px 0 0}
   .dl .mm-sheet{overflow-x:auto;margin:8px 0 14px}
@@ -2146,6 +2185,7 @@
                 <div class="card-tag">คำแปล</div>
                 <div class="card-meaning" id="cardMeaning">ความหมาย</div>
                 <div class="card-pron thai" id="cardPron">คำอ่าน</div>
+                <div class="card-wm thai" id="cardWm"></div>
               </div>
             </div>
           </div>
@@ -2722,6 +2762,7 @@
     document.getElementById('cardWord').textContent = item.w;
     document.getElementById('cardMeaning').textContent = item.m;
     document.getElementById('cardPron').textContent = item.r;
+    var cw = document.getElementById('cardWm'); if (cw){ cw.textContent = wmText(item.w); if (!WMX) wmLoad(function(){ if (VOCAB[fcDeckIds[fcPos]] === item) cw.textContent = wmText(item.w); }); }
     var cs = document.getElementById('cardSay'); if (cs) cs.setAttribute('data-say', item.w);
     if (window.DL && document.getElementById('view-flashcards').classList.contains('active')) window.DL.autoSpeak(item.w);
     fcFlipped = false;
@@ -3303,7 +3344,7 @@
       row.innerHTML =
         '<div class="w">' + '<button class="say-btn" data-say="' + escapeHTML(item.w) + '" aria-label="ฟังเสียง"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/></svg></button>' + escapeHTML(item.w) + '<span class="pos-tag">' + escapeHTML(item.p||'') + ' · ' + escapeHTML(item.lvl||'') + '</span>' + (window.DL ? window.DL.pill(item.w) : '') + '</div>' +
         '<div class="m thai">' + escapeHTML(item.m) + '</div>' +
-        '<div class="r thai">' + escapeHTML(item.r) + '</div>' +
+        '<div class="r thai">' + escapeHTML(item.r) + '</div>' + wmHTML(item.w) +
         '<div class="star-wrap"><button class="star-btn' + (known ? ' known' : '') + '" aria-label="รู้ความหมายแล้ว" title="รู้ความหมายแล้ว">' + starSVG(known) + '</button></div>';
       var starBtn = row.querySelector('.star-btn');
       starBtn.addEventListener('click', function(){
@@ -4493,6 +4534,8 @@
       if (activeStat !== 'all'){ var st = wStat(item.w); if (activeStat === 'new' ? st !== '' : st !== activeStat) return false; }
       if (activeTopic){ var tp = wTopic(item.w); if (!tp || tp[0] !== activeTopic) return false; }
       if (!searchTerm) return true;
+      var af = wmAffix(searchTerm);
+      if (af){ if (!WMX) return false; var e = WMX[wmKey(item.w)]; return !!e && e.seg.some(function(p){ return p[1] === af.k && p[0] === af.t; }); }
       return normalize(item.w).indexOf(searchTerm) !== -1 ||
              (item.m||'').indexOf(searchTerm) !== -1 ||
              (item.r||'').indexOf(searchTerm) !== -1;
@@ -4507,6 +4550,46 @@
     var st = wStat(w), tp = wTopic(w);
     return '<span class="bw-tags">' + (st === 'fix' ? '<span class="bw-tag fix">ต้องซ่อม</span>' : st === 'learn' ? '<span class="bw-tag learn">กำลังฝึก</span>' : '') + (tp ? '<span class="bw-tag">' + tp[2] + ' ' + escapeHTML(tp[1]) + '</span>' : '') + '</span>';
   }
+  /* word parts, part of speech, origin and word family (exam/data/wmorph.js, built by tools/write_morph.py; loaded on first use) */
+  var WMX = null, WMF = {}, WML = false, WMEAN = null;
+  function wmLoad(cb){
+    if (WMX){ cb && cb(); return; }
+    var go = function(){ var d = window.WMORPH; if (!d) return; WMX = {}; WMF = {};
+      d.m.split('\n').forEach(function(line){ var c = line.split('\t'); var seg = c[1] ? c[1].split('|').map(function(x){ return x.split('~'); }) : [];
+        WMX[c[0]] = { seg:seg, pos:c[2] ? c[2].split(',') : [], org:c[3] || '', fam:c[4] || '' };
+        if (c[4]) (WMF[c[4]] = WMF[c[4]] || []).push(c[0]); });
+      cb && cb(); };
+    if (window.WMORPH){ go(); return; }
+    if (WML) return; WML = true;
+    var sc = document.createElement('script'); sc.src = 'exam/data/wmorph.js'; sc.onload = go; sc.onerror = function(){ WML = false; }; document.head.appendChild(sc);
+  }
+  function wmMean(w){
+    if (!WMEAN){ WMEAN = {}; VOCAB.forEach(function(x){ var k = String(x.w).replace(/\d+$/, '').trim().toLowerCase(); if (!WMEAN[k]) WMEAN[k] = String(x.m || '').split(/\s*[,/;]\s*/)[0]; }); }
+    var d = window.WMORPH || {}; return (d.b && d.b[w]) || WMEAN[w] || '';
+  }
+  function wmPart(p, html){
+    var t = p[0], k = p[1], id = p[2], d = window.WMORPH || {}, a = d.a && d.a[k + ':' + id];
+    var m = a ? a[1].split(' / ')[0] : (k === 'b' || k === 'c') ? wmMean(t) : '';
+    var shown = k === 'p' ? t + '-' : k === 's' ? '-' + t : t;
+    if (!html) return shown + (m ? ' (' + m + ')' : '');
+    return '<span class="wp wp-' + (k === 'c' ? 'b' : k) + '"' + (a && k === 'r' ? ' title="' + escapeHTML(a[0] + ' · ' + a[2]) + '"' : '') + '><b>' + escapeHTML(shown) + '</b>' + (m ? '<small>' + escapeHTML(m) + '</small>' : '') + '</span>';
+  }
+  function wmKey(w){ return String(w || '').replace(/\d+$/, '').trim().toLowerCase(); }
+  function wmHTML(w){
+    if (!WMX) return '';
+    var k = wmKey(w), e = WMX[k]; if (!e) return '';
+    var d = window.WMORPH || {}, P = d.p || {};
+    var pos = e.pos.length ? '<span class="wm-pos">' + e.pos.map(function(p){ return escapeHTML(P[p] || p); }).join(' / ') + '</span>' : '';
+    var parts = e.seg.length ? '<span class="wp-chips">' + e.seg.map(function(p){ return wmPart(p, true); }).join('<i class="wp-plus">+</i>') + '</span>'
+      : (k.indexOf(' ') < 0 && k.indexOf('-') < 0 ? '<span class="wm-basic">คำพื้นฐาน · แยกส่วนไม่ได้</span>' : '');
+    var org = e.org ? '<span class="wm-org">ที่มา: ' + escapeHTML(e.org) + '</span>' : '';
+    var fam = e.fam && WMF[e.fam] ? WMF[e.fam].filter(function(x){ return x !== k; }).slice(0, 8) : [];
+    return '<div class="wm">' + parts + '<span class="wm-meta">' + pos + org + '</span>' +
+      (fam.length ? '<div class="wm-fam"><span>ครอบครัวคำ:</span>' + fam.map(function(x){ return '<button class="wm-fw" data-say="' + escapeHTML(x) + '">' + escapeHTML(x) + '</button>'; }).join('') + '</div>' : '') + '</div>';
+  }
+  function wmText(w){ if (!WMX) return ''; var e = WMX[wmKey(w)]; if (!e || !e.seg.length) return ''; return 'แยกส่วน: ' + e.seg.map(function(p){ return wmPart(p, false); }).join(' + '); }
+  /* search "-tion" (suffix) or "un-" (prefix) lists the words that have that part */
+  function wmAffix(term){ var m = /^-([a-z]+)$/.exec(term) || /^([a-z]+)-$/.exec(term); if (!m) return null; return { t:m[1], k:term.charAt(0) === '-' ? 's' : 'p' }; }
   function starSVG(known){
     return known
       ? '<svg viewBox="0 0 24 24"><path d="M12 3.5l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17.3l-5.4 3.1 1-6.1-4.4-4.3 6.1-.9L12 3.5z"/></svg>'
@@ -4514,6 +4597,7 @@
   }
 
   function renderBrowse(){
+    if (!WMX){ wmLoad(function(){ renderBrowse(); }); }
     var results = filteredWords();
     renderBwFilters();
     var acts = document.getElementById('bwActs');
@@ -4535,7 +4619,7 @@
       row.innerHTML =
         '<div class="w">' + '<button class="say-btn" data-say="' + escapeHTML(item.w) + '" aria-label="ฟังเสียง"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/></svg></button>' + escapeHTML(item.w) + '<span class="pos-tag">' + escapeHTML(item.p||'') + ' · ' + escapeHTML(item.lvl||'') + '</span>' + (window.DL ? window.DL.pill(item.w) : '') + '</div>' +
         '<div class="m thai">' + escapeHTML(item.m) + bwBadges(item.w) + '</div>' +
-        '<div class="r thai">' + escapeHTML(item.r) + '</div>' +
+        '<div class="r thai">' + escapeHTML(item.r) + '</div>' + wmHTML(item.w) +
         '<div class="star-wrap"><button class="star-btn' + (known ? ' known' : '') + '" aria-label="รู้ความหมายแล้ว" title="รู้ความหมายแล้ว">' + starSVG(known) + '</button></div>';
       var starBtn = row.querySelector('.star-btn');
       starBtn.addEventListener('click', function(){
@@ -6003,7 +6087,7 @@ $('up-check').addEventListener('click', function(){
   }).catch(function(){ note.textContent = 'ตรวจไม่สำเร็จ ลองใหม่อีกครั้ง'; btn.disabled = false; });
 });
 /* ---------- practice log + mistakes (feed the weekly report and the coach) ---------- */
-var APP_NO = 'v39', APP_DATE = '22 ต.ค. 2569';   /* keep in step with VERSION in sw.js */
+var APP_NO = 'v40', APP_DATE = '22 ต.ค. 2569';   /* keep in step with VERSION in sw.js */
 var APP_VER = APP_NO + ' · 2026-10-22 · offline';
 document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent = 'เวอร์ชัน ' + APP_NO + ' · อัปเดต ' + APP_DATE; });
 document.querySelectorAll('.app-ver-no').forEach(function(e){ e.textContent = APP_NO; });
@@ -7572,8 +7656,11 @@ var XL_STAGES = [
   { th:'วิธีเรียน', sub:'เทคนิคการจำ การฟัง การอ่าน การเขียน และการทำข้อสอบ' },
   { th:'พื้นฐาน', sub:'ออกเสียงให้ถูก เข้าใจ tense และไวยากรณ์ที่ใช้บ่อย' },
   { th:'คำศัพท์', sub:'คำศัพท์ตามหัวข้อจากหนังสือ 2 เล่ม' },
-  { th:'ข้อสอบ', sub:'ข้อสอบจริง 10 ชุด แยกตาม Part' }
+  { th:'ข้อสอบ', sub:'ข้อสอบจริง 10 ชุด แยกตาม Part' },
+  { th:'ภาษาอังกฤษเพื่องาน', sub:'เขียนอีเมล รายงาน ประชุม และเอกสารเทคนิคในโรงงาน' }
 ];
+var XL_N = { xword:374, xwork:160 };   /* question counts of the authored modules (set from tools/build_word.py) */
+var XL_NR = 2093;   /* words in the root maps (set from tools/write_morph.py) */
 var XL_MODS = [
   { id:'tips', key:'xtips', stage:0, th:'เทคนิคการเรียน', sub:'5 บทสั้นๆ ทำก่อนเริ่มเรียน', n:25, has:function(k){ return k.indexOf('tp-')===0; } },
   { id:'phonics', local:'phonics', stage:1, th:'ออกเสียง (Phonics)', sub:'ตัวอักษร สระ พยัญชนะ การเน้นเสียง', n:61, has:function(k){ return k.indexOf('ph-')===0; } },
@@ -7581,6 +7668,8 @@ var XL_MODS = [
   { id:'basic', key:'xbasic', stage:1, th:'ไวยากรณ์พื้นฐาน', sub:'28 บทใน 5 หมวด: โครงสร้างประโยค คำนาม คำกริยา คำขยาย ประโยคซับซ้อน', n:280, has:function(k){ return k.indexOf('bg-')===0; } },
   { id:'mind', key:'xmind', stage:2, th:'แผนผังคำ (Mind map)', sub:'phrasal verb, คำเสียงท้ายเหมือนกัน, คำประสม, คำตามหัวข้อ และสรุปไวยากรณ์ 1 หน้า', n:245, has:function(k){ return k.indexOf('mm-')===0; } },
   { id:'bank', key:'xbank', stage:2, th:'แผนผังคลังคำ', sub:'ทุกคำในคลัง 5,478 คำ จัดเป็นแผนผังตามหัวข้อและระดับ A1–A2, B1–B2, คำศัพท์ข้อสอบ', n:5478, has:function(k){ return k.indexOf('mb-')===0; } },
+  { id:'word', key:'xword', stage:2, th:'สร้างคำและรากศัพท์', sub:'ชนิดของคำ, คำเติมหน้า-คำเติมท้าย, ครอบครัวคำและรากศัพท์ ละติน-กรีก', n:XL_N.xword, has:function(k){ return k.indexOf('wf-')===0; } },
+  { id:'root', key:'xroot', stage:2, th:'แผนผังรากศัพท์', sub:'ทุกคำในคลังที่แยกส่วนได้ จัดตามรากศัพท์ คำเติมหน้า คำเติมท้าย และคำประสม', n:XL_NR, has:function(k){ return k.indexOf('mr-')===0; } },
   { id:'e600', key:'x600', stage:2, th:'600 Essential Words', sub:'50 หัวข้อ 600 คำ พร้อมเสียงจริง', n:1095, has:function(k){ return k.indexOf('e6-')===0; } },
   { id:'cyev', key:'xcyev', stage:2, th:'Check Your English Vocabulary', sub:'42 หน่วย ทำในสมุดแล้วตรวจกับเฉลย', n:42, has:function(k){ return k.indexOf('cy-')===0; } },
   { id:'part1', key:'xpart1', stage:3, th:'Part 1 ภาพ', sub:'ภาพและเสียงจริง', n:60, has:xlRange(1, 6) },
@@ -7588,6 +7677,7 @@ var XL_MODS = [
   { id:'part34', key:'xpart34', stage:3, th:'Part 3–4 บทสนทนา', sub:'บทสนทนาและบทพูด', n:690, has:xlRange(32, 100) },
   { id:'grammar', key:'xgram', stage:3, th:'Part 5–6 ไวยากรณ์', sub:'ไวยากรณ์และคำศัพท์', n:460, has:xlRange(101, 146) },
   { id:'part7', key:'xpart7', stage:3, th:'Part 7 การอ่าน', sub:'การอ่าน', n:540, has:xlRange(147, 200) },
+  { id:'work', key:'xwork', stage:4, th:'Business & Technical English', sub:'อีเมล รายงาน การประชุม การนำเสนอ + spec, SOP, QC/NCR, 8D, การวัดและหน่วย', n:XL_N.xwork, has:function(k){ return k.indexOf('wk-')===0; } },
   { id:'rnd', rnd:true, stage:3, th:'สุ่มข้อสอบจริง', sub:'สุ่มข้อจากข้อสอบทั้ง 10 ชุด ไม่เรียงเหมือนเดิม เลือก Part ได้', n:0, has:function(){ return false; } }
 ];
 /* random set: questions drawn from the real-test modules; 'mix' takes the same number from each group */
@@ -7662,6 +7752,7 @@ function xlLoad(cb){
 }
 /* the word-bank maps are stored compactly (exam/data/xbank.js); expand them once into normal lessons */
 function xlBankExpand(d){
+  if(d && d.root && !d._x) return xlRootExpand(d);
   if(!d || !d.bank || d._x) return d;
   d.lessons.forEach(function(L){
     var c = L.mm, b = c.b.map(function(x){ return { w:x[0], t:x[1], e:'', g:c.gs[x[2]] }; });
@@ -7672,6 +7763,24 @@ function xlBankExpand(d){
     L.items = L.q.map(function(q, i){ var y = b[i], o = {}; q[1].split('|').forEach(function(w, j){ o['ABCD'.charAt(j)] = w; });
       return { id:q[0], p:0, mm:i, s:'กิ่งที่หายไปคือคำไหน: "'+y.t+'" (กิ่ง '+y.g+')', o:o, oth:{}, a:'ABCD'.charAt(q[2]),
         x:y.w+' แปลว่า '+y.t+' อยู่ในกิ่ง "'+y.g+'" ของแผนผัง '+c.root, v:[], sum:y.w+' = '+y.t }; });
+  });
+  d._x = 1; return d;
+}
+/* root / prefix / suffix maps (exam/data/xroot.js): b = [word, meaning, part-of-speech group, parts, part meanings] */
+function xlRootExpand(d){
+  d.lessons.forEach(function(L){
+    var c = L.mm, b = c.b.map(function(x){ return { w:x[0], t:x[1], e:'', g:d.gs[x[2]], p:x[3], pm:x[4] }; });
+    L.mm = { k:'topic', bank:1, rootmap:1, root:c.root, rt:c.rt, em:c.em, b:b };
+    L.en = c.kind; L.intro = ''; L.html = ''; L.r = []; L.tips = [];
+    var ex = b.find(function(y){ return y.p.indexOf('+')>0; }) || b[0];
+    L.easy = { say:'แผนผังนี้รวมคำในคลังที่มี "'+c.root+'" ('+c.rt+') จำนวน '+b.length+' คำ แบ่งกิ่งตามชนิดของคำ ใต้ทุกคำมีส่วนประกอบของคำนั้น อ่านส่วนประกอบแล้วเดาความหมายก่อนดูคำแปล',
+      eg:['<b>'+esc(ex.w)+'</b> = '+esc(ex.p), ex.pm+' → '+ex.t], rule:'แยกคำเป็นส่วนๆ → รู้ความหมายแต่ละส่วน → เดาความหมายทั้งคำได้' };
+    L.items = L.q.map(function(q){ var y = b[q[4]], o = {};
+      q[2].split('|').forEach(function(w, j){ o['ABCD'.charAt(j)] = w; });
+      if(q[1]===2) return { id:q[0], p:0, gap:0, s:'คำว่า "'+y.w+'" ('+y.t+') แยกเป็น '+y.p+' ส่วน "'+q[5]+'" แปลว่าอะไร?', o:o, oth:{}, a:'ABCD'.charAt(q[3]),
+        x:y.w+' = '+y.p+' = '+y.pm+' → '+y.t, v:[], sum:y.w+' = '+y.p };
+      return { id:q[0], p:0, mm:q[4], s:'กิ่งที่หายไปคือคำไหน: "'+y.t+'" ส่วนประกอบแปลว่า '+y.pm, o:o, oth:{}, a:'ABCD'.charAt(q[3]),
+        x:y.w+' = '+y.p+' ('+y.pm+') แปลว่า '+y.t, v:[], sum:y.w+' = '+y.p }; });
   });
   d._x = 1; return d;
 }
@@ -7821,7 +7930,8 @@ function xlMM(L, hide, fill){
   var mm = L.mm, node = function(b, i){
     var hid = i===hide, word = '<b>'+(mm.k==='pv' ? '<i>'+esc(mm.root)+'</i> ' : '')+(hid ? '<span class="blank">'+(fill ? esc(fill) : '?')+'</span>' : xlMMWord(mm, b))+'</b>';
     var say = hid && !fill ? '' : ' data-say="'+esc(xlMMSay(mm, b))+'"';
-    return '<div class="mm-b'+(hid ? ' hid' : '')+'" style="--h:'+((i*47 + 190) % 360)+'"'+say+(say ? ' role="button" tabindex="0"' : '')+'>'+(b.e ? '<span class="mm-em" aria-hidden="true">'+esc(b.e)+'</span>' : '')+'<span class="mm-t">'+word+'<small>'+esc(b.t)+'</small></span></div>';
+    var pl = b.p ? '<em class="mm-p">'+esc(hid && !fill ? b.pm : b.p)+'</em>' : '';
+    return '<div class="mm-b'+(hid ? ' hid' : '')+'" style="--h:'+((i*47 + 190) % 360)+'"'+say+(say ? ' role="button" tabindex="0"' : '')+'>'+(b.e ? '<span class="mm-em" aria-hidden="true">'+esc(b.e)+'</span>' : '')+'<span class="mm-t">'+word+pl+'<small>'+esc(b.t)+'</small></span></div>';
   };
   var brs = '';
   if(mm.k==='topic'){ var gs = [], only = mm.bank && hide>=0 ? mm.b[hide].g : null;
